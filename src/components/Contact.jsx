@@ -1,4 +1,4 @@
-import GoogleMapReact from "google-map-react";
+// import GoogleMapReact from "google-map-react";
 function Contact() {
   const mapOptions = {
     center: {
@@ -91,7 +91,7 @@ function Contact() {
                 <a href="#" id="streetView">
                   Street View
                 </a> */}
-                <GoogleMapReact
+                {/* <GoogleMapReact
                   bootstrapURLKeys={{ key: "hopeful-breaker-422614-k8" }} // Replace with your actual API key
                   defaultCenter={mapOptions.center}
                   defaultZoom={mapOptions.zoom}
@@ -101,7 +101,7 @@ function Contact() {
                     lng={mapOptions.center.lng}
                     text="Marker"
                   />
-                </GoogleMapReact>
+                </GoogleMapReact> */}
               </div>
             </div>
           </div>

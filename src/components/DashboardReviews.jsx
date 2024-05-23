@@ -234,7 +234,7 @@ function DashboardReviews() {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-            © 2019 <strong>Hireo</strong>. All Rights Reserved.
+          ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

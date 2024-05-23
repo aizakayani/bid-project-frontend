@@ -4,13 +4,65 @@ import userAvatarSmall2 from "../utils/images/user-avatar-small-02.jpg";
 import userAvatarSmall1 from "../utils/images/user-avatar-small-01.jpg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/userContext";
+import { jwtDecode } from "jwt-decode";
+import { getJobsByUser } from "../services/job";
+import { isTokenValid } from "../utils/utils";
 function Header() {
+  const { user, setUser, setIsLoggedIn, isLoggedIn, setUserJobs } =
+    useContext(UserContext);
   const navigate = useNavigate();
-  const isLoggedIn = true;
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
     useState(false);
   const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
+
+  useEffect(() => {
+    const queryParameters = new URLSearchParams(window.location.search);
+    let token = queryParameters.get("token");
+    if (!token) {
+      token = localStorage.getItem("token");
+    }
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const userData = {
+        name: decodedToken.name,
+        email: decodedToken.email,
+        role: decodedToken.role,
+        id: decodedToken.id,
+      };
+      setUser(userData);
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    initializer();
+  }, [isLoggedIn]);
+
+  const initializer = async () => {
+    if (user.role === "employer") {
+      await getJobs();
+    }
+  };
+
+  const getJobs = async () => {
+    // fetch jobs
+    try {
+      const jobsResult = await getJobsByUser();
+      if (jobsResult?.success && jobsResult?.jobs?.length > 0) {
+        setUserJobs([...jobsResult?.jobs]);
+      } else {
+        if (!isTokenValid(jobsResult)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     console.log("useeffect");
@@ -123,16 +175,18 @@ function Header() {
                         </ul>
                       </li>
                       <li>
-                        <a onClick={() => navigate('/blog')}>Blog</a>
+                        <a onClick={() => navigate("/blog")}>Blog</a>
                       </li>
                       <li>
-                        <a onClick={() => navigate('/pricing')}>Pricing Plans</a>
+                        <a onClick={() => navigate("/pricing")}>
+                          Pricing Plans
+                        </a>
                       </li>
                       <li>
-                        <a onClick={() => navigate('/checkout')}>Checkout</a>
+                        <a onClick={() => navigate("/checkout")}>Checkout</a>
                       </li>
                       <li>
-                        <a onClick={() => navigate('/invoice')}>
+                        <a onClick={() => navigate("/invoice")}>
                           Invoice Template
                         </a>
                       </li>
@@ -204,65 +258,59 @@ function Header() {
                           <a href="#">Open Street Map</a>
                           <ul class="dropdown-nav">
                             <li>
-                              <a href="jobs-list-layout-full-page-map-OpenStreetMap.html">
-                                {" "}
-                                Map
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-job-page-OpenStreetMap.html">
+                              <a
+                                onClick={() => {
+                                  navigate("/jobDetails");
+                                }}
+                              >
                                 Job Page
                               </a>
                             </li>
                             <li>
-                              <a href="single-company-profile-OpenStreetMap.html">
+                              <a
+                                a
+                                onClick={() => {
+                                  navigate("/CompanyDetails");
+                                }}
+                              >
                                 Company Profile
                               </a>
                             </li>
                             <li>
-                              <a href="pages-contact-OpenStreetMap.html">
+                              <a
+                                onClick={() => {
+                                  navigate("/Contact");
+                                }}
+                              >
                                 Contact
                               </a>
                             </li>
                             <li>
-                              <a href="jobs-list-layout-1-OpenStreetMap.html">
-                                Location Autocomplete
+                              <a
+                                onClick={() => {
+                                  navigate("/JobListLayout");
+                                }}
+                              >
+                                Job-List
                               </a>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <a onClick={() => navigate('/blog')}>Blog</a>
+                          <a onClick={() => navigate("/blog")}>Blog</a>
                         </li>
                         <li>
-                          <a onClick={() => navigate('/pricing')}>Pricing Plans</a>
+                          <a onClick={() => navigate("/pricing")}>
+                            Pricing Plans
+                          </a>
                         </li>
                         <li>
-                          <a onClick={() => navigate('/checkout')}>Checkout</a>
+                          <a onClick={() => navigate("/checkout")}>Checkout</a>
                         </li>
                         <li>
-                          <a onClick={() => navigate('/invoice')}>
+                          <a onClick={() => navigate("/invoice")}>
                             Invoice Template
                           </a>
-                        </li>
-                        <li>
-                          <a href="pages-user-interface-elements.html">
-                            User Interface Elements
-                          </a>
-                        </li>
-                        <li>
-                          <a href="pages-icons-cheatsheet.html">
-                            Icons Cheatsheet
-                          </a>
-                        </li>
-                        <li>
-                          <a href="pages-login.html">Login & Register</a>
-                        </li>
-                        <li>
-                          <a href="pages-404.html">404 Page</a>
-                        </li>
-                        <li>
-                          <a href="pages-contact.html">Contact</a>
                         </li>
                       </ul>
                     </li>
@@ -285,7 +333,14 @@ function Header() {
             {/* <!-- Main Navigation / End --> */}
             {!isLoggedIn && (
               <div class="login-button">
-                <button class="button ripple-effect">Login</button>
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                  class="button ripple-effect"
+                >
+                  Login
+                </button>
               </div>
             )}
             <div class="clearfix"></div>

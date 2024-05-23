@@ -38,7 +38,7 @@ function Invoice() {
           <div class="col-xl-6">
             <strong class="margin-bottom-5">Supplier</strong>
             <p>
-              Hireo Ltd. <br></br>
+              Bid Bridge Ltd. <br></br>
               21 St Andrews Lane <br></br>
               London, CF44 6ZL, UK <br></br>
             </p>

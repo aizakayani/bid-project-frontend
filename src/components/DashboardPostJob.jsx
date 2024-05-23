@@ -1,4 +1,70 @@
+import { useContext, useState } from "react";
+import { addJobAPI, getJobsByUser } from "../services/job";
+import { UserContext } from "../context/userContext";
+import toast from "react-hot-toast";
+
 function DashboardPostJob() {
+  const { setUserJobs } =
+  useContext(UserContext);
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("Full Time");
+  const [category, setCategory] = useState("Accounting and Finance");
+  const [location, setLocation] = useState("");
+  const [salary, setSalary] = useState("");
+  const [tags, setTags] = useState("");
+  const [description, setDescription] = useState("");
+  const handlePostJob = async () => {
+    if (title.trim() === "") {
+      return;
+    }
+    if (location.trim() === "") {
+      return;
+    }
+
+    const jobData = {
+      title,
+      type,
+      category,
+      location,
+      salary,
+      tags,
+      description,
+      createdAt: Date.now()
+    };
+
+    // fetch jobs
+    try {
+      const jobsResult = await addJobAPI(jobData);
+      if (jobsResult?.success) {
+        toast.success("Job added successfully");
+        setTitle("");
+        setType("");
+        setLocation("");
+        setCategory("");
+        setSalary("");
+        setTags("")
+        setDescription("");
+        // fetch jobs
+        await getJobs();
+      } else {
+        toast.error("Failed to add job");
+        //hanlde errors :p
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getJobs = async () => {
+    // fetch jobs
+    try {
+      const jobsResult = await getJobsByUser();
+      if (jobsResult?.success && jobsResult?.jobs?.length > 0) {
+        setUserJobs([...jobsResult?.jobs]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+}
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -37,7 +103,12 @@ function DashboardPostJob() {
                   <div class="col-xl-4">
                     <div class="submit-field">
                       <h5>Job Title</h5>
-                      <input type="text" class="with-border" />
+                      <input
+                        type="text"
+                        class="with-border"
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                      />
                     </div>
                   </div>
 
@@ -48,12 +119,16 @@ function DashboardPostJob() {
                         class="selectpicker with-border"
                         data-size="7"
                         title="Select Job Type"
+                        value={type}
+                        onChange={(e) => {
+                          setType(e.target.value);
+                        }}
                       >
-                        <option>Full Time</option>
-                        <option>Freelance</option>
-                        <option>Part Time</option>
-                        <option>Internship</option>
-                        <option>Temporary</option>
+                        <option value={"Full Time"}>Full Time</option>
+                        <option value={"Freelance"}>Freelance</option>
+                        <option value={"Part Time"}>Part Time</option>
+                        <option value={"Internship"}>Internship</option>
+                        <option value={"Temporary"}>Temporary</option>
                       </select>
                     </div>
                   </div>
@@ -65,18 +140,36 @@ function DashboardPostJob() {
                         class="selectpicker with-border"
                         data-size="7"
                         title="Select Category"
+                        value={category}
+                        onChange={(e) => {
+                          setCategory(e.target.value);
+                        }}
                       >
-                        <option>Accounting and Finance</option>
-                        <option>Clerical & Data Entry</option>
-                        <option>Counseling</option>
-                        <option>Court Administration</option>
-                        <option>Human Resources</option>
-                        <option>Investigative</option>
-                        <option>IT and Computers</option>
-                        <option>Law Enforcement</option>
-                        <option>Management</option>
-                        <option>Miscellaneous</option>
-                        <option>Public Relations</option>
+                        <option value={"Accounting and Finance"}>
+                          Accounting and Finance
+                        </option>
+                        <option value={"Clerical & Data Entry"}>
+                          Clerical & Data Entry
+                        </option>
+                        <option value={"Counseling"}>Counseling</option>
+                        <option value={"Court Administration"}>
+                          Court Administration
+                        </option>
+                        <option value={"Human Resources"}>
+                          Human Resources
+                        </option>
+                        <option value={"Investigative"}>Investigative</option>
+                        <option value={"IT and Computers"}>
+                          IT and Computers
+                        </option>
+                        <option value={"Law Enforcement"}>
+                          Law Enforcement
+                        </option>
+                        <option value={"Management"}>Management</option>
+                        <option value={"Miscellaneous"}>Miscellaneous</option>
+                        <option value={"Public Relations"}>
+                          Public Relations
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -91,6 +184,8 @@ function DashboardPostJob() {
                             class="with-border"
                             type="text"
                             placeholder="Type Address"
+                            onChange={(e) => setLocation(e.target.value)}
+                            value={location}
                           />
                         </div>
                         <i class="icon-material-outline-location-on"></i>
@@ -107,18 +202,15 @@ function DashboardPostJob() {
                             <input
                               class="with-border"
                               type="text"
-                              placeholder="Min"
+                              onChange={(e) => setSalary(e.target.value)}
+                              value={salary}
                             />
                             <i class="currency">USD</i>
                           </div>
                         </div>
                         <div class="col-xl-6">
                           <div class="input-with-icon">
-                            <input
-                              class="with-border"
-                              type="text"
-                              placeholder="Max"
-                            />
+                            <input class="with-border" type="text" />
                             <i class="currency">USD</i>
                           </div>
                         </div>
@@ -142,6 +234,8 @@ function DashboardPostJob() {
                             type="text"
                             class="keyword-input with-border"
                             placeholder="e.g. job title, responsibilites"
+                            onChange={(e) => setTags(e.target.value)}
+                            value={tags}
                           />
                           <button class="keyword-input-button ripple-effect">
                             <i class="icon-material-outline-add"></i>
@@ -162,6 +256,8 @@ function DashboardPostJob() {
                         cols="30"
                         rows="5"
                         class="with-border"
+                        onChange={(e) => setDescription(e.target.value)}
+                        value={description}
                       ></textarea>
                       <div class="uploadButton margin-top-30">
                         <input
@@ -190,7 +286,10 @@ function DashboardPostJob() {
           </div>
 
           <div class="col-xl-12">
-            <a href="#" class="button ripple-effect big margin-top-30">
+            <a
+              onClick={handlePostJob}
+              class="button ripple-effect big margin-top-30"
+            >
               <i class="icon-feather-plus"></i> Post a Job
             </a>
           </div>
@@ -201,7 +300,7 @@ function DashboardPostJob() {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-            © 2019 <strong>Hireo</strong>. All Rights Reserved.
+            ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

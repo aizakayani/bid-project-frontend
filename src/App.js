@@ -17,51 +17,126 @@ import DashboardLayout from "./components/DashboardLayout";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/login";
 import Register from "./components/register";
+import { UserProvider } from "./context/userContext";
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                  path="/freelancers"
-                  element={<FreeLancersListLayout />}
-                />
-                <Route path="/jobs" element={<JobsListLayout />} />
-                <Route path="/tasks" element={<TasksListLayout />} />
-                <Route path="/companies" element={<BrowseCompanies />} />
-                <Route path="/company/details" element={<CompanyDetails />} />
-                <Route path="/task/details" element={<TaskDetails />} />
-                <Route path="/job/details" element={<JobDetails />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/checkout" element={<Checkout />} />
-              </Routes>
-            </Layout>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <DashboardLayout>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-              </Routes>
-            </DashboardLayout>
-          }
-        />
-        <Route path="/invoice" element={<Invoice />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        {/* <Route path="*" element={<NotFound />} /> */}
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/freelancers"
+            element={
+              <Layout>
+                <FreeLancersListLayout />
+              </Layout>
+            }
+          />
+          <Route
+            path="/jobs"
+            element={
+              <Layout>
+                <JobsListLayout />
+              </Layout>
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <Layout>
+                <TasksListLayout />
+              </Layout>
+            }
+          />
+          <Route
+            path="/companies"
+            element={
+              <Layout>
+                <BrowseCompanies />
+              </Layout>
+            }
+          />
+          <Route
+            path="/company/details"
+            element={
+              <Layout>
+                <CompanyDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/task/details"
+            element={
+              <Layout>
+                <TaskDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/job/details"
+            element={
+              <Layout>
+                <JobDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Layout>
+                <Contact />
+              </Layout>
+            }
+          />
+          <Route
+            path="/blog"
+            element={
+              <Layout>
+                <Blog />
+              </Layout>
+            }
+          />
+          <Route
+            path="/pricing"
+            element={
+              <Layout>
+                <Pricing />
+              </Layout>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <Layout>
+                <Checkout />
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/invoice" element={<Invoice />} />
+          {/* <Route path="*" element={<NotFound />} /> */}
+        </Routes>
+        <Toaster position="top-right" reverseOrder={false} />
+      </Router>
+    </UserProvider>
   );
 }
 

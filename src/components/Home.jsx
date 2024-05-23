@@ -20,18 +20,18 @@ import logoCarousel5 from "../utils/images/logo-carousel-05.png";
 import logoCarousel6 from "../utils/images/logo-carousel-06.png";
 
 function Home() {
-    const onRightClick = () => {
-        const mainContainerId = document.getElementById('freelancer-container');
-        if(mainContainerId) {
-            mainContainerId.scrollLeft += 400;
-        }
+  const onRightClick = () => {
+    const mainContainerId = document.getElementById("freelancer-container");
+    if (mainContainerId) {
+      mainContainerId.scrollLeft += 400;
     }
-    const onLeftClick = () => {
-        const mainContainerId = document.getElementById('freelancer-container');
-        if(mainContainerId) {
-            mainContainerId.scrollLeft -= 400;
-        }
+  };
+  const onLeftClick = () => {
+    const mainContainerId = document.getElementById("freelancer-container");
+    if (mainContainerId) {
+      mainContainerId.scrollLeft -= 400;
     }
+  };
   return (
     <div>
       {/* <!-- Intro Banner
@@ -487,15 +487,29 @@ function Home() {
               </div>
             </div>
 
-            <div class="col-xl-12" style={{display: 'flex', flexDirection: 'row'}}>
-                {/* <div className="left-icon" style={{width: '40px', display: 'flex', alignItems: 'center'}} > */}
-                    {/* <div className="icon-container" style={{backgroundColor: '#770737', width: '40px', height: ' 40px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <div
+              class="col-xl-12"
+              style={{ display: "flex", flexDirection: "row" }}
+            >
+              {/* <div className="left-icon" style={{width: '40px', display: 'flex', alignItems: 'center'}} > */}
+              {/* <div className="icon-container" style={{backgroundColor: '#770737', width: '40px', height: ' 40px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <img src={leftArrow} alt="" width={'25px'} height={'25px'} color={'white'}/>
                     </div> */}
-                    <button class="slick-prev slick-arrow" aria-label="Previous" type="button" aria-disabled="false" onClick={()=> onLeftClick()}>Previous</button>
-                
-                {/* </div> */}
-              <div class="default-slick-carousel freelancers-container freelancers-grid-layout" id='freelancer-container'>
+              <button
+                class="slick-prev slick-arrow"
+                aria-label="Previous"
+                type="button"
+                aria-disabled="false"
+                onClick={() => onLeftClick()}
+              >
+                Previous
+              </button>
+
+              {/* </div> */}
+              <div
+                class="default-slick-carousel freelancers-container freelancers-grid-layout"
+                id="freelancer-container"
+              >
                 {/* <!--Freelancer --> */}
                 <div class="freelancer">
                   {/* <!-- Overview --> */}
@@ -914,12 +928,20 @@ function Home() {
                 {/* <!-- Freelancer / End --> */}
               </div>
               {/* <div className="right-icon" style={{width: '35px',display: 'flex', alignItems: 'center'}}> */}
-                {/* <div className="icon-container">
+              {/* <div className="icon-container">
                 <img src={rightArrow} alt="" width={'25px'} height={'25px'} />
                 </div> */}
-                <button class="slick-next slick-arrow" aria-label="Next" type="button" aria-disabled="false" onClick={()=> onRightClick()}>Next</button>
-                
-                {/* </div> */}
+              <button
+                class="slick-next slick-arrow"
+                aria-label="Next"
+                type="button"
+                aria-disabled="false"
+                onClick={() => onRightClick()}
+              >
+                Next
+              </button>
+
+              {/* </div> */}
             </div>
           </div>
         </div>

@@ -1,4 +1,56 @@
+import React, { useState, useContext } from "react";
+import { loginUserAPI } from "../services/user";
+import { UserContext } from "../context/userContext";
+import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
+  const { setUser, setIsLoggedIn } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        email,
+        password,
+      };
+      const response = await loginUserAPI(payload);
+      if (response.success) {
+        localStorage.setItem("token", response.token);
+        const decodedToken = jwtDecode(response.token);
+        const userData = {
+          name: decodedToken.name,
+          email: decodedToken.email,
+          role: decodedToken.role,
+          id: decodedToken.id,
+        };
+        setUser(userData);
+        setIsLoggedIn(true);
+        toast.success('Login successfull');
+        navigate('/')
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.error('Login failed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loginViaGoogle = () => {
+    setLoading(true);
+    try {
+      window.open("http://localhost:3000/users/auth/google", "_self")
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {/* <!-- Titlebar
@@ -34,7 +86,9 @@ function Login() {
                 <h3>We're glad to see you again!</h3>
                 <span>
                   Don't have an account?{" "}
-                  <a href="pages-register.html">Sign Up!</a>
+                  <a  onClick={() => {
+                    navigate("/register");
+                  }}>Sign Up!</a>
                 </span>
               </div>
 
@@ -49,6 +103,10 @@ function Login() {
                     id="emailaddress"
                     placeholder="Email Address"
                     required
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                   />
                 </div>
 
@@ -61,6 +119,10 @@ function Login() {
                     id="password"
                     placeholder="Password"
                     required
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </div>
                 <a href="#" class="forgot-password">
@@ -73,8 +135,11 @@ function Login() {
                 class="button full-width button-sliding-icon ripple-effect margin-top-10"
                 type="submit"
                 form="login-form"
+                button
+                onClick={handleLogin}
+                disabled={loading}
               >
-                Log In <i class="icon-material-outline-arrow-right-alt"></i>
+                {loading ? "Login" : "Login"}
               </button>
 
               {/* <!-- Social Login --> */}
@@ -82,10 +147,8 @@ function Login() {
                 <span>or</span>
               </div>
               <div class="social-login-buttons">
-                <button class="facebook-login ripple-effect">
-                  <i class="icon-brand-facebook-f"></i> Log In via Facebook
-                </button>
-                <button class="google-login ripple-effect">
+                
+                <button class="google-login ripple-effect" onClick={loginViaGoogle}>
                   <i class="icon-brand-google-plus-g"></i> Log In via Google+
                 </button>
               </div>
