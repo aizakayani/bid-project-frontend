@@ -1,20 +1,53 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
 import companyLogo05 from "../utils/images/company-logo-05.png";
-import { unixToDate } from "../utils/utils";
-function DashboardManageJobs() {
-  const { userJobs } = useContext(UserContext);
-  const checkExpiration = (date) => {
-    const date = new Date(date)
-    const newDate = new Date(date.setMonth(date.getMonth() + 1))
-
-    const newDateTime = newDate.getTime()
-    if (isDateGreaterThanCurrent(newDate)) {
+import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
+import Popup from "./modals/Popup";
+import { deleteJobAPI, getJobsByUser } from "../services/job";
+import toast from "react-hot-toast";
+function DashboardManageJobs({ handleUpdateJob }) {
+  const { userJobs, setUserJobs } = useContext(UserContext);
+  const [showDeleteJobPopup, setShowDeleteJobPopup] = useState(false);
+  const [jobIdToDelete, setJobIdToDelete] = useState(null);
+  const checkExpiration = (createdTime) => {
+    const currentTime = Date.now() / 1000;
+    if (currentTime < createdTime) {
       return "Expired";
     } else {
-      return `Expiring on ${unixToDate(job?.createdAt)}`
+      const expiringDate = addOneMonthToUnixDate(createdTime);
+      return `Expiring on ${unixToDate(expiringDate)}`;
     }
-  }
+  };
+
+  const handleDeleteJob = async () => {
+    try {
+      const deleteJobResponse = await deleteJobAPI(jobIdToDelete);
+      if (deleteJobResponse.success) {
+        toast.success("Job deleted successfully");
+        await getJobs();
+      } else {
+        toast.error("Failed to delete job");
+      }
+      setShowDeleteJobPopup(false);
+      setJobIdToDelete(null);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete job");
+    }
+  };
+
+  const getJobs = async () => {
+    // fetch jobs
+    try {
+      const jobsResult = await getJobsByUser();
+      if (jobsResult?.success && jobsResult?.jobs?.length > 0) {
+        setUserJobs([...jobsResult?.jobs]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -81,11 +114,13 @@ function DashboardManageJobs() {
                                   <ul>
                                     <li>
                                       <i class="icon-material-outline-date-range"></i>{" "}
-                                      {`Posted on ${unixToDate(job?.createdAt)}`}
+                                      {`Posted on ${unixToDate(
+                                        job?.createdAt
+                                      )}`}
                                     </li>
                                     <li>
                                       <i class="icon-material-outline-date-range"></i>{" "}
-                                      Expiring on 10 August, 2019
+                                      {`${checkExpiration(job?.createdAt)}`}
                                     </li>
                                   </ul>
                                 </div>
@@ -104,7 +139,9 @@ function DashboardManageJobs() {
                               <span class="button-info">0</span>
                             </a>
                             <a
-                              href="#"
+                              onClick={() => {
+                                handleUpdateJob(job);
+                              }}
                               class="button gray ripple-effect ico"
                               title="Edit"
                               data-tippy-placement="top"
@@ -112,7 +149,10 @@ function DashboardManageJobs() {
                               <i class="icon-feather-edit"></i>
                             </a>
                             <a
-                              href="#"
+                              onClick={() => {
+                                setJobIdToDelete(job._id);
+                                setShowDeleteJobPopup(true);
+                              }}
                               class="button gray ripple-effect ico"
                               title="Remove"
                               data-tippy-placement="top"
@@ -279,6 +319,15 @@ function DashboardManageJobs() {
         </div>
         {/* <!-- Footer / End --> */}
       </div>
+      <Popup
+        show={showDeleteJobPopup}
+        title={"Delete job"}
+        description={"Are you sure you want to delete job?"}
+        okButtonText={"Delete"}
+        closeButtonText={"Cancel"}
+        handleOk={handleDeleteJob}
+        handleClose={() => setShowDeleteJobPopup(false)}
+      />
     </div>
   );
 }

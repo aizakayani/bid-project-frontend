@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
-import { addJobAPI, getJobsByUser } from "../services/job";
+import { useContext, useEffect, useState } from "react";
+import { addJobAPI, getJobsByUser, updateJobAPI } from "../services/job";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
 
-function DashboardPostJob() {
-  const { setUserJobs } =
-  useContext(UserContext);
+function DashboardPostJob({ updateJobData }) {
+  const { setUserJobs } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Full Time");
   const [category, setCategory] = useState("Accounting and Finance");
@@ -13,6 +12,19 @@ function DashboardPostJob() {
   const [salary, setSalary] = useState("");
   const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (updateJobData) {
+      setTitle(updateJobData.title);
+      setType(updateJobData.type);
+      setLocation(updateJobData.location);
+      setCategory(updateJobData.category);
+      setSalary(updateJobData.salary);
+      setTags(updateJobData.tags);
+      setDescription(updateJobData.description);
+    }
+  }, [updateJobData]);
+
   const handlePostJob = async () => {
     if (title.trim() === "") {
       return;
@@ -29,25 +41,31 @@ function DashboardPostJob() {
       salary,
       tags,
       description,
-      createdAt: Date.now()
+      createdAt: Date.now() / 1000,
     };
 
     // fetch jobs
     try {
-      const jobsResult = await addJobAPI(jobData);
+      const jobsResult = updateJobData
+        ? await updateJobAPI(jobData, updateJobData._id)
+        : await addJobAPI(jobData);
       if (jobsResult?.success) {
-        toast.success("Job added successfully");
+        toast.success(
+          updateJobData ? "Job updated successfully" : "Job added successfully"
+        );
         setTitle("");
         setType("");
         setLocation("");
         setCategory("");
         setSalary("");
-        setTags("")
+        setTags("");
         setDescription("");
         // fetch jobs
         await getJobs();
       } else {
-        toast.error("Failed to add job");
+        toast.error(
+          updateJobData ? "Failed to update job" : "Failed to add job"
+        );
         //hanlde errors :p
       }
     } catch (error) {
@@ -64,13 +82,13 @@ function DashboardPostJob() {
     } catch (error) {
       console.log(error);
     }
-}
+  };
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
-          <h3>Post a Job</h3>
+          <h3>{updateJobData ? "Update Job" : "Post a Job"}</h3>
 
           {/* <!-- Breadcrumbs --> */}
           <nav id="breadcrumbs" class="dark">
@@ -290,7 +308,8 @@ function DashboardPostJob() {
               onClick={handlePostJob}
               class="button ripple-effect big margin-top-30"
             >
-              <i class="icon-feather-plus"></i> Post a Job
+              <i class="icon-feather-plus"></i>{" "}
+              {updateJobData ? "Update Job" : "Post a Job"}
             </a>
           </div>
         </div>

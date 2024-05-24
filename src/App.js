@@ -18,7 +18,8 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/login";
 import Register from "./components/register";
 import { UserProvider } from "./context/userContext";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
