@@ -1,4 +1,71 @@
-function DashboardPostTask() {
+import { useContext, useState } from "react";
+import { addTaskAPI, getTasksByUser } from "../services/task";
+import { UserContext } from "../context/userContext";
+import toast from "react-hot-toast";
+function DashboardPostTask() 
+{
+const { setUserTasks } =
+  useContext(UserContext);
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("hourly");
+  const [category, setCategory] = useState("Accounting and Finance");
+  const [location, setLocation] = useState("");
+  const [budget, setBudget] = useState("");
+  const [requiredSkills, setRequiredSkills] = useState("");
+  const [description, setDescription] = useState("");
+  const handlePostJob = async () => {
+    if (title.trim() === "") {
+      return;
+    }
+    if (location.trim() === "") {
+      return;
+    }
+    const taskData = {
+      title,
+      type,
+      category,
+      location,
+      budget,
+      requiredSkills,
+      description,
+      createdAt: Date.now()
+    };
+    // fetch task
+    try {
+      const taskResult = await addTaskAPI(taskData);
+      if (taskResult?.success) {
+        toast.success("Task added successfully");
+        setTitle("");
+        setType("");
+        setLocation("");
+        setCategory("");
+        setBudget("");
+        setRequiredSkills("")
+        setDescription("");
+        // fetch task
+        await getTask();
+      } else {
+        toast.error("Failed to add task");
+        //hanlde errors :p
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getTask = async () => {
+    // fetch task
+    try {
+      const tasksResult = await getTasksByUser();
+      if (tasksResult?.success && tasksResult?.task?.length > 0) {
+        setUserTasks([...tasksResult?.tasks]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+
+
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -41,6 +108,8 @@ function DashboardPostTask() {
                         type="text"
                         class="with-border"
                         placeholder="e.g. build me a website"
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
                       />
                     </div>
                   </div>
@@ -52,17 +121,26 @@ function DashboardPostTask() {
                         class="selectpicker with-border"
                         data-size="7"
                         title="Select Category"
+                        onChange={(e) => {
+                          setCategory(e.target.value);
+                        }}
                       >
-                        <option>Admin Support</option>
-                        <option>Customer Service</option>
-                        <option>Data Analytics</option>
-                        <option>Design & Creative</option>
-                        <option>Legal</option>
-                        <option>Software Developing</option>
-                        <option>IT & Networking</option>
-                        <option>Writing</option>
-                        <option>Translation</option>
-                        <option>Sales & Marketing</option>
+                        <option value={"Admin Support"}>
+                        Admin Support
+                        </option>
+                        <option value={"Customer Service"}>
+                        Customer Service
+                        </option>
+                        <option value={"Data Analytics"}>
+                        Data Analytics
+                        </option>
+                        <option value={"Design & Creative"}>Design & Creative</option>
+                        <option value={"Legal"}>Legal</option>
+                        <option value={"Software Developing"}>Software Developing</option>
+                        <option value={"IT & Networking"}>IT & Networking</option>
+                        <option value={"Writing"}>Writing</option>
+                        <option value={"Translation"}>Translation</option>
+                        <option value={"Sales & Marketing"}>Sales & Marketing</option>
                       </select>
                     </div>
                   </div>
@@ -84,6 +162,8 @@ function DashboardPostTask() {
                             class="with-border"
                             type="text"
                             placeholder="Anywhere"
+                            onChange={(e) => setLocation(e.target.value)}
+                            value={location}
                           />
                         </div>
                         <i class="icon-material-outline-location-on"></i>
@@ -101,6 +181,8 @@ function DashboardPostTask() {
                               class="with-border"
                               type="text"
                               placeholder="Minimum"
+                              onChange={(e) => setBudget(e.target.value)}
+                              value={budget}
                             />
                             <i class="currency">USD</i>
                           </div>
@@ -122,7 +204,10 @@ function DashboardPostTask() {
                             id="radio-1"
                             name="radio"
                             type="radio"
-                            checked
+                            checked={type === "fixed"}
+                            onClick={(e) => {
+                              if (e.target.checked) setType("fixed");
+                            }}
                           />
                           <label for="radio-1">
                             <span class="radio-label"></span> Fixed Price
@@ -131,7 +216,12 @@ function DashboardPostTask() {
                         </div>
 
                         <div class="radio">
-                          <input id="radio-2" name="radio" type="radio" />
+                          <input id="radio-2" name="radio" type="radio"
+                          checked={type === "hourly"}
+                          onClick={(e) => {
+                            if (e.target.checked) setType("hourly");
+                          }}
+                          />
                           <label for="radio-2">
                             <span class="radio-label"></span> Hourly Project
                           </label>
@@ -156,6 +246,8 @@ function DashboardPostTask() {
                             type="text"
                             class="keyword-input with-border"
                             placeholder="Add Skills"
+                            onChange={(e) => setRequiredSkills(e.target.value)}
+                            value={requiredSkills}
                           />
                           <button class="keyword-input-button ripple-effect">
                             <i class="icon-material-outline-add"></i>
@@ -176,6 +268,8 @@ function DashboardPostTask() {
                         cols="30"
                         rows="5"
                         class="with-border"
+                        onChange={(e) => setDescription(e.target.value)}
+                        value={description}
                       ></textarea>
                       <div class="uploadButton margin-top-30">
                         <input

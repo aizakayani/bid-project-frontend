@@ -1,4 +1,53 @@
-function DashboardManageTasks() {
+import { useContext, useState } from "react";
+import { UserContext } from "../context/userContext";
+import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
+import Popup from "./modals/Popup";
+import { deleteTaskAPI, getTasksByUser } from "../services/task";
+import toast from "react-hot-toast";
+
+function DashboardManageTasks({ handleUpdateTask }) {
+
+  const { userTasks, setUserTasks } = useContext(UserContext);
+  const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState(false);
+  const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+  const checkExpiration = (createdTime) => {
+    const currentTime = Date.now() / 1000;
+    if (currentTime < createdTime) {
+      return "Expired";
+    } else {
+      const expiringDate = addOneMonthToUnixDate(createdTime);
+      return `Expiring on ${unixToDate(expiringDate)}`;
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    try {
+      const deleteTaskResponse = await deleteTaskAPI(taskIdToDelete);
+      if (deleteTaskResponse.success) {
+        toast.success("Task deleted successfully");
+        await getTasks();
+      } else {
+        toast.error("Failed to delete Task");
+      }
+      setShowDeleteTaskPopup(false);
+      setTaskIdToDelete(null);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete task");
+    }
+  };
+
+  const getTasks = async () => {
+    // fetch tasks
+    try {
+      const tasksResult = await getTasksByUser();
+      if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
+        setUserTasks([...tasksResult?.tasks]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -34,6 +83,9 @@ function DashboardManageTasks() {
 
               <div class="content">
                 <ul class="dashboard-box-list">
+                {userTasks?.length > 0 &&
+                    userTasks.map((task) => {
+                    return (
                   <li>
                     {/* <!-- Job Listing --> */}
                     <div class="job-listing width-adjustment">
@@ -42,7 +94,7 @@ function DashboardManageTasks() {
                         {/* <!-- Details --> */}
                         <div class="job-listing-description">
                           <h3 class="job-listing-title">
-                            <a href="#">Design a Landing Page</a>{" "}
+                            <a href="#">{task.title}</a>{" "}
                             <span class="dashboard-status-button yellow">
                               Expiring
                             </span>
@@ -104,7 +156,8 @@ function DashboardManageTasks() {
                       </a>
                     </div>
                   </li>
-
+                    )
+                    })}
                   <li>
                     {/* <!-- Job Listing --> */}
                     <div class="job-listing width-adjustment">
@@ -113,7 +166,7 @@ function DashboardManageTasks() {
                         {/* <!-- Details --> */}
                         <div class="job-listing-description">
                           <h3 class="job-listing-title">
-                            <a href="#">Food Delivery Mobile Application</a>
+                          <a href="#">{task.title}</a>{" "}
                           </h3>
 
                           {/* <!-- Job Listing Footer --> */}
@@ -121,7 +174,9 @@ function DashboardManageTasks() {
                             <ul>
                               <li>
                                 <i class="icon-material-outline-access-time"></i>{" "}
-                                6 days, 23 hours left
+                                {`Posted on ${unixToDate(
+                                        task?.createdAt
+                                      )}`}
                               </li>
                             </ul>
                           </div>
@@ -153,9 +208,12 @@ function DashboardManageTasks() {
                       >
                         <i class="icon-material-outline-supervisor-account"></i>{" "}
                         Manage Bidders <span class="button-info">3</span>
+                        
                       </a>
                       <a
-                        href="#"
+                      onClick={() => {
+                        handleUpdateTask(task);
+                      }}
                         class="button gray ripple-effect ico"
                         title="Edit"
                         data-tippy-placement="top"
@@ -163,7 +221,10 @@ function DashboardManageTasks() {
                         <i class="icon-feather-edit"></i>
                       </a>
                       <a
-                        href="#"
+                       onClick={() => {
+                        setTaskIdToDelete(task._id);
+                        setShowDeleteTaskPopup(true);
+                      }}
                         class="button gray ripple-effect ico"
                         title="Remove"
                         data-tippy-placement="top"

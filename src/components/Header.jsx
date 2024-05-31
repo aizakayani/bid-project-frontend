@@ -9,6 +9,7 @@ import { UserContext } from "../context/userContext";
 import { jwtDecode } from "jwt-decode";
 import { getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
+import { getTasksByUser } from "../services/task";
 function Header() {
   const { user, setUser, setIsLoggedIn, isLoggedIn, setUserJobs } =
     useContext(UserContext);
@@ -42,7 +43,7 @@ function Header() {
   }, [isLoggedIn]);
 
   const initializer = async () => {
-    if (user.role === "employer") {
+    if (user.role === "freelancer") {
       await getJobs();
     }
   };
@@ -55,6 +56,23 @@ function Header() {
         setUserJobs([...jobsResult?.jobs]);
       } else {
         if (!isTokenValid(jobsResult)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTasks = async () => {
+    // fetch jobs
+    try {
+      const tasksResult = await getTasksByUser();
+      if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
+        setUserTasks([...tasksResult?.tasks]);
+      } else {
+        if (!isTokenValid(tasksResult)) {
           navigate("/login");
           setIsLoggedIn(false);
         }

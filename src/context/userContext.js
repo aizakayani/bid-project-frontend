@@ -7,9 +7,9 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userJobs, setUserJobs] = useState([]);
-
+  const [userTasks, setUserTasks] = useState([]);
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, setIsLoggedIn, userJobs, setUserJobs }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, setIsLoggedIn, userJobs, setUserJobs, userTasks, setUserTasks }}>
       {children}
     </UserContext.Provider>
   );
