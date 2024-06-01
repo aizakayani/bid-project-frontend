@@ -1,11 +1,9 @@
-import { useContext, useState } from "react";
-import { addTaskAPI, getTasksByUser } from "../services/task";
+import { useContext, useEffect, useState } from "react";
+import { addTaskAPI, getTasksByUser, updateTaskAPI } from "../services/task";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
-function DashboardPostTask() 
-{
-const { setUserTasks } =
-  useContext(UserContext);
+function DashboardPostTask({ updateTaskData }) {
+  const { setUserTasks } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("hourly");
   const [category, setCategory] = useState("Accounting and Finance");
@@ -13,7 +11,20 @@ const { setUserTasks } =
   const [budget, setBudget] = useState("");
   const [requiredSkills, setRequiredSkills] = useState("");
   const [description, setDescription] = useState("");
-  const handlePostJob = async () => {
+
+  useEffect(() => {
+    if (updateTaskData) {
+      setTitle(updateTaskData.title);
+      setType(updateTaskData.type);
+      setLocation(updateTaskData.location);
+      setCategory(updateTaskData.category);
+      setBudget(updateTaskData.budget);
+      setRequiredSkills(updateTaskData.requiredSkills);
+      setDescription(updateTaskData.description);
+    }
+  }, [updateTaskData]);
+
+  const handlePostOrUpdateTask = async () => {
     if (title.trim() === "") {
       return;
     }
@@ -28,43 +39,49 @@ const { setUserTasks } =
       budget,
       requiredSkills,
       description,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
     // fetch task
     try {
-      const taskResult = await addTaskAPI(taskData);
+      const taskResult = updateTaskData
+        ? await updateTaskAPI(taskData, updateTaskData._id)
+        : await addTaskAPI(taskData);
       if (taskResult?.success) {
-        toast.success("Task added successfully");
+        toast.success(
+          updateTaskData
+            ? "Task updated successfully"
+            : "Task added successfully"
+        );
         setTitle("");
         setType("");
         setLocation("");
         setCategory("");
         setBudget("");
-        setRequiredSkills("")
+        setRequiredSkills("");
         setDescription("");
         // fetch task
-        await getTask();
+        await getTasks();
       } else {
-        toast.error("Failed to add task");
+        toast.error(
+          updateTaskData ? "Failed to update task" : "Failed to add task"
+        );
         //hanlde errors :p
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const getTask = async () => {
+  const getTasks = async () => {
     // fetch task
     try {
       const tasksResult = await getTasksByUser();
-      if (tasksResult?.success && tasksResult?.task?.length > 0) {
+      if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
         setUserTasks([...tasksResult?.tasks]);
       }
     } catch (error) {
       console.log(error);
     }
-}
-
-
+  };
 
   return (
     <div class="dashboard-content-container" data-simplebar>
@@ -125,22 +142,26 @@ const { setUserTasks } =
                           setCategory(e.target.value);
                         }}
                       >
-                        <option value={"Admin Support"}>
-                        Admin Support
-                        </option>
+                        <option value={"Admin Support"}>Admin Support</option>
                         <option value={"Customer Service"}>
-                        Customer Service
+                          Customer Service
                         </option>
-                        <option value={"Data Analytics"}>
-                        Data Analytics
+                        <option value={"Data Analytics"}>Data Analytics</option>
+                        <option value={"Design & Creative"}>
+                          Design & Creative
                         </option>
-                        <option value={"Design & Creative"}>Design & Creative</option>
                         <option value={"Legal"}>Legal</option>
-                        <option value={"Software Developing"}>Software Developing</option>
-                        <option value={"IT & Networking"}>IT & Networking</option>
+                        <option value={"Software Developing"}>
+                          Software Developing
+                        </option>
+                        <option value={"IT & Networking"}>
+                          IT & Networking
+                        </option>
                         <option value={"Writing"}>Writing</option>
                         <option value={"Translation"}>Translation</option>
-                        <option value={"Sales & Marketing"}>Sales & Marketing</option>
+                        <option value={"Sales & Marketing"}>
+                          Sales & Marketing
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -216,11 +237,14 @@ const { setUserTasks } =
                         </div>
 
                         <div class="radio">
-                          <input id="radio-2" name="radio" type="radio"
-                          checked={type === "hourly"}
-                          onClick={(e) => {
-                            if (e.target.checked) setType("hourly");
-                          }}
+                          <input
+                            id="radio-2"
+                            name="radio"
+                            type="radio"
+                            checked={type === "hourly"}
+                            onClick={(e) => {
+                              if (e.target.checked) setType("hourly");
+                            }}
                           />
                           <label for="radio-2">
                             <span class="radio-label"></span> Hourly Project
@@ -298,8 +322,12 @@ const { setUserTasks } =
           </div>
 
           <div class="col-xl-12">
-            <a href="#" class="button ripple-effect big margin-top-30">
-              <i class="icon-feather-plus"></i> Post a Task
+            <a
+              onClick={handlePostOrUpdateTask}
+              class="button ripple-effect big margin-top-30"
+            >
+              <i class="icon-feather-plus"></i>{" "}
+              {updateTaskAPI ? "Update Task" : "Post a Task"}
             </a>
           </div>
         </div>
@@ -309,7 +337,7 @@ const { setUserTasks } =
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-          ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
+            ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

@@ -6,19 +6,18 @@ import { deleteTaskAPI, getTasksByUser } from "../services/task";
 import toast from "react-hot-toast";
 
 function DashboardManageTasks({ handleUpdateTask }) {
-
   const { userTasks, setUserTasks } = useContext(UserContext);
   const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
-  const checkExpiration = (createdTime) => {
-    const currentTime = Date.now() / 1000;
-    if (currentTime < createdTime) {
-      return "Expired";
-    } else {
-      const expiringDate = addOneMonthToUnixDate(createdTime);
-      return `Expiring on ${unixToDate(expiringDate)}`;
-    }
-  };
+  // const checkExpiration = (createdTime) => {
+  //   const currentTime = Date.now() / 1000;
+  //   if (currentTime < createdTime) {
+  //     return "Expired";
+  //   } else {
+  //     const expiringDate = addOneMonthToUnixDate(createdTime);
+  //     return `Expiring on ${unixToDate(expiringDate)}`;
+  //   }
+  // };
 
   const handleDeleteTask = async () => {
     try {
@@ -56,8 +55,9 @@ function DashboardManageTasks({ handleUpdateTask }) {
           <h3>Manage Tasks</h3>
 
           {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
+          {/* <nav id="breadcrumbs" class="dark">
             <ul>
+              deleted
               <li>
                 <a href="#">Home</a>
               </li>
@@ -66,7 +66,7 @@ function DashboardManageTasks({ handleUpdateTask }) {
               </li>
               <li>Manage Tasks</li>
             </ul>
-          </nav>
+          </nav> */}
         </div>
 
         {/* <!-- Row --> */}
@@ -83,156 +83,86 @@ function DashboardManageTasks({ handleUpdateTask }) {
 
               <div class="content">
                 <ul class="dashboard-box-list">
-                {userTasks?.length > 0 &&
+                  {userTasks?.length > 0 &&
                     userTasks.map((task) => {
-                    return (
-                  <li>
-                    {/* <!-- Job Listing --> */}
-                    <div class="job-listing width-adjustment">
-                      {/* <!-- Job Listing Details --> */}
-                      <div class="job-listing-details">
-                        {/* <!-- Details --> */}
-                        <div class="job-listing-description">
-                          <h3 class="job-listing-title">
-                            <a href="#">{task.title}</a>{" "}
-                            <span class="dashboard-status-button yellow">
-                              Expiring
-                            </span>
-                          </h3>
+                      return (
+                        <li>
+                          {/* <!-- Job Listing --> */}
+                          <div class="job-listing width-adjustment">
+                            {/* <!-- Job Listing Details --> */}
+                            <div class="job-listing-details">
+                              {/* <!-- Details --> */}
+                              <div class="job-listing-description">
+                                <h3 class="job-listing-title">
+                                  <a href="#">{task.title}</a>{" "}
+                                  <span class="dashboard-status-button yellow">
+                                    Expiring
+                                  </span>
+                                </h3>
 
-                          {/* <!-- Job Listing Footer --> */}
-                          <div class="job-listing-footer">
-                            <ul>
-                              <li>
-                                <i class="icon-material-outline-access-time"></i>{" "}
-                                23 hours left
-                              </li>
-                            </ul>
+                                {/* <!-- Job Listing Footer --> */}
+                                <div class="job-listing-footer">
+                                  <ul>
+                                    <li>
+                                      <i class="icon-material-outline-access-time"></i>{" "}
+                                      23 hours left
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* <!-- Task Details --> */}
-                    <ul class="dashboard-task-info">
-                      <li>
-                        <strong>3</strong>
-                        <span>Bids</span>
-                      </li>
-                      <li>
-                        <strong>$22</strong>
-                        <span>Avg. Bid</span>
-                      </li>
-                      <li>
-                        <strong>$15 - $30</strong>
-                        <span>Hourly Rate</span>
-                      </li>
-                    </ul>
+                          {/* <!-- Task Details --> */}
+                          <ul class="dashboard-task-info">
+                            <li>
+                              <strong>3</strong>
+                              <span>Bids</span>
+                            </li>
+                            <li>
+                              <strong>$22</strong>
+                              <span>Avg. Bid</span>
+                            </li>
+                            <li>
+                              <strong>$15 - $30</strong>
+                              <span>Hourly Rate</span>
+                            </li>
+                          </ul>
 
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right always-visible">
-                      <a
-                        href="dashboard-manage-bidders.html"
-                        class="button ripple-effect"
-                      >
-                        <i class="icon-material-outline-supervisor-account"></i>{" "}
-                        Manage Bidders <span class="button-info">3</span>
-                      </a>
-                      <a
-                        href="#"
-                        class="button gray ripple-effect ico"
-                        title="Edit"
-                        data-tippy-placement="top"
-                      >
-                        <i class="icon-feather-edit"></i>
-                      </a>
-                      <a
-                        href="#"
-                        class="button gray ripple-effect ico"
-                        title="Remove"
-                        data-tippy-placement="top"
-                      >
-                        <i class="icon-feather-trash-2"></i>
-                      </a>
-                    </div>
-                  </li>
-                    )
+                          {/* <!-- Buttons --> */}
+                          <div class="buttons-to-right always-visible">
+                            <a
+                              href="dashboard-manage-bidders.html"
+                              class="button ripple-effect"
+                            >
+                              <i class="icon-material-outline-supervisor-account"></i>{" "}
+                              Manage Bidders <span class="button-info">3</span>
+                            </a>
+                            <a
+                              onClick={() => {
+                                handleUpdateTask(task);
+                              }}
+                              class="button gray ripple-effect ico"
+                              title="Edit"
+                              data-tippy-placement="top"
+                            >
+                              <i class="icon-feather-edit"></i>
+                            </a>
+                            <a
+                              onClick={() => {
+                                setTaskIdToDelete(task._id);
+                                setShowDeleteTaskPopup(true);
+                              }}
+                              class="button gray ripple-effect ico"
+                              title="Remove"
+                              data-tippy-placement="top"
+                            >
+                              <i class="icon-feather-trash-2"></i>
+                            </a>
+                          </div>
+                        </li>
+                      );
                     })}
-                  <li>
-                    {/* <!-- Job Listing --> */}
-                    <div class="job-listing width-adjustment">
-                      {/* <!-- Job Listing Details --> */}
-                      <div class="job-listing-details">
-                        {/* <!-- Details --> */}
-                        <div class="job-listing-description">
-                          <h3 class="job-listing-title">
-                          <a href="#">{task.title}</a>{" "}
-                          </h3>
-
-                          {/* <!-- Job Listing Footer --> */}
-                          <div class="job-listing-footer">
-                            <ul>
-                              <li>
-                                <i class="icon-material-outline-access-time"></i>{" "}
-                                {`Posted on ${unixToDate(
-                                        task?.createdAt
-                                      )}`}
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* <!-- Task Details --> */}
-                    <ul class="dashboard-task-info">
-                      <li>
-                        <strong>3</strong>
-                        <span>Bids</span>
-                      </li>
-                      <li>
-                        <strong>$3,200</strong>
-                        <span>Avg. Bid</span>
-                      </li>
-                      <li>
-                        <strong>$2,500 - $4,500</strong>
-                        <span>Fixed Price</span>
-                      </li>
-                    </ul>
-
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right always-visible">
-                      <a
-                        href="dashboard-manage-bidders.html"
-                        class="button ripple-effect"
-                      >
-                        <i class="icon-material-outline-supervisor-account"></i>{" "}
-                        Manage Bidders <span class="button-info">3</span>
-                        
-                      </a>
-                      <a
-                      onClick={() => {
-                        handleUpdateTask(task);
-                      }}
-                        class="button gray ripple-effect ico"
-                        title="Edit"
-                        data-tippy-placement="top"
-                      >
-                        <i class="icon-feather-edit"></i>
-                      </a>
-                      <a
-                       onClick={() => {
-                        setTaskIdToDelete(task._id);
-                        setShowDeleteTaskPopup(true);
-                      }}
-                        class="button gray ripple-effect ico"
-                        title="Remove"
-                        data-tippy-placement="top"
-                      >
-                        <i class="icon-feather-trash-2"></i>
-                      </a>
-                    </div>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -244,7 +174,7 @@ function DashboardManageTasks({ handleUpdateTask }) {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-          ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
+            ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>
@@ -272,6 +202,15 @@ function DashboardManageTasks({ handleUpdateTask }) {
         </div>
         {/* <!-- Footer / End --> */}
       </div>
+      <Popup
+        show={showDeleteTaskPopup}
+        title={"Delete Task"}
+        description={"Are you sure you want to delete task?"}
+        okButtonText={"Delete"}
+        closeButtonText={"Cancel"}
+        handleOk={handleDeleteTask}
+        handleClose={() => setShowDeleteTaskPopup(false)}
+      />
     </div>
   );
 }

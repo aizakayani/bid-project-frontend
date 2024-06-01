@@ -11,8 +11,14 @@ import { getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
 import { getTasksByUser } from "../services/task";
 function Header() {
-  const { user, setUser, setIsLoggedIn, isLoggedIn, setUserJobs } =
-    useContext(UserContext);
+  const {
+    user,
+    setUser,
+    setIsLoggedIn,
+    isLoggedIn,
+    setUserJobs,
+    setUserTasks,
+  } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
     useState(false);
@@ -43,9 +49,10 @@ function Header() {
   }, [isLoggedIn]);
 
   const initializer = async () => {
-    if (user.role === "freelancer") {
-      await getJobs();
-    }
+    // if (user.role === "freelancer") {
+    await getJobs();
+    await getTasks();
+    // }
   };
 
   const getJobs = async () => {

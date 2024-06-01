@@ -17,9 +17,14 @@ function Dashboard() {
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
   const [taskMenuOpen, setTaskMenuOpen] = useState(false);
   const [updateJobData, setUpdateJobData] = useState(null);
+  const [updateTaskData, setUpdateTaskData] = useState(null);
   const handleUpdateJob = (jobData) => {
     setUpdateJobData(jobData);
     setDashboardType("postjob");
+  };
+  const handleUpdateTask = (taskData) => {
+    setUpdateTaskData(taskData);
+    setDashboardType("posttask");
   };
   return (
     <>
@@ -179,10 +184,17 @@ function Dashboard() {
             setUpdateJobData={setUpdateJobData}
           />
         )}
-        {dashboardType === "managetasks" && <DashboardManageTasks />}
+        {dashboardType === "managetasks" && (
+          <DashboardManageTasks handleUpdateTask={handleUpdateTask} />
+        )}
         {dashboardType === "managebidders" && <DashboardManageBidders />}
         {dashboardType === "activebids" && <DashboardMyActiveBids />}
-        {dashboardType === "posttask" && <DashboardPostTask />}
+        {dashboardType === "posttask" && (
+          <DashboardPostTask
+            updateTaskData={updateTaskData}
+            setUpdateTaskData={setUpdateTaskData}
+          />
+        )}
         {/* <!-- Dashboard Content / End --> */}
       </div>
     </>
