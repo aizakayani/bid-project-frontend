@@ -1,15 +1,29 @@
-import singleJob from '../utils/images/single-job.jpg';
-import companyLogo3a from '../utils/images/company-logo-03a.png';
-import gb from '../utils/images/flags/gb.svg';
-import companyLogo2 from '../utils/images/company-logo-02.png';
-import companyLogo3 from '../utils/images/company-logo-03.png';
+import singleJob from "../utils/images/single-job.jpg";
+import companyLogo3a from "../utils/images/company-logo-03a.png";
+import gb from "../utils/images/flags/gb.svg";
+import companyLogo2 from "../utils/images/company-logo-02.png";
+import companyLogo3 from "../utils/images/company-logo-03.png";
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { timeDifferenceFromNow } from "../utils/utils";
 function JobDetails() {
+  const { id } = useParams();
+  const { jobsList } = useContext(UserContext);
+  const [JobDetails, setJobDetails] = useState(null);
+
+  useEffect(() => {
+    if (id && jobsList?.length > 0) {
+      const filteredJob = jobsList.find((job) => job._id === id);
+      if (filteredJob) {
+        console.log(filteredJob);
+        setJobDetails(filteredJob);
+      }
+    }
+  }, [id, jobsList]);
   return (
     <>
-      <div
-        class="single-page-header"
-        data-background-image={singleJob}
-      >
+      <div class="single-page-header" data-background-image={singleJob}>
         <div class="container">
           <div class="row">
             <div class="col-md-12">
@@ -31,7 +45,7 @@ function JobDetails() {
                       </li>
                       <li>
                         <div class="star-rating" data-rating="4.9">
-                        <span class="star"></span>
+                          <span class="star"></span>
                           <span class="star"></span>
                           <span class="star"></span>
                           <span class="star"></span>
@@ -40,7 +54,7 @@ function JobDetails() {
                       </li>
                       <li>
                         <img class="flag" src={gb} alt="" />{" "}
-                        United Kingdom
+                        {JobDetails.location}
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -51,7 +65,7 @@ function JobDetails() {
                 <div class="right-side">
                   <div class="salary-box">
                     <div class="salary-type">Annual Salary</div>
-                    <div class="salary-amount">$35k - $38k</div>
+                    <div class="salary-amount">{JobDetails.salary}</div>
                   </div>
                 </div>
               </div>
@@ -66,7 +80,8 @@ function JobDetails() {
           <div class="col-xl-8 col-lg-8 content-right-offset">
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
-              <p>
+              <p>{JobDetails.description}</p>
+              {/* <p>
                 Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
                 foster collaborative thinking to further the overall value
@@ -89,7 +104,7 @@ function JobDetails() {
                 additional clickthroughs from DevOps. Nanotechnology immersion
                 along the information highway will close the loop on focusing
                 solely on the bottom line.
-              </p>
+              </p> */}
             </div>
 
             <div class="single-page-section">
@@ -220,22 +235,24 @@ function JobDetails() {
                       <li>
                         <i class="icon-material-outline-location-on"></i>
                         <span>Location</span>
-                        <h5>London, United Kingdom</h5>
+                        <h5>{JobDetails.location}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-business-center"></i>
                         <span>Job Type</span>
-                        <h5>Full Time</h5>
+                        <h5>{JobDetails.type}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-local-atm"></i>
                         <span>Salary</span>
-                        <h5>$35k - $38k</h5>
+                        <h5>{JobDetails.salary}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-access-time"></i>
                         <span>Date Posted</span>
-                        <h5>2 days ago</h5>
+                        <h5>{`${timeDifferenceFromNow(
+                          JobDetails?.createdAt
+                        )}`}</h5>
                       </li>
                     </ul>
                   </div>

@@ -1,17 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { useContext } from "react";
+import { timeDifferenceFromNow } from "../utils/utils";
 
 function TasksListLayout() {
   const navigate = useNavigate();
-  const tasksList = [
-    {
-      title: "Food Delviery Mobile App",
-      description:
-        "Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster.",
-      location: "SanFrancissco",
-      postDate: "2 minutes ago",
-      tags: ["iOS", "Android", "Mobile App", "Design"],
-    },
-  ];
+  // const tasksList = [
+  //   {
+  //     title: "Food Delviery Mobile App",
+  //     description:
+  //       "Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster.",
+  //     location: "SanFrancissco",
+  //     postDate: "2 minutes ago",
+  //     tags: ["iOS", "Android", "Mobile App", "Design"],
+  //   },
+  // ];
+  const { tasksList } = useContext(UserContext);
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -200,7 +204,10 @@ function TasksListLayout() {
             {tasksList?.length > 0 &&
               tasksList?.map((task) => {
                 return (
-                  <a onClick={() => navigate('/task/details')} class="task-listing">
+                  <a
+                    onClick={() => navigate("/task/details")}
+                    class="task-listing"
+                  >
                     {/* <!-- Job Listing Details --> */}
                     <div class="task-listing-details">
                       {/* <!-- Details --> */}
@@ -213,13 +220,17 @@ function TasksListLayout() {
                           </li>
                           <li>
                             <i class="icon-material-outline-access-time"></i>{" "}
-                            {task.postDate}
+                            {`${timeDifferenceFromNow(task?.createdAt)}`}
                           </li>
                         </ul>
                         <p class="task-listing-text">{task.description}</p>
                         <div class="task-tags">
-                          {task?.tags?.length > 0 &&
-                            task.tags.map((tag) => <span style={{marginLeft: 4}}>{tag}</span>)}
+                          {task?.tags?.split(",").length > 0 &&
+                            task?.tags
+                              ?.split(",")
+                              .map((tag) => (
+                                <span style={{ marginLeft: 4 }}>{tag}</span>
+                              ))}
                         </div>
                       </div>
                     </div>
@@ -227,8 +238,8 @@ function TasksListLayout() {
                     <div class="task-listing-bid">
                       <div class="task-listing-bid-inner">
                         <div class="task-offers">
-                          <strong>$1,000 - $2,500</strong>
-                          <span>Fixed Price</span>
+                          <strong>{task.budget}</strong>
+                          <span>{task.type}</span>
                         </div>
                         <span class="button button-sliding-icon ripple-effect">
                           Bid Now{" "}

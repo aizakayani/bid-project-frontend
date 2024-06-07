@@ -83,7 +83,7 @@ function App() {
             }
           />
           <Route
-            path="/job/details"
+            path="/job/details/:id"
             element={
               <Layout>
                 <JobDetails />

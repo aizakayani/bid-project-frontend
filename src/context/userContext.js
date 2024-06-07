@@ -8,8 +8,25 @@ export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userJobs, setUserJobs] = useState([]);
   const [userTasks, setUserTasks] = useState([]);
+  const [jobsList, setJobsList] = useState([]);
+  const [tasksList, setTasksList] = useState([]);
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, setIsLoggedIn, userJobs, setUserJobs, userTasks, setUserTasks }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        isLoggedIn,
+        setIsLoggedIn,
+        userJobs,
+        setUserJobs,
+        userTasks,
+        setUserTasks,
+        jobsList,
+        setJobsList,
+        tasksList,
+        setTasksList,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

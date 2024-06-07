@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { jwtDecode } from "jwt-decode";
-import { getJobsByUser } from "../services/job";
+import { getJobs, getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
-import { getTasksByUser } from "../services/task";
+import { getTasks, getTasksByUser } from "../services/task";
 function Header() {
   const {
     user,
@@ -18,6 +18,8 @@ function Header() {
     isLoggedIn,
     setUserJobs,
     setUserTasks,
+    setJobsList,
+    setTasksList,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -50,12 +52,14 @@ function Header() {
 
   const initializer = async () => {
     // if (user.role === "freelancer") {
-    await getJobs();
-    await getTasks();
+    await getAllJobs();
+    await getUserJobs();
+    await getUserTasks();
+    await getAllTasks();
     // }
   };
 
-  const getJobs = async () => {
+  const getUserJobs = async () => {
     // fetch jobs
     try {
       const jobsResult = await getJobsByUser();
@@ -72,12 +76,46 @@ function Header() {
     }
   };
 
-  const getTasks = async () => {
+  const getUserTasks = async () => {
     // fetch jobs
     try {
       const tasksResult = await getTasksByUser();
       if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
         setUserTasks([...tasksResult?.tasks]);
+      } else {
+        if (!isTokenValid(tasksResult)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllJobs = async () => {
+    // fetch jobs
+    try {
+      const jobsResult = await getJobs();
+      if (jobsResult?.success && jobsResult?.jobs?.length > 0) {
+        setJobsList([...jobsResult?.jobs]);
+      } else {
+        if (!isTokenValid(jobsResult)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllTasks = async () => {
+    // fetch jobs
+    try {
+      const tasksResult = await getTasks();
+      if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
+        setTasksList([...tasksResult?.tasks]);
       } else {
         if (!isTokenValid(tasksResult)) {
           navigate("/login");
