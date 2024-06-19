@@ -15,15 +15,6 @@ function Contact() {
           <div class="row">
             <div class="col-md-12">
               <h2>Contact</h2>
-
-              {/* <!-- Breadcrumbs --> */}
-              <nav id="breadcrumbs" class="dark">
-                {/* <ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Pages</a></li>
-						<li>Contact</li>
-					</ul> */}
-              </nav>
             </div>
           </div>
         </div>

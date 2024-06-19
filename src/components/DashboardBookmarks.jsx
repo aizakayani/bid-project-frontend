@@ -13,15 +13,6 @@ function DashboardBookmarks () {
 			{/* <!-- Dashboard Headline --> */}
 			<div class="dashboard-headline">
 				<h3>Bookmarks</h3>
-
-				{/* <!-- Breadcrumbs --> */}
-				<nav id="breadcrumbs" class="dark">
-					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Dashboard</a></li>
-						<li>Bookmarks</li>
-					</ul>
-				</nav>
 			</div>
 	
 			{/* <!-- Row --> */}

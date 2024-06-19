@@ -7,14 +7,7 @@ function DashboardMyActiveBids () {
 			<div class="dashboard-headline">
 				<h3>My Active Bids</h3>
 
-				{/* <!-- Breadcrumbs --> */}
-				<nav id="breadcrumbs" class="dark">
-					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Dashboard</a></li>
-						<li>My Active Bids</li>
-					</ul>
-				</nav>
+				
 			</div>
 	
 			{/* <!-- Row --> */}

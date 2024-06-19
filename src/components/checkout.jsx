@@ -9,14 +9,7 @@ function Checkout() {
             <div class="col-md-12">
               <h2>Checkout</h2>
 
-              {/* <!-- Breadcrumbs -->
-				<nav id="breadcrumbs" class="dark">
-					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Pricing Plans</a></li>
-						<li>Checkout</li>
-					</ul>
-				</nav> */}
+             
             </div>
           </div>
         </div>

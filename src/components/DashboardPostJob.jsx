@@ -90,18 +90,7 @@ function DashboardPostJob({ updateJobData }) {
         <div class="dashboard-headline">
           <h3>{updateJobData ? "Update Job" : "Post a Job"}</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Post a Job</li>
-            </ul>
-          </nav>
+          
         </div>
 
         {/* <!-- Row --> */}

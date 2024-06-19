@@ -43,15 +43,6 @@ function Register() {
             <div class="col-md-12">
               <h2>Register</h2>
 
-              {/* <!-- Breadcrumbs --> */}
-              <nav id="breadcrumbs" class="dark">
-                <ul>
-                  <li>
-                    <a href="#">Home</a>
-                  </li>
-                  <li>Register</li>
-                </ul>
-              </nav>
             </div>
           </div>
         </div>
@@ -70,7 +61,7 @@ function Register() {
                   Already have an account?{" "}
                   <a  onClick={() => {
                     navigate("/login");
-                  }}>Log In!</a>
+                  }}style={{ color: '#770737', textDecoration: 'underline' }}>Log In!</a>
                 </span>
               </div>
 

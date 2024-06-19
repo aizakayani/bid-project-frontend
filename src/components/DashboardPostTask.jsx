@@ -90,18 +90,8 @@ function DashboardPostTask({ updateTaskData }) {
         <div class="dashboard-headline">
           <h3>Post a Task</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Post a Task</li>
-            </ul>
-          </nav>
+          
+          
         </div>
 
         {/* <!-- Row --> */}

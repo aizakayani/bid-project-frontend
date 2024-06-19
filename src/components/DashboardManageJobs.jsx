@@ -55,18 +55,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
         <div class="dashboard-headline">
           <h3>Manage Jobs</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Manage Jobs</li>
-            </ul>
-          </nav>
+          
         </div>
 
         {/* <!-- Row --> */}

@@ -14,18 +14,7 @@ function DashboardManageBidders() {
             Bids for <a href="#">Food Delivery Mobile Application</a>
           </span>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Manage Bidders</li>
-            </ul>
-          </nav>
+          
         </div>
 
         {/* <!-- Row --> */}

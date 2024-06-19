@@ -6,16 +6,6 @@ function DashboardMain () {
           <div class="dashboard-headline">
             <h3>Howdy, Tom!</h3>
             <span>We are glad to see you again!</span>
-
-            {/* <!-- Breadcrumbs --> */}
-            <nav id="breadcrumbs" class="dark">
-              <ul>
-                <li>
-                  <a href="#">Home</a>
-                </li>
-                <li>Dashboard</li>
-              </ul>
-            </nav>
           </div>
 
           {/* <!-- Fun Facts Container --> */}
