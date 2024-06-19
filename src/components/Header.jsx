@@ -210,7 +210,7 @@ function Header() {
                     <a onClick={() => navigate("/")}>Home</a>
                   </li>
 
-                  <li>
+                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
                     <a href="#">Find Work</a>
                     <ul class="dropdown-nav">
                       <li>
@@ -232,7 +232,7 @@ function Header() {
                       Find a Freelancer
                     </a>
                   </li>
-                  <li>
+                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
                     <a href="#">More</a>
                     <ul class="dropdown-nav">
                       <li>
@@ -438,7 +438,7 @@ function Header() {
             <div class="clearfix"></div>
           </div>
           {isLoggedIn && (
-            <div class="right-side">
+            <div class="right-side-notifications">
               {/* <!--  User Notifications --> */}
               <div class="header-widget hide-on-mobile">
                 {/* <!-- Notifications --> */}

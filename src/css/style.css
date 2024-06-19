@@ -339,6 +339,19 @@ header.fullwidth .container {
 	top: 6px;
 }
 
+#header .right-side-notifications {
+	float: left;
+	text-align: left;
+	width: auto;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	right: 25px;
+	background-color: #fff;
+	top: 6px;
+	height: 90% !important;
+}
+
 #header .right-side-before-login {
 	float: right;
 	text-align: right;
@@ -951,7 +964,7 @@ ul.user-menu-small-nav li a:hover i { color: #66676b; }
 #navigation {
 	position: relative;
 	display: inline-block;
-	margin-top: 22px;
+	margin-top: 27px;
 }
 
 #navigation ul {
