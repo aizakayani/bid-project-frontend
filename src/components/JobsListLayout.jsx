@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
 function JobsListLayout() {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ function JobsListLayout() {
   //   },
   // ];
   const { jobsList } = useContext(UserContext);
+ const[isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -60,8 +61,8 @@ function JobsListLayout() {
 
             {/* <!-- Category --> */}
             <div class="sidebar-widget">
-              <h3>Category</h3>
-              <select
+              <h3 onClick={()=> setIsMenuOpen(!isMenuOpen)}>Category</h3>
+              {isMenuOpen &&   <select
                 class="selectpicker"
                 multiple
                 data-selected-text-format="count"
@@ -79,7 +80,8 @@ function JobsListLayout() {
                 <option>Management</option>
                 <option>Miscellaneous</option>
                 <option>Public Relations</option>
-              </select>
+              </select>}
+            
             </div>
 
             {/* <!-- Job Types --> */}

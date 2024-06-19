@@ -306,7 +306,8 @@ img { max-width: 100%; }
 #header .container {
 	height: 100%;
 }
-#header .left-side { height: 100%; }
+#header .left-side { height: 100%; display: flex !important;}
+
 
 /* Full Width Header */
 header.fullwidth .container {
@@ -327,6 +328,18 @@ header.fullwidth .container {
 
 
 #header .right-side {
+	float: left;
+	text-align: left;
+	width: auto;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	right: 25px;
+	background-color: #fff;
+	top: 6px;
+}
+
+#header .right-side-before-login {
 	float: right;
 	text-align: right;
 	width: auto;
@@ -337,6 +350,7 @@ header.fullwidth .container {
 	background-color: #fff;
 	top: 6px;
 }
+
 
 /* Full Width Styles */
 .full-width #header .left-side {
