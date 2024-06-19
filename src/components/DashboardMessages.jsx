@@ -2,8 +2,43 @@ import userAvatarSmall3 from "../utils/images/user-avatar-small-03.jpg";
 import userAvatarSmall2 from "../utils/images/user-avatar-small-02.jpg";
 import userAvatarSmall1 from "../utils/images/user-avatar-small-01.jpg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/userContext";
+
+const dummyMessages = [
+  {
+    placement: "left",
+    content:
+      "Thanks for choosing my offer. I will start working on your project tomorrow.",
+  },
+  {
+    placement: "right",
+    content: "Great. If you need any further clarification let me know. 👍",
+  },
+  {
+    placement: "right",
+    content: "Ok, I will. 😉",
+  },
+  {
+    placement: "right",
+    content:
+      "Hi Sindy, I just wanted to let you know that project is finished and I'm waiting for your approval.",
+  },
+  {
+    placement: "left",
+    content:
+      "Hi Tom! Hate to break it to you, but I'm actually on vacation 🌴 until Sunday so I can't check it now. 😎",
+  },
+  {
+    placement: "right",
+    content: "Ok, no problem. But don't forget about last payment. 🙂",
+  },
+];
 
 function DashboardMessages() {
+  const { newMessageContext, setNewMessageContext } = useContext(UserContext);
+  const [selectedMessages, setSelectedMessages] = useState(dummyMessages);
+  console.log(newMessageContext);
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -41,6 +76,27 @@ function DashboardMessages() {
               </div>
 
               <ul>
+                {newMessageContext && (
+                  <li>
+                    <a href="#">
+                      <div class="message-avatar">
+                        <i class="status-icon status-online"></i>
+                        <img src={userAvatarSmall3} alt="" />
+                      </div>
+
+                      <div class="message-by">
+                        <div class="message-by-headline">
+                          <h5>{newMessageContext?.receiver?.name}</h5>
+                          {/* <span>4 hours ago</span> */}
+                        </div>
+                        {/* <p>
+                          Thanks for reaching out. I'm quite busy right now on
+                          many
+                        </p> */}
+                      </div>
+                    </a>
+                  </li>
+                )}
                 <li>
                   <a href="#">
                     <div class="message-avatar">
@@ -137,113 +193,31 @@ function DashboardMessages() {
                   <span>28 June, 2019</span>
                 </div>
 
-                <div class="message-bubble me">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall3} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>
-                        Thanks for choosing my offer. I will start working on
-                        your project tomorrow.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-                <div class="message-bubble">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall2} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>
-                        Great. If you need any further clarification let me
-                        know. 👍
-                      </p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-                <div class="message-bubble me">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall1} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>Ok, I will. 😉</p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
+                {selectedMessages?.length > 0 &&
+                  selectedMessages?.map((message) => {
+                    return (
+                      <div
+                        class={`message-bubble ${
+                          message.placement === "right" ? "me" : ""
+                        }`}
+                      >
+                        <div class="message-bubble-inner">
+                          <div class="message-avatar">
+                            <img src={userAvatarSmall3} alt="" />
+                          </div>
+                          <div class="message-text">
+                            <p>{message.content}</p>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                    );
+                  })}
 
                 {/* <!-- Time Sign --> */}
-                <div class="message-time-sign">
+                {/* <div class="message-time-sign">
                   <span>Yesterday</span>
-                </div>
-
-                <div class="message-bubble me">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall1} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>
-                        Hi Sindy, I just wanted to let you know that project is
-                        finished and I'm waiting for your approval.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-                <div class="message-bubble">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall2} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>
-                        Hi Tom! Hate to break it to you, but I'm actually on
-                        vacation 🌴 until Sunday so I can't check it now. 😎
-                      </p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-                <div class="message-bubble me">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall1} alt="" />
-                    </div>
-                    <div class="message-text">
-                      <p>
-                        Ok, no problem. But don't forget about last payment. 🙂
-                      </p>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-                <div class="message-bubble">
-                  <div class="message-bubble-inner">
-                    <div class="message-avatar">
-                      <img src={userAvatarSmall2} alt="" />
-                    </div>
-                    <div class="message-text">
-                      {/* <!-- Typing Indicator --> */}
-                      <div class="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
+                </div> */}
               </div>
               {/* <!-- Message Content Inner / End --> */}
 
@@ -267,7 +241,7 @@ function DashboardMessages() {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-          ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
+            ©2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

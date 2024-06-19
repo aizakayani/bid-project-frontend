@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import { getJobs, getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
 import { getTasks, getTasksByUser } from "../services/task";
+import io from "socket.io-client";
 function Header() {
   const {
     user,
@@ -20,6 +21,9 @@ function Header() {
     setUserTasks,
     setJobsList,
     setTasksList,
+    socket,
+    setSocket,
+    setChatMessages,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -49,6 +53,31 @@ function Header() {
     if (!isLoggedIn) return;
     initializer();
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    if (socket) return;
+    const newSocket = io("http://localhost:3000", {
+      query: { userId: user.id },
+    });
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+      console.log("Chat socket connected");
+      // fetch chat history
+      // newSocket.emit("chat-history", {});
+    });
+
+    newSocket.on("chat-message", (msg) => {
+      setChatMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    newSocket.on("chat-history", (msgs) => {
+      setChatMessages([...msgs]);
+    });
+
+    return () => newSocket.close();
+  }, [user?.id]);
 
   const initializer = async () => {
     // if (user.role === "freelancer") {

@@ -177,7 +177,9 @@ function Dashboard() {
         {dashboardType === "managejobs" && (
           <DashboardManageJobs handleUpdateJob={handleUpdateJob} />
         )}
-        {dashboardType === "managecandidates" && <DashboardManageCandidates />}
+        {dashboardType === "managecandidates" && (
+          <DashboardManageCandidates setDashboardType={setDashboardType} />
+        )}
         {dashboardType === "postjob" && (
           <DashboardPostJob
             updateJobData={updateJobData}

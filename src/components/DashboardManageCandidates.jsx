@@ -3,7 +3,50 @@ import au from "../utils/images/flags/au.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import it from "../utils/images/flags/it.svg";
 import ru from "../utils/images/flags/ru.svg";
-function DashboardManageCandidates() {
+import { useContext, useEffect } from "react";
+import { UserContext } from "../context/userContext";
+import { getJobsApplicationsByJobIds } from "../services/job-applications";
+import { saveAs } from "file-saver";
+function DashboardManageCandidates({ setDashboardType }) {
+  const {
+    setJobApplications,
+    jobApplications,
+    userJobs,
+    setNewMessageContext,
+  } = useContext(UserContext);
+  useEffect(() => {
+    if (userJobs?.length > 0) {
+      // get JobIds
+      const jobIds = userJobs.map((job) => job._id);
+      console.log(jobIds);
+      getJobApplications(jobIds);
+    }
+  }, [userJobs?.length]);
+
+  const getJobApplications = async (jobIds) => {
+    // fetch jobs
+    try {
+      const jobApplicationsResult = await getJobsApplicationsByJobIds(jobIds);
+      if (
+        jobApplicationsResult?.success &&
+        jobApplicationsResult?.jobApplications?.length > 0
+      ) {
+        setJobApplications([...jobApplicationsResult?.jobApplications]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const downloadPdf = (applicantCV) => {
+    // Example buffer data (replace with your actual PDF buffer)
+    const pdfBuffer = new Uint8Array(applicantCV?.data?.data);
+
+    // Convert buffer to Blob
+    const blob = new Blob([pdfBuffer], { type: "application/pdf" });
+
+    // Use FileSaver to save the file
+    saveAs(blob, "downloaded.pdf");
+  };
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -43,6 +86,97 @@ function DashboardManageCandidates() {
 
               <div class="content">
                 <ul class="dashboard-box-list">
+                  {jobApplications?.length > 0 &&
+                    jobApplications?.map((jobApplication) => {
+                      return (
+                        <li>
+                          {/* <!-- Overview --> */}
+                          <div class="freelancer-overview manage-candidates">
+                            <div class="freelancer-overview-inner">
+                              {/* <!-- Avatar --> */}
+                              <div class="freelancer-avatar">
+                                <div class="verified-badge"></div>
+                                <a href="#">
+                                  <img src={userAvatarBig3} alt="" />
+                                </a>
+                              </div>
+
+                              {/* <!-- Name --> */}
+                              <div class="freelancer-name">
+                                <h4>
+                                  <a href="#">
+                                    {`${jobApplication.applicantName} `}
+                                    <img
+                                      class="flag"
+                                      src={au}
+                                      alt=""
+                                      title="Australia"
+                                      data-tippy-placement="top"
+                                    />
+                                  </a>
+                                </h4>
+
+                                {/* <!-- Details --> */}
+                                <span class="freelancer-detail-item">
+                                  <a href="#">
+                                    <i class="icon-feather-mail"></i>{" "}
+                                    {jobApplication.applicantEmail}
+                                  </a>
+                                </span>
+                                <span class="freelancer-detail-item">
+                                  <i class="icon-feather-phone"></i> (+61)
+                                  123-456-789
+                                </span>
+
+                                {/* <!-- Rating --> */}
+                                <div class="freelancer-rating">
+                                  <div
+                                    class="star-rating"
+                                    data-rating="5.0"
+                                  ></div>
+                                </div>
+
+                                {/* <!-- Buttons --> */}
+                                <div class="buttons-to-right always-visible margin-top-25 margin-bottom-5">
+                                  <a
+                                    class="button ripple-effect"
+                                    onClick={() =>
+                                      downloadPdf(jobApplication.applicantCV)
+                                    }
+                                  >
+                                    <i class="icon-feather-file-text"></i>{" "}
+                                    Download CV
+                                  </a>
+                                  <a
+                                    href="#small-dialog"
+                                    class="popup-with-zoom-anim button dark ripple-effect"
+                                    onClick={() => {
+                                      setNewMessageContext({
+                                        receiver: {
+                                          name: jobApplication.applicantName,
+                                        },
+                                      });
+                                      setDashboardType("messages");
+                                    }}
+                                  >
+                                    <i class="icon-feather-mail"></i> Send
+                                    Message
+                                  </a>
+                                  <a
+                                    href="#"
+                                    class="button gray ripple-effect ico"
+                                    title="Remove Candidate"
+                                    data-tippy-placement="top"
+                                  >
+                                    <i class="icon-feather-trash-2"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
                   <li>
                     {/* <!-- Overview --> */}
                     <div class="freelancer-overview manage-candidates">
@@ -118,10 +252,7 @@ function DashboardManageCandidates() {
                         {/* <!-- Avatar --> */}
                         <div class="freelancer-avatar">
                           <a href="#">
-                            <img
-                              src={userAvatarPlaceholder}
-                              alt=""
-                            />
+                            <img src={userAvatarPlaceholder} alt="" />
                           </a>
                         </div>
 
@@ -189,10 +320,7 @@ function DashboardManageCandidates() {
                         {/* <!-- Avatar --> */}
                         <div class="freelancer-avatar">
                           <a href="#">
-                            <img
-                              src={userAvatarPlaceholder}
-                              alt=""
-                            />
+                            <img src={userAvatarPlaceholder} alt="" />
                           </a>
                         </div>
 
@@ -263,7 +391,7 @@ function DashboardManageCandidates() {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-          2024 <strong>Bid Bridge</strong>. All Rights Reserved.
+            2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

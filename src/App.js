@@ -92,6 +92,7 @@ function App() {
           />
           <Route
             path="/contact"
+            createError
             element={
               <Layout>
                 <Contact />

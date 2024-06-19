@@ -10,6 +10,10 @@ export const UserProvider = ({ children }) => {
   const [userTasks, setUserTasks] = useState([]);
   const [jobsList, setJobsList] = useState([]);
   const [tasksList, setTasksList] = useState([]);
+  const [socket, setSocket] = useState(null);
+  const [chatMessages, setChatMessages] = useState(null);
+  const [jobApplications, setJobApplications] = useState([]);
+  const [newMessageContext, setNewMessageContext] = useState(null);
   return (
     <UserContext.Provider
       value={{
@@ -25,6 +29,14 @@ export const UserProvider = ({ children }) => {
         setJobsList,
         tasksList,
         setTasksList,
+        jobApplications,
+        setJobApplications,
+        socket,
+        setSocket,
+        chatMessages,
+        setChatMessages,
+        newMessageContext,
+        setNewMessageContext,
       }}
     >
       {children}
