@@ -319,7 +319,7 @@ function Header() {
                     <a onClick={() => navigate("/")}>Home</a>
                   </li>
 
-                  <li>
+                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
                     <a href="#">Find Work</a>
                     <ul class="dropdown-nav">
                       <li>

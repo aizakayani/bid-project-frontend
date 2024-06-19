@@ -118,13 +118,14 @@ th span::after {
 }
 
 #footer li {
-  display: inline-block;
+  display: flex;
+  justify-items: start;
   padding: 0 20px;
   border-right: 1px solid #ddd;
   line-height: 11px;
+  padding-left: 0;
 }
 
-#footer li:first-child { padding-left: 0; }
 #footer li:last-child { border:none; }
 
 #footer li span {
