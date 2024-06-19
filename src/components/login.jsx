@@ -61,15 +61,7 @@ function Login() {
             <div class="col-md-12">
               <h2>Log In</h2>
 
-              {/* <!-- Breadcrumbs --> */}
-              <nav id="breadcrumbs" class="dark">
-                <ul>
-                  <li>
-                    <a href="#">Home</a>
-                  </li>
-                  <li>Log In</li>
-                </ul>
-              </nav>
+             
             </div>
           </div>
         </div>
@@ -88,7 +80,7 @@ function Login() {
                   Don't have an account?{" "}
                   <a  onClick={() => {
                     navigate("/register");
-                  }}>Sign Up!</a>
+                  }}style={{ color: '#770737', textDecoration: 'underline' }}>Sign Up!</a>
                 </span>
               </div>
 
@@ -146,8 +138,7 @@ function Login() {
               <div class="social-login-separator">
                 <span>or</span>
               </div>
-              <div class="social-login-buttons">
-                
+              <div class="social-login-buttons"> 
                 <button class="google-login ripple-effect" onClick={loginViaGoogle}>
                   <i class="icon-brand-google-plus-g"></i> Log In via Google+
                 </button>

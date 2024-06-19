@@ -6,18 +6,7 @@ function DashboardReviews() {
         <div class="dashboard-headline">
           <h3>Reviews</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Reviews</li>
-            </ul>
-          </nav>
+          
         </div>
 
         {/* <!-- Row --> */}

@@ -46,18 +46,7 @@ function DashboardMessages() {
         <div class="dashboard-headline">
           <h3>Messages</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Messages</li>
-            </ul>
-          </nav>
+          
         </div>
 
         <div class="messages-container margin-top-0">

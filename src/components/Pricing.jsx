@@ -10,18 +10,7 @@ function Pricing() {
             <div class="col-md-12">
               <h2>Pricing Plans</h2>
 
-              {/* <!-- Breadcrumbs --> */}
-              {/* <nav id="breadcrumbs" class="dark">
-                <ul>
-                  <li>
-                    <a href="#">Home</a>
-                  </li>
-                  <li>
-                    <a href="#">Pages</a>
-                  </li>
-                  <li>Pricing Plans</li>
-                </ul>
-              </nav> */}
+            
             </div>
           </div>
         </div>

@@ -17,16 +17,7 @@ function Blog() {
             <div class="col-md-12">
               <h2>Blog</h2>
               <span>Featured Posts</span>
-
-              {/* <!-- Breadcrumbs --> */}
-              <nav id="breadcrumbs" class="dark">
-                <ul>
-                  <li>
-                    <a href="#">Home</a>
-                  </li>
-                  <li>Blog</li>
-                </ul>
-              </nav>
+              
             </div>
           </div>
         </div>

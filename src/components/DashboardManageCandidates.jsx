@@ -57,18 +57,7 @@ function DashboardManageCandidates({ setDashboardType }) {
             Job Applications for <a href="#">Full Stack PHP Developer</a>
           </span>
 
-          {/* <!-- Breadcrumbs --> */}
-          <nav id="breadcrumbs" class="dark">
-            <ul>
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Manage Candidates</li>
-            </ul>
-          </nav>
+         
         </div>
 
         {/* <!-- Row --> */}

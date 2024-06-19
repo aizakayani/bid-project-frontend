@@ -54,19 +54,7 @@ function DashboardManageTasks({ handleUpdateTask }) {
         <div class="dashboard-headline">
           <h3>Manage Tasks</h3>
 
-          {/* <!-- Breadcrumbs --> */}
-          {/* <nav id="breadcrumbs" class="dark">
-            <ul>
-              deleted
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li>
-                <a href="#">Dashboard</a>
-              </li>
-              <li>Manage Tasks</li>
-            </ul>
-          </nav> */}
+          
         </div>
 
         {/* <!-- Row --> */}
