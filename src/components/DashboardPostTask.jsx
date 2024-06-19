@@ -39,7 +39,7 @@ function DashboardPostTask({ updateTaskData }) {
       budget,
       requiredSkills,
       description,
-      createdAt: Date.now(),
+      createdAt: Date.now() / 1000,
     };
     // fetch task
     try {

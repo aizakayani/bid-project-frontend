@@ -9,6 +9,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
   const { userJobs, setUserJobs } = useContext(UserContext);
   const [showDeleteJobPopup, setShowDeleteJobPopup] = useState(false);
   const [jobIdToDelete, setJobIdToDelete] = useState(null);
+
   const checkExpiration = (createdTime) => {
     const currentTime = Date.now() / 1000;
     if (currentTime < createdTime) {

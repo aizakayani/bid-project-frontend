@@ -1,17 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import companyLogo1 from "../utils/images/company-logo-01.png";
+import companyLogo05 from "../utils/images/company-logo-05.png";
+import { UserContext } from "../context/userContext";
+import { useContext } from "react";
+import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
 function JobsListLayout() {
   const navigate = useNavigate();
-  const jobsList = [
-    {
-      title: "Bilingual Event Support Specialist",
-      company: "Hexagon",
-      location: "SanFrancissco",
-      type: "Full Time",
-      postDate: "2 days ago",
-      logo: companyLogo1,
-    },
-  ];
+  // const { jobsList } = useContext(UserContext);
+  // const jobsList = [
+  //   {
+  //     title: "Bilingual Event Support Specialist",
+  //     company: "Hexagon",
+  //     location: "SanFrancissco",
+  //     type: "Full Time",
+  //     postDate: "2 days ago",
+  //     logo: companyLogo1,
+  //   },
+  // ];
+  const { jobsList } = useContext(UserContext);
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -203,12 +208,15 @@ function JobsListLayout() {
             {jobsList?.length > 0 &&
               jobsList.map((job) => {
                 return (
-                  <a onClick={() => navigate('/job/details')} class="job-listing">
+                  <a
+                    onClick={() => navigate(`/job/details/${job._id}`)}
+                    class="job-listing"
+                  >
                     {/* <!-- Job Listing Details --> */}
                     <div class="job-listing-details">
                       {/* <!-- Logo --> */}
                       <div class="job-listing-company-logo">
-                        <img src={job.logo} alt="" />
+                        <img src={job.companyLogo || companyLogo05} alt="" />
                       </div>
 
                       {/* <!-- Details --> */}
@@ -237,7 +245,7 @@ function JobsListLayout() {
                             </li>
                             <li>
                               <i class="icon-material-outline-access-time"></i>{" "}
-                              {job.postDate}
+                              {`${timeDifferenceFromNow(job?.createdAt)}`}
                             </li>
                           </ul>
                         </div>
