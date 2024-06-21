@@ -20,6 +20,7 @@ import Register from "./components/register";
 import { UserProvider } from "./context/userContext";
 import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
+import FreeLancerDetails from "./components/FreeLancerDetails";
 
 function App() {
   return (
@@ -131,6 +132,15 @@ function App() {
               </DashboardLayout>
             }
           />
+          <Route
+            path="/freelancer/details/:id"
+            element={
+              <Layout>
+                <FreeLancerDetails/>
+              </Layout>
+            }
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/invoice" element={<Invoice />} />

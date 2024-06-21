@@ -125,24 +125,6 @@ function JobsListLayout() {
               </div>
             </div>
 
-            {/* <!-- Salary --> */}
-            <div class="sidebar-widget">
-              <h3>Salary</h3>
-              <div class="margin-top-55"></div>
-
-              {/* <!-- Range Slider --> */}
-              <input
-                class="range-slider"
-                type="text"
-                value=""
-                data-slider-currency="$"
-                data-slider-min="1500"
-                data-slider-max="15000"
-                data-slider-step="100"
-                data-slider-value="[1500,15000]"
-              />
-            </div>
-
             {/* <!-- Tags --> */}
             <div class="sidebar-widget">
               <h3>Tags</h3>
