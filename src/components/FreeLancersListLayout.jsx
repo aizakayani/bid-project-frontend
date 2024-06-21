@@ -289,7 +289,7 @@ function FreeLancersListLayout() {
           <div class="row">
             <div class="col-md-12">
               {/* <!-- Pagination --> */}
-              <div class="pagination-container margin-top-40 margin-bottom-60">
+              {freelancersList?.length > 5 && <div class="pagination-container margin-top-40 margin-bottom-60">
                 <nav class="pagination">
                   <ul>
                     <li class="pagination-arrow">
@@ -324,7 +324,8 @@ function FreeLancersListLayout() {
                     </li>
                   </ul>
                 </nav>
-              </div>
+              </div>}
+              
             </div>
           </div>
           {/* <!-- Pagination / End --> */}

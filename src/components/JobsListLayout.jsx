@@ -265,8 +265,8 @@ function JobsListLayout() {
           <div class="clearfix"></div>
           <div class="row">
             <div class="col-md-12">
-              {/* <!-- Pagination --> */}
-              <div class="pagination-container margin-top-60 margin-bottom-60">
+              {/* <!-- Pagination --> */} {
+                jobsList?. length > 5 && <div class="pagination-container margin-top-60 margin-bottom-60">
                 <nav class="pagination">
                   <ul>
                     <li class="pagination-arrow">
@@ -296,6 +296,8 @@ function JobsListLayout() {
                   </ul>
                 </nav>
               </div>
+              }
+              
             </div>
           </div>
           {/* <!-- Pagination / End --> */}
