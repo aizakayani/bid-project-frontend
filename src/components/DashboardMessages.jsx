@@ -7,38 +7,148 @@ import { UserContext } from "../context/userContext";
 
 const dummyMessages = [
   {
-    placement: "left",
-    content:
+    message:
       "Thanks for choosing my offer. I will start working on your project tomorrow.",
   },
   {
-    placement: "right",
-    content: "Great. If you need any further clarification let me know. 👍",
+    message: "Great. If you need any further clarification let me know. 👍",
   },
   {
-    placement: "right",
-    content: "Ok, I will. 😉",
+    message: "Ok, I will. 😉",
   },
   {
-    placement: "right",
-    content:
+    message:
       "Hi Sindy, I just wanted to let you know that project is finished and I'm waiting for your approval.",
   },
   {
-    placement: "left",
-    content:
+    message:
       "Hi Tom! Hate to break it to you, but I'm actually on vacation 🌴 until Sunday so I can't check it now. 😎",
   },
   {
-    placement: "right",
-    content: "Ok, no problem. But don't forget about last payment. 🙂",
+    message: "Ok, no problem. But don't forget about last payment. 🙂",
   },
 ];
 
 function DashboardMessages() {
-  const { newMessageContext, setNewMessageContext } = useContext(UserContext);
-  const [selectedMessages, setSelectedMessages] = useState(dummyMessages);
-  console.log(newMessageContext);
+  const {
+    newMessageContext,
+    setNewMessageContext,
+    chatMessages,
+    socket,
+    user,
+  } = useContext(UserContext);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [conversations, setConversations] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  useEffect(() => {
+    if (chatMessages) {
+      if (newMessageContext) {
+        // check if receiver with new message context already exists then just open chat
+        const filteredMessages = chatMessages.filter(
+          (message) => message.receiver === newMessageContext?.receiver?.id
+        );
+        if (filteredMessages?.length > 0) {
+          const messageData = {
+            conversationReceiver: newMessageContext.receiver.id,
+            conversationName: newMessageContext.receiver.name,
+            conversationMessages: [...filteredMessages],
+          };
+          setNewMessageContext(null);
+          setSelectedConversation(messageData);
+        } else {
+          setSelectedConversation({
+            conversationReceiver: newMessageContext.receiver.id,
+            conversatisetSelectedConversationonName:
+              newMessageContext.receiver.name,
+            conversationMessages: [],
+          });
+        }
+      }
+      if (chatMessages?.length > 0) {
+        const groupedMessages = groupMessages(chatMessages);
+        console.log("HUI", groupedMessages);
+        setConversations(groupedMessages);
+        // set first conversation if none is selected
+        console.log(
+          groupedMessages?.length > 0,
+          !newMessageContext,
+          !selectedConversation
+        );
+        if (groupedMessages?.length > 0 && !newMessageContext) {
+          if (selectedConversation) {
+            const selectedCoversationCopy = groupedMessages?.find(
+              (groupedMessage) =>
+                groupedMessage.conversationReceiver ===
+                selectedConversation.conversationReceiver
+            );
+            if (selectedCoversationCopy) {
+              setSelectedConversation(selectedCoversationCopy);
+            }
+          } else {
+            setSelectedConversation(groupedMessages[0]);
+          }
+        }
+      }
+    }
+    // return () => setNewMessageContext(null);
+  }, [newMessageContext, chatMessages]);
+
+  const groupMessages = (messages) => {
+    console.log("MESSAGES", messages);
+    const groupedMessages = [];
+    messages.forEach((message) => {
+      const { receiver, sender, receiverName, senderName } = message;
+      // get index
+      let conversationIndex = -1;
+      groupedMessages?.length > 0 &&
+        groupedMessages.forEach((groupedMessage, index) => {
+          if (
+            groupedMessage.conversationGroup === `${receiver}-${sender}` ||
+            groupedMessage.conversationGroup === `${sender}-${receiver}`
+          ) {
+            conversationIndex = index;
+          }
+        });
+      if (conversationIndex === -1) {
+        groupedMessages.push({
+          conversationGroup: `${receiver}-${sender}`,
+          conversationName: sender === user.id ? receiverName : senderName,
+          conversationReceiver: sender === user.id ? receiver : sender,
+          conversationMessages: [message],
+        });
+      } else {
+        groupedMessages[conversationIndex].conversationMessages.push(message);
+      }
+    });
+    return groupedMessages;
+  };
+
+  const sortedConversations = conversations.sort((a, b) => {
+    // Extract the last message's createdAt timestamp for both conversations
+    const lastMessageA =
+      a.conversationMessages[a.conversationMessages.length - 1]?.createdAt;
+    const lastMessageB =
+      b.conversationMessages[b.conversationMessages.length - 1]?.createdAt;
+
+    // Compare the timestamps for sorting
+    return lastMessageB - lastMessageA;
+  });
+
+  const handleSendMessage = () => {
+    if (!socket) return;
+    if (selectedConversation) {
+      socket.emit("chat-message", {
+        message: newMessage,
+        receiverId: newMessageContext
+          ? newMessageContext.receiver.id
+          : selectedConversation.conversationReceiver,
+      });
+      setNewMessage("");
+      if (newMessageContext) {
+        setNewMessageContext(null);
+      }
+    }
+  };
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -86,7 +196,38 @@ function DashboardMessages() {
                     </a>
                   </li>
                 )}
-                <li>
+                {sortedConversations?.length > 0 &&
+                  sortedConversations.map((conversation) => (
+                    <li>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setSelectedConversation(conversation);
+                          setNewMessageContext(null);
+                        }}
+                      >
+                        <div class="message-avatar">
+                          <i class="status-icon status-online"></i>
+                          <img src={userAvatarSmall3} alt="" />
+                        </div>
+
+                        <div class="message-by">
+                          <div class="message-by-headline">
+                            <h5>{conversation.conversationName}</h5>
+                            <span>4 hours ago</span>
+                          </div>
+                          <p>
+                            {conversation.conversationMessages?.length
+                              ? conversation.conversationMessages[
+                                  conversation.conversationMessages.length - 1
+                                ].message
+                              : ""}
+                          </p>
+                        </div>
+                      </a>
+                    </li>
+                  ))}
+                {/* <li>
                   <a href="#">
                     <div class="message-avatar">
                       <i class="status-icon status-online"></i>
@@ -161,7 +302,7 @@ function DashboardMessages() {
                       <p>Yes, I received payment. Thanks for cooperation!</p>
                     </div>
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
             {/* <!-- Messages / End --> */}
@@ -169,7 +310,7 @@ function DashboardMessages() {
             {/* <!-- Message Content --> */}
             <div class="message-content">
               <div class="messages-headline">
-                <h4>Sindy Forest</h4>
+                <h4>{selectedConversation?.conversationName}</h4>
                 <a href="#" class="message-action">
                   <i class="icon-feather-trash-2"></i> Delete Conversation
                 </a>
@@ -182,26 +323,49 @@ function DashboardMessages() {
                   <span>28 June, 2019</span>
                 </div>
 
-                {selectedMessages?.length > 0 &&
-                  selectedMessages?.map((message) => {
-                    return (
-                      <div
-                        class={`message-bubble ${
-                          message.placement === "right" ? "me" : ""
-                        }`}
-                      >
-                        <div class="message-bubble-inner">
-                          <div class="message-avatar">
-                            <img src={userAvatarSmall3} alt="" />
+                {selectedConversation?.conversationMessages?.length > 0 &&
+                  selectedConversation?.conversationMessages?.map(
+                    (conversationMessage) => {
+                      let avatar = null;
+                      avatar =
+                        conversationMessage.sender === user.id
+                          ? conversationMessage.senderAvatar
+                          : conversationMessage.receiverAvatar;
+                      return (
+                        <div
+                          class={`message-bubble ${
+                            conversationMessage.sender === user.id ? "me" : ""
+                          }`}
+                        >
+                          <div class="message-bubble-inner">
+                            <div class="message-avatar">
+                              <img
+                                // src={
+                                //   conversationMessage.sender === user.id
+                                //     ? conversationMessage.senderAvatar
+                                //       ? conversationMessage.senderAvatar
+                                //       : userAvatarPlaceholder
+                                //     : conversationMessage.receiverAvatar
+                                //     ? conversationMessage.receiverAvatar
+                                //     : userAvatarPlaceholder
+                                // }
+                                src={
+                                  avatar && avatar.trim() !== ""
+                                    ? avatar
+                                    : userAvatarPlaceholder
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div class="message-text">
+                              <p>{conversationMessage.message}</p>
+                            </div>
                           </div>
-                          <div class="message-text">
-                            <p>{message.content}</p>
-                          </div>
+                          <div class="clearfix"></div>
                         </div>
-                        <div class="clearfix"></div>
-                      </div>
-                    );
-                  })}
+                      );
+                    }
+                  )}
 
                 {/* <!-- Time Sign --> */}
                 {/* <div class="message-time-sign">
@@ -217,8 +381,17 @@ function DashboardMessages() {
                   rows="1"
                   placeholder="Your Message"
                   data-autoresize
+                  value={newMessage}
+                  onChange={(e) => {
+                    setNewMessage(e.target.value);
+                  }}
                 ></textarea>
-                <button class="button ripple-effect">Send</button>
+                <button
+                  class="button ripple-effect"
+                  onClick={handleSendMessage}
+                >
+                  Send
+                </button>
               </div>
             </div>
             {/* <!-- Message Content --> */}

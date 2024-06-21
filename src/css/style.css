@@ -2585,6 +2585,10 @@ em.mm-counter+a.mm-fullsubopen+span {
 /* ---------------------------------- */
 /* Pagination
 ------------------------------------- */
+.pagination-container {
+	display: flex;
+	justify-content: center;
+}
 .pagination {
 	margin: 0;
 	text-align: center;
