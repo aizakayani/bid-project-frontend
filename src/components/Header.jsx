@@ -26,9 +26,9 @@ function Header() {
     setChatMessages,
   } = useContext(UserContext);
   const navigate = useNavigate();
-  const [showNotificationsDropdown, setShowNotificationsDropdown] =
-    useState(false);
+  const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
   const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -454,6 +454,7 @@ function Header() {
                           !showNotificationsDropdown
                         );
                         setShowMessagesDropdown(false);
+                        setShowProfileDropdown(false);
                       }}
                     >
                       <i class="icon-feather-bell"></i>
@@ -557,6 +558,7 @@ function Header() {
                       onClick={() => {
                         setShowMessagesDropdown(!showMessagesDropdown);
                         setShowNotificationsDropdown(false);
+                        setShowProfileDropdown(false);
                       }}
                     >
                       <i class="icon-feather-mail"></i>
@@ -656,15 +658,21 @@ function Header() {
                 {/* <!-- Messages --> */}
                 <div class="header-notifications user-menu">
                   <div class="header-notifications-trigger">
-                    <a href="#">
-                      <div class="user-avatar status-online">
+                    <a >
+                      <div class="user-avatar status-online" onClick={
+                    ()=> {
+                      console.log('avatar')
+                    setShowProfileDropdown(!showProfileDropdown);
+                    setShowMessagesDropdown(false);
+                    setShowNotificationsDropdown(false);
+                    }}>
                         <img src={userAvatarSmall1} alt="" />
                       </div>
                     </a>
                   </div>
 
                   {/* <!-- Dropdown --> */}
-                  <div class="header-notifications-dropdown">
+                  {showProfileDropdown &&  <div class={showProfileDropdown ? 'header-notifications-dropdown-active' : "header-notifications-dropdown"}>
                     {/* <!-- User Status --> */}
                     <div class="user-status">
                       {/* <!-- User Name / Avatar --> */}
@@ -709,7 +717,8 @@ function Header() {
                         </a>
                       </li>
                     </ul>
-                  </div>
+                  </div>}
+                 
                 </div>
               </div>
               {/* <!-- User Menu / End -->

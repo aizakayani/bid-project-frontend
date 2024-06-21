@@ -176,7 +176,7 @@ function TasksListLayout() {
         <div class="col-xl-9 col-lg-8 content-left-offset">
           <h3 class="page-title">Search Results</h3>
 
-          <div class="notify-box margin-top-15">
+          <div class="notify-box margin-top-15" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <div class="switch-container">
               <label class="switch">
                 <input type="checkbox" />
@@ -187,15 +187,16 @@ function TasksListLayout() {
               </label>
             </div>
 
-            <div class="sort-by">
-              <span>Sort by:</span>
-              <select class="selectpicker hide-tick">
-                <option>Relevance</option>
-                <option>Newest</option>
-                <option>Oldest</option>
-                <option>Random</option>
-              </select>
-            </div>
+            <div style={{display: 'flex', gap: '5px', flexWrap: 'nowrap'}}>
+              <div style={{display: 'flex', flexWrap: 'nowrap'}}>Sort by:</div>
+             <select>
+        <option value="relevance">Relevance</option>
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+                <option value='random'>Random</option>
+               
+      </select>
+             </div>
           </div>
 
           {/* <!-- Tasks Container --> */}
