@@ -35,6 +35,8 @@ function Header() {
     let token = queryParameters.get("token");
     if (!token) {
       token = localStorage.getItem("token");
+    } else {
+      localStorage.setItem("token", token);
     }
     if (token) {
       const decodedToken = jwtDecode(token);
@@ -65,7 +67,7 @@ function Header() {
     newSocket.on("connect", () => {
       console.log("Chat socket connected");
       // fetch chat history
-      // newSocket.emit("chat-history", {});
+      newSocket.emit("chat-history");
     });
 
     newSocket.on("chat-message", (msg) => {
@@ -236,37 +238,6 @@ function Header() {
                     <a href="#">More</a>
                     <ul class="dropdown-nav">
                       <li>
-                        <a href="#">Open Street Map</a>
-                        <ul class="dropdown-nav">
-                          <li>
-                            <a href="jobs-list-layout-full-page-map-OpenStreetMap.html">
-                              {" "}
-                              Map
-                            </a>
-                          </li>
-                          <li>
-                            <a href="single-job-page-OpenStreetMap.html">
-                              Job Page
-                            </a>
-                          </li>
-                          <li>
-                            <a href="single-company-profile-OpenStreetMap.html">
-                              Company Profile
-                            </a>
-                          </li>
-                          <li>
-                            <a href="pages-contact-OpenStreetMap.html">
-                              Contact
-                            </a>
-                          </li>
-                          <li>
-                            <a href="jobs-list-layout-1-OpenStreetMap.html">
-                              Location Autocomplete
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
                         <a onClick={() => navigate("/blog")}>Blog</a>
                       </li>
                       <li>
@@ -281,25 +252,6 @@ function Header() {
                         <a onClick={() => navigate("/invoice")}>
                           Invoice Template
                         </a>
-                      </li>
-                      <li>
-                        <a href="pages-user-interface-elements.html">
-                          User Interface Elements
-                        </a>
-                      </li>
-                      <li>
-                        <a href="pages-icons-cheatsheet.html">
-                          Icons Cheatsheet
-                        </a>
-                      </li>
-                      <li>
-                        <a href="pages-login.html">Login & Register</a>
-                      </li>
-                      <li>
-                        <a href="pages-404.html">404 Page</a>
-                      </li>
-                      <li>
-                        <a href="pages-contact.html">Contact</a>
                       </li>
                     </ul>
                   </li>

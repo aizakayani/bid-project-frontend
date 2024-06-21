@@ -80,42 +80,6 @@ function TasksListLayout() {
               </div>
             </div>
 
-            {/* <!-- Budget --> */}
-            <div class="sidebar-widget">
-              <h3>Fixed Price</h3>
-              <div class="margin-top-55"></div>
-
-              {/* <!-- Range Slider --> */}
-              <input
-                class="range-slider"
-                type="text"
-                value=""
-                data-slider-currency="$"
-                data-slider-min="10"
-                data-slider-max="2500"
-                data-slider-step="25"
-                data-slider-value="[10,2500]"
-              />
-            </div>
-
-            {/* <!-- Hourly Rate --> */}
-            <div class="sidebar-widget">
-              <h3>Hourly Rate</h3>
-              <div class="margin-top-55"></div>
-
-              {/* <!-- Range Slider --> */}
-              <input
-                class="range-slider"
-                type="text"
-                value=""
-                data-slider-currency="$"
-                data-slider-min="10"
-                data-slider-max="150"
-                data-slider-step="5"
-                data-slider-value="[10,200]"
-              />
-            </div>
-
             {/* <!-- Tags --> */}
             <div class="sidebar-widget">
               <h3>Skills</h3>

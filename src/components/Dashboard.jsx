@@ -11,13 +11,14 @@ import DashboardManageTasks from "./DashboardManageTasks";
 import DashboardManageBidders from "./DashboardManageBidders";
 import DashboardMyActiveBids from "./DashboardMyActiveBids";
 import DashboardPostTask from "./DashboardPostTask";
-
+import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
   const [taskMenuOpen, setTaskMenuOpen] = useState(false);
   const [updateJobData, setUpdateJobData] = useState(null);
   const [updateTaskData, setUpdateTaskData] = useState(null);
+  const navigate = useNavigate();
   const handleUpdateJob = (jobData) => {
     setUpdateJobData(jobData);
     setDashboardType("postjob");
@@ -153,7 +154,7 @@ function Dashboard() {
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => setDashboardType("main")}>
+                      <a onClick={() =>{localStorage.removeItem('token');navigate("/jobs")} }>
                         <i class="icon-material-outline-power-settings-new"></i>{" "}
                         Logout
                       </a>

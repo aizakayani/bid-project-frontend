@@ -142,6 +142,7 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     onClick={() => {
                                       setNewMessageContext({
                                         receiver: {
+                                          id: jobApplication.userId,
                                           name: jobApplication.applicantName,
                                         },
                                       });

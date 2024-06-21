@@ -3,7 +3,9 @@ import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
 import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
 import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from "react-router-dom";
 function FreeLancersListLayout() {
+  const navigate = useNavigate();
   const freelancersList = [
     {
       name: "Sebastiano Piccio",
@@ -100,24 +102,6 @@ function FreeLancersListLayout() {
                 </div>
                 <div class="clearfix"></div>
               </div>
-            </div>
-
-            {/* <!-- Hourly Rate --> */}
-            <div class="sidebar-widget">
-              <h3>Hourly Rate</h3>
-              <div class="margin-top-55"></div>
-
-              {/* <!-- Range Slider --> */}
-              <input
-                class="range-slider"
-                type="text"
-                value=""
-                data-slider-currency="$"
-                data-slider-min="10"
-                data-slider-max="250"
-                data-slider-step="5"
-                data-slider-value="[10,250]"
-              />
             </div>
 
             {/* <!-- Tags --> */}
@@ -275,8 +259,7 @@ function FreeLancersListLayout() {
                           </li>
                         </ul>
                       </div>
-                      <a
-                        href="single-freelancer-profile.html"
+                      <a  onClick={() =>{navigate("/freelancer/details/:id")} }
                         class="button button-sliding-icon ripple-effect"
                       >
                         View Profile{" "}
