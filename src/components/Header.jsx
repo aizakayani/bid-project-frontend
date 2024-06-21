@@ -35,6 +35,8 @@ function Header() {
     let token = queryParameters.get("token");
     if (!token) {
       token = localStorage.getItem("token");
+    } else {
+      localStorage.setItem("token", token);
     }
     if (token) {
       const decodedToken = jwtDecode(token);
@@ -65,7 +67,7 @@ function Header() {
     newSocket.on("connect", () => {
       console.log("Chat socket connected");
       // fetch chat history
-      // newSocket.emit("chat-history", {});
+      newSocket.emit("chat-history");
     });
 
     newSocket.on("chat-message", (msg) => {
