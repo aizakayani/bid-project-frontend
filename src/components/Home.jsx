@@ -1002,80 +1002,9 @@ function Home() {
         </div>
       </div>
       {/* <!-- Counters / End --> */}
-      <div class="section border-top padding-top-45 padding-bottom-45">
         {/* <!-- Logo Carousel --> */}
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              {/* <!-- Carousel --> */}
-              <div class="col-md-12">
-                <div class="logo-carousel">
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel1} alt="" />
-                    </a>
-                  </div>
+       
 
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel2} alt="" />
-                    </a>
-                  </div>
-
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel3} alt="" />
-                    </a>
-                  </div>
-
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel4} alt="" />
-                    </a>
-                  </div>
-
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel5} alt="" />
-                    </a>
-                  </div>
-
-                  <div class="carousel-item">
-                    <a
-                      href="http://acmelogos.com/"
-                      target="_blank"
-                      title="http://acmelogos.com/"
-                    >
-                      <img src={logoCarousel6} alt="" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/* <!-- Carousel / End --> */}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
