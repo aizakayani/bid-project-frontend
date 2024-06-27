@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 function Register() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ function Register() {
   const [role, setRole] = useState("freelancer");
 
   const handleButtonClick = async () => {
-    console.log(name, email, password, repeatPassword)
+   
     setLoading(true);
     // setError(null);
     try {
@@ -27,14 +28,32 @@ function Register() {
             role
         }),
       });
+     
       const data = await response.json();
       console.log("EHEHHE", data)
-
+    if (data.success) {
+      toast.success("Registered successfully");
+      setName("");
+      setEmail("");
+      setPassword("");
+      setRepeatPassword("");
+    } else {
+      toast.error(data.message);
+    }
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
+    
   };
+  const loginViaGoogle = () => {
+    setLoading(true);
+    try {
+      window.open("http://localhost:3000/users/auth/google", "_self")
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <div id="titlebar" class="gradient">
@@ -194,7 +213,7 @@ function Register() {
                 <span>or</span>
               </div>
               <div class="social-login-buttons">
-                <button class="google-login ripple-effect">
+                <button class="google-login ripple-effect" onClick={loginViaGoogle}>
                   <i class="icon-brand-google-plus-g"></i> Register via Google+
                 </button>
               </div>

@@ -299,7 +299,6 @@ function Header() {
                       <a href="#">More</a>
                       <ul class="dropdown-nav">
                         <li>
-                          <a href="#">Open Street Map</a>
                           <ul class="dropdown-nav">
                             <li>
                               <a
@@ -576,7 +575,7 @@ function Header() {
 
                           {/* <!-- Notification --> */}
                           <li class="notifications-not-read">
-                            <a href="dashboard-messages.html">
+                            <a  onClick={() => { navigate("/dashboard/message/"); }}>
                               <span class="notification-avatar status-online">
                                 <img src={userAvatarPlaceholder} alt="" />
                               </span>
@@ -594,7 +593,7 @@ function Header() {
                     </div>
 
                     <a
-                      href="dashboard-messages.html"
+                      onClick={() => { navigate("/dashboard/message/"); }}
                       class="header-notifications-button ripple-effect button-sliding-icon"
                     >
                       View All Messages
@@ -651,19 +650,19 @@ function Header() {
 
                     <ul class="user-menu-small-nav">
                       <li>
-                        <a href="dashboard.html">
+                        <a onClick={() =>{navigate("/dashboard")} }>
                           <i class="icon-material-outline-dashboard"></i>{" "}
                           Dashboard
                         </a>
                       </li>
                       <li>
-                        <a href="dashboard-settings.html">
+                        <a onClick={() => {navigate("/dashboard/setting/")}}>
                           <i class="icon-material-outline-settings"></i>{" "}
                           Settings
                         </a>
                       </li>
                       <li>
-                        <a href="index-logged-out.html">
+                        <a onClick={() =>{localStorage.removeItem('token');navigate("/login")} }>
                           <i class="icon-material-outline-power-settings-new"></i>{" "}
                           Logout
                         </a>

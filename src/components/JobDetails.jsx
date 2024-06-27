@@ -54,7 +54,7 @@ function JobDetails() {
                       </li>
                       <li>
                         <img class="flag" src={gb} alt="" />{" "}
-                        {JobDetails.location}
+                        {JobDetails?.location}
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -65,7 +65,7 @@ function JobDetails() {
                 <div class="right-side">
                   <div class="salary-box">
                     <div class="salary-type">Annual Salary</div>
-                    <div class="salary-amount">{JobDetails.salary}</div>
+                    <div class="salary-amount">{JobDetails?.salary}</div>
                   </div>
                 </div>
               </div>
@@ -80,7 +80,7 @@ function JobDetails() {
           <div class="col-xl-8 col-lg-8 content-right-offset">
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
-              <p>{JobDetails.description}</p>
+              <p>{JobDetails?.description}</p>
               {/* <p>
                 Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
@@ -235,17 +235,17 @@ function JobDetails() {
                       <li>
                         <i class="icon-material-outline-location-on"></i>
                         <span>Location</span>
-                        <h5>{JobDetails.location}</h5>
+                        <h5>{JobDetails?.location}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-business-center"></i>
                         <span>Job Type</span>
-                        <h5>{JobDetails.type}</h5>
+                        <h5>{JobDetails?.type}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-local-atm"></i>
                         <span>Salary</span>
-                        <h5>{JobDetails.salary}</h5>
+                        <h5>{JobDetails?.salary}</h5>
                       </li>
                       <li>
                         <i class="icon-material-outline-access-time"></i>

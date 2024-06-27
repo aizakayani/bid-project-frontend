@@ -1,7 +1,4 @@
-import companyLogo1 from "../utils/images/company-logo-01.png";
-import companyLogo5 from "../utils/images/company-logo-05.png";
-import companyLogo2 from "../utils/images/company-logo-02.png";
-import companyLogo3 from "../utils/images/company-logo-03.png";
+
 import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
 import gb from "../utils/images/flags/gb.svg";
 import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
@@ -12,14 +9,16 @@ import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
 import au from "../utils/images/flags/au.svg";
 import it from "../utils/images/flags/it.svg";
 import fr from "../utils/images/flags/fr.svg";
-import logoCarousel1 from "../utils/images/logo-carousel-01.png";
-import logoCarousel2 from "../utils/images/logo-carousel-02.png";
-import logoCarousel3 from "../utils/images/logo-carousel-03.png";
-import logoCarousel4 from "../utils/images/logo-carousel-04.png";
-import logoCarousel5 from "../utils/images/logo-carousel-05.png";
-import logoCarousel6 from "../utils/images/logo-carousel-06.png";
+import { useContext, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import companyLogo05 from "../utils/images/company-logo-05.png";
+import { UserContext } from "../context/userContext";
+import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
 
 function Home() {
+  
+  const { jobsList } = useContext(UserContext);
+  const navigate = useNavigate();
   const onRightClick = () => {
     const mainContainerId = document.getElementById("freelancer-container");
     if (mainContainerId) {
@@ -32,6 +31,26 @@ function Home() {
       mainContainerId.scrollLeft -= 400;
     }
   };
+  const [locationInput, setLocationInput] = useState('');
+  const [titleInput, setTitleInput] = useState('');
+  const [searchJob, setSearchJob] = useState({location: '', title: ''});
+  const handleButtonClick = () => {
+    setSearchJob((prevState) => ({
+      ...prevState,
+      location: locationInput,
+      title: titleInput,
+    }));
+  };
+  // Function to filter jobs based on location and title
+  const filteredJobs = jobsList.filter(job => {
+    // Convert inputs to lowercase for case-insensitive comparison
+    const locationMatch = job.location.toLowerCase().includes(searchJob?.location.toLowerCase());
+    const titleMatch = job.title.toLowerCase().includes(searchJob?.title.toLowerCase());
+    return locationMatch && titleMatch;
+  });
+  
+
+  
   return (
     <div>
       {/* <!-- Intro Banner
@@ -75,9 +94,11 @@ function Home() {
                   </label>
                   <div class="input-with-icon">
                     <input
-                      id="autocomplete-input"
-                      type="text"
-                      placeholder="Online Job"
+                    placeholder="Online Job"
+                    id="autocomplete-input"
+                    type="text"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
                     />
                     <i class="icon-material-outline-location-on"></i>
                   </div>
@@ -90,17 +111,20 @@ function Home() {
                   </label>
                   <input
                     id="intro-keywords"
-                    type="text"
                     placeholder="Job Title or Keywords"
+                    type="text"
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
                   />
                 </div>
 
                 {/* <!-- Button --> */}
                 <div class="intro-search-button">
                   <button
+                   onClick={() => handleButtonClick()}
                     class="button ripple-effect"
-                    onclick="window.location.href='jobs-list-layout-1.html'"
-                  >
+                 >
+
                     Search
                   </button>
                 </div>
@@ -130,8 +154,86 @@ function Home() {
         </div>
       </div>
 
-      {/* <!-- Content
-================================================== --> */}
+      {/* <!-- Features Jobs --> */}
+      <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              {/* <!-- Section Headline --> */}
+              <div class="section-headline margin-top-0 margin-bottom-35">
+                <h3>Featured Jobs</h3>
+                <a
+                  onClick={() => navigate("/jobs")}
+                  class="headline-link"
+                >
+                  Browse All Jobs
+                </a>
+              </div>
+              <div class="listings-container compact-list-layout margin-top-35">
+            {filteredJobs?.length > 0 &&
+              filteredJobs.map((job) => {
+                return (
+                  <a
+                    onClick={() => navigate(`/job/details/${job._id}`)}
+                    class="job-listing"
+                  >
+                    {/* <!-- Job Listing Details --> */}
+                    <div class="job-listing-details">
+                      {/* <!-- Logo --> */}
+                      <div class="job-listing-company-logo">
+                        <img src={job.companyLogo || companyLogo05} alt="" />
+                      </div>
+
+                      {/* <!-- Details --> */}
+                      <div class="job-listing-description">
+                        <h3 class="job-listing-title">{job.title}</h3>
+
+                        {/* <!-- Job Listing Footer --> */}
+                        <div class="job-listing-footer">
+                          <ul>
+                            <li>
+                              <i class="icon-material-outline-business"></i>{" "}
+                              {job.company}{" "}
+                              <div
+                                class="verified-badge"
+                                title="Verified Employer"
+                                data-tippy-placement="top"
+                              ></div>
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              {job.location}
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-business-center"></i>{" "}
+                              {job.type}
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-access-time"></i>{" "}
+                              {`${timeDifferenceFromNow(job?.createdAt)}`}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <a
+                    onClick={() => navigate(`job/details/:${job._id}`)}
+                   class="job-listing with-apply-button"
+                  >
+                    <span class="list-apply-button ripple-effect">Apply Now</span>
+                  </a>
+                    </div>
+                  </a>
+                );
+              })}
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <!-- Featured Jobs / End --> */}
+
+      
+
       {/* <!-- Icon Boxes --> */}
       <div class="section padding-top-65 padding-bottom-65">
         <div class="container">
@@ -207,274 +309,6 @@ function Home() {
       </div>
       {/* <!-- Icon Boxes / End --> */}
 
-      {/* <!-- Features Jobs --> */}
-      <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              {/* <!-- Section Headline --> */}
-              <div class="section-headline margin-top-0 margin-bottom-35">
-                <h3>Featured Jobs</h3>
-                <a
-                  href="jobs-list-layout-full-page-map.html"
-                  class="headline-link"
-                >
-                  Browse All Jobs
-                </a>
-              </div>
-
-              {/* <!-- Jobs Container --> */}
-              <div class="listings-container compact-list-layout margin-top-35">
-                {/* <!-- Job Listing --> */}
-                <a
-                  href="single-job-page.html"
-                  class="job-listing with-apply-button"
-                >
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo1} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h3 class="job-listing-title">
-                        Bilingual Event Support Specialist
-                      </h3>
-
-                      {/* <!-- Job Listing Footer --> */}
-                      <div class="job-listing-footer">
-                        <ul>
-                          <li>
-                            <i class="icon-material-outline-business"></i>{" "}
-                            Hexagon{" "}
-                            <div
-                              class="verified-badge"
-                              title="Verified Employer"
-                              data-tippy-placement="top"
-                            ></div>
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            San Francissco
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-business-center"></i>{" "}
-                            Full Time
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-access-time"></i> 2
-                            days ago
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* <!-- Apply Button --> */}
-                    <span class="list-apply-button ripple-effect">
-                      Apply Now
-                    </span>
-                  </div>
-                </a>
-
-                {/* <!-- Job Listing --> */}
-                <a
-                  href="single-job-page.html"
-                  class="job-listing with-apply-button"
-                >
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo5} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h3 class="job-listing-title">Competition Law Officer</h3>
-
-                      {/* <!-- Job Listing Footer --> */}
-                      <div class="job-listing-footer">
-                        <ul>
-                          <li>
-                            <i class="icon-material-outline-business"></i> Laxo
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            San Francissco
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-business-center"></i>{" "}
-                            Full Time
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-access-time"></i> 2
-                            days ago
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* <!-- Apply Button --> */}
-                    <span class="list-apply-button ripple-effect">
-                      Apply Now
-                    </span>
-                  </div>
-                </a>
-                {/* <!-- Job Listing --> */}
-                <a
-                  href="single-job-page.html"
-                  class="job-listing with-apply-button"
-                >
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo2} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h3 class="job-listing-title">Barista and Cashier</h3>
-
-                      {/* <!-- Job Listing Footer --> */}
-                      <div class="job-listing-footer">
-                        <ul>
-                          <li>
-                            <i class="icon-material-outline-business"></i>{" "}
-                            Coffee
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            San Francissco
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-business-center"></i>{" "}
-                            Full Time
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-access-time"></i> 2
-                            days ago
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* <!-- Apply Button --> */}
-                    <span class="list-apply-button ripple-effect">
-                      Apply Now
-                    </span>
-                  </div>
-                </a>
-
-                {/* <!-- Job Listing --> */}
-                <a
-                  href="single-job-page.html"
-                  class="job-listing with-apply-button"
-                >
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo3} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h3 class="job-listing-title">
-                        Restaurant General Manager
-                      </h3>
-
-                      {/* <!-- Job Listing Footer --> */}
-                      <div class="job-listing-footer">
-                        <ul>
-                          <li>
-                            <i class="icon-material-outline-business"></i> King{" "}
-                            <div
-                              class="verified-badge"
-                              title="Verified Employer"
-                              data-tippy-placement="top"
-                            ></div>
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            San Francissco
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-business-center"></i>{" "}
-                            Full Time
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-access-time"></i> 2
-                            days ago
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* <!-- Apply Button --> */}
-                    <span class="list-apply-button ripple-effect">
-                      Apply Now
-                    </span>
-                  </div>
-                </a>
-
-                {/* <!-- Job Listing --> */}
-                <a
-                  href="single-job-page.html"
-                  class="job-listing with-apply-button"
-                >
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo5} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h3 class="job-listing-title">
-                        International Marketing Coordinator
-                      </h3>
-
-                      {/* <!-- Job Listing Footer --> */}
-                      <div class="job-listing-footer">
-                        <ul>
-                          <li>
-                            <i class="icon-material-outline-business"></i>{" "}
-                            Skyist
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            San Francissco
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-business-center"></i>{" "}
-                            Full Time
-                          </li>
-                          <li>
-                            <i class="icon-material-outline-access-time"></i> 2
-                            days ago
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* <!-- Apply Button --> */}
-                    <span class="list-apply-button ripple-effect">
-                      Apply Now
-                    </span>
-                  </div>
-                </a>
-              </div>
-              {/* <!-- Jobs Container / End --> */}
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <!-- Featured Jobs / End --> */}
-
       {/* <!-- Highest Rated Freelancers --> */}
       <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
         <div class="container">
@@ -483,7 +317,9 @@ function Home() {
               {/* <!-- Section Headline --> */}
               <div class="section-headline margin-top-0 margin-bottom-25">
                 <h3>Highest Rated Freelancers</h3>
-                <a class="headline-link">Browse All Freelancers</a>
+                <a 
+                onClick={() => navigate("/freelancers")}
+                class="headline-link">Browse All Freelancers</a>
               </div>
             </div>
 

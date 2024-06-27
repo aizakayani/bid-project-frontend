@@ -21,6 +21,8 @@ import { UserProvider } from "./context/userContext";
 import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FreeLancerDetails from "./components/FreeLancerDetails";
+import DashboardSettings from "./components/DashboardSettings";
+import DashboardMessages from "./components/DashboardMessages";
 
 function App() {
   return (
@@ -140,6 +142,23 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/dashboard/setting/"
+            element={
+              <Layout>
+                <DashboardSettings/>
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard/message/"
+            element={
+              <Layout>
+                <DashboardMessages/>
+              </Layout>
+            }
+          />
+
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

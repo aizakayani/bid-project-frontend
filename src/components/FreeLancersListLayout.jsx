@@ -185,9 +185,7 @@ function FreeLancersListLayout() {
       </select>
              </div>
      
-   
-              
-     
+
           </div>
 
           {/* <!-- Freelancers List Container --> */}

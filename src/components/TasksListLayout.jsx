@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import { useContext } from "react";
 import { timeDifferenceFromNow } from "../utils/utils";
-
+import { useContext, useState } from "react";
 function TasksListLayout() {
   const navigate = useNavigate();
   // const tasksList = [
@@ -16,6 +15,19 @@ function TasksListLayout() {
   //   },
   // ];
   const { tasksList } = useContext(UserContext);
+  const [locationInput, setLocationInput] = useState('');
+  const [titleInput, setTitleInput] = useState('');
+  const handleButtonClick = (newLocation, newTitle) => {
+    setLocationInput(newLocation);
+    setTitleInput(newTitle);
+  };
+  // Function to filter tasks based on location and title
+  const filteredTasks = tasksList.filter(task=> {
+    // Convert inputs to lowercase for case-insensitive comparison
+    const locationMatch = task.location.toLowerCase().includes(locationInput.toLowerCase());
+    const titleMatch = task.title.toLowerCase().includes(titleInput.toLowerCase());
+    return locationMatch && titleMatch;
+  });
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -27,9 +39,11 @@ function TasksListLayout() {
               <div class="input-with-icon">
                 <div id="autocomplete-container">
                   <input
+                    placeholder="Location"
                     id="autocomplete-input"
                     type="text"
-                    placeholder="Location"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
                   />
                 </div>
                 <i class="icon-material-outline-location-on"></i>
@@ -65,9 +79,11 @@ function TasksListLayout() {
               <div class="keywords-container">
                 <div class="keyword-input-container">
                   <input
+                    id="intro-keywords"
+                    placeholder="Task Title or Keywords"
                     type="text"
-                    class="keyword-input"
-                    placeholder="e.g. task title"
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
                   />
                   <button class="keyword-input-button ripple-effect">
                     <i class="icon-material-outline-add"></i>
@@ -166,8 +182,8 @@ function TasksListLayout() {
           {/* <!-- Tasks Container --> */}
           <div class="tasks-list-container compact-list margin-top-35">
             {/* <!-- Task --> */}
-            {tasksList?.length > 0 &&
-              tasksList?.map((task) => {
+            {filteredTasks?.length > 0 &&
+              filteredTasks?.map((task) => {
                 return (
                   <a
                     onClick={() => navigate("/task/details")}

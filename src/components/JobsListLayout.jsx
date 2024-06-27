@@ -16,8 +16,22 @@ function JobsListLayout() {
   //     logo: companyLogo1,
   //   },
   // ];
-  const { jobsList } = useContext(UserContext);
+ const { jobsList } = useContext(UserContext);
  const[isMenuOpen, setIsMenuOpen] = useState(false);
+ const [locationInput, setLocationInput] = useState('');
+  const [titleInput, setTitleInput] = useState('');
+  const handleButtonClick = (newLocation, newTitle) => {
+    setLocationInput(newLocation);
+    setTitleInput(newTitle);
+  };
+  // Function to filter jobs based on location and title
+  const filteredJobs = jobsList.filter(job => {
+    // Convert inputs to lowercase for case-insensitive comparison
+    const locationMatch = job.location.toLowerCase().includes(locationInput.toLowerCase());
+    const titleMatch = job.title.toLowerCase().includes(titleInput.toLowerCase());
+    return locationMatch && titleMatch;
+    console.log(filteredJobs);
+  });
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -29,9 +43,11 @@ function JobsListLayout() {
               <div class="input-with-icon">
                 <div id="autocomplete-container">
                   <input
+                    placeholder="Location"
                     id="autocomplete-input"
                     type="text"
-                    placeholder="Location"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
                   />
                 </div>
                 <i class="icon-material-outline-location-on"></i>
@@ -44,9 +60,11 @@ function JobsListLayout() {
               <div class="keywords-container">
                 <div class="keyword-input-container">
                   <input
+                    id="intro-keywords"
+                    placeholder="Job Title"
                     type="text"
-                    class="keyword-input"
-                    placeholder="e.g. job title"
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
                   />
                   <button class="keyword-input-button ripple-effect">
                     <i class="icon-material-outline-add"></i>
@@ -190,8 +208,8 @@ function JobsListLayout() {
           </div>
 
           <div class="listings-container compact-list-layout margin-top-35">
-            {jobsList?.length > 0 &&
-              jobsList.map((job) => {
+            {filteredJobs?.length > 0 &&
+              filteredJobs.map((job) => {
                 return (
                   <a
                     onClick={() => navigate(`/job/details/${job._id}`)}

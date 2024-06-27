@@ -174,7 +174,7 @@ function FreeLancerDetails() {
 
               {/* <!-- Pagination --> */}
               <div class="clearfix"></div>
-              <div class="pagination-container margin-top-40 margin-bottom-10">
+              {/* <div class="pagination-container margin-top-40 margin-bottom-10">
                 <nav class="pagination">
                   <ul>
                     <li>
@@ -194,7 +194,7 @@ function FreeLancerDetails() {
                     </li>
                   </ul>
                 </nav>
-              </div>
+              </div> */}
               <div class="clearfix"></div>
               {/* <!-- Pagination / End --> */}
             </div>
