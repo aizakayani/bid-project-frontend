@@ -5,7 +5,9 @@ import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
 import Popup from "./modals/Popup";
 import { deleteJobAPI, getJobsByUser } from "../services/job";
 import toast from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 function DashboardManageJobs({ handleUpdateJob }) {
+  const navigate = useNavigate();
   const { userJobs, setUserJobs } = useContext(UserContext);
   const [showDeleteJobPopup, setShowDeleteJobPopup] = useState(false);
   const [jobIdToDelete, setJobIdToDelete] = useState(null);
@@ -121,7 +123,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
                             <a
-                              href="dashboard-manage-candidates.html"
+                                onClick={() => navigate("/dashboard/manage/candidate/:id")}
                               class="button ripple-effect"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
@@ -188,7 +190,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                     {/* <!-- Buttons --> */}
                     <div class="buttons-to-right always-visible">
                       <a
-                        href="dashboard-manage-candidates.html"
+                       onClick={() => navigate("/dashboard/manage/candidate/:id")}
                         class="button ripple-effect"
                       >
                         <i class="icon-material-outline-supervisor-account"></i>{" "}
@@ -243,7 +245,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                     {/* <!-- Buttons --> */}
                     <div class="buttons-to-right always-visible">
                       <a
-                        href="dashboard-manage-candidates.html"
+                        onClick={() => navigate("/dashboard/manage/candidate/:id")}
                         class="button ripple-effect"
                       >
                         <i class="icon-material-outline-supervisor-account"></i>{" "}

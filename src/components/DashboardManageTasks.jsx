@@ -4,8 +4,9 @@ import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
 import Popup from "./modals/Popup";
 import { deleteTaskAPI, getTasksByUser } from "../services/task";
 import toast from "react-hot-toast";
-
+import { useNavigate } from 'react-router-dom';
 function DashboardManageTasks({ handleUpdateTask }) {
+  const navigate = useNavigate();
   const { userTasks, setUserTasks } = useContext(UserContext);
   const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
@@ -120,7 +121,7 @@ function DashboardManageTasks({ handleUpdateTask }) {
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
                             <a
-                              href="dashboard-manage-bidders.html"
+                              onClick={() => navigate("/dashboard/manage/bidders/:id")}
                               class="button ripple-effect"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}

@@ -23,6 +23,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FreeLancerDetails from "./components/FreeLancerDetails";
 import DashboardSettings from "./components/DashboardSettings";
 import DashboardMessages from "./components/DashboardMessages";
+import DashboardManageCandidates from "./components/DashboardManageCandidates";
+import DashboardManageBidders from "./components/DashboardManageBidders";
 
 function App() {
   return (
@@ -155,6 +157,22 @@ function App() {
             element={
               <Layout>
                 <DashboardMessages/>
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard/manage/candidate/:id"
+            element={
+              <Layout>
+                <DashboardManageCandidates/>
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard/manage/bidders/:id"
+            element={
+              <Layout>
+                <DashboardManageBidders/>
               </Layout>
             }
           />
