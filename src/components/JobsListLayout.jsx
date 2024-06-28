@@ -20,18 +20,43 @@ function JobsListLayout() {
  const[isMenuOpen, setIsMenuOpen] = useState(false);
  const [locationInput, setLocationInput] = useState('');
   const [titleInput, setTitleInput] = useState('');
-  const handleButtonClick = (newLocation, newTitle) => {
-    setLocationInput(newLocation);
-    setTitleInput(newTitle);
-  };
+  const [tags, setTags] = useState({
+    frontend:false,
+    angular:false,
+    react:false,
+    vuejs:false,
+    webapp:false,
+    design:false,
+    wordpress:false
+  
+  });
+
   // Function to filter jobs based on location and title
+  // Function to filter jobs based on location, title, and tags
   const filteredJobs = jobsList.filter(job => {
-    // Convert inputs to lowercase for case-insensitive comparison
     const locationMatch = job.location.toLowerCase().includes(locationInput.toLowerCase());
     const titleMatch = job.title.toLowerCase().includes(titleInput.toLowerCase());
-    return locationMatch && titleMatch;
-    console.log(filteredJobs);
+
+    // Get selected tags
+    const selectedTags = Object.keys(tags).filter(tag => tags[tag]);
+
+    // Check if at least one selected tag exists in job tags (using job title as tag name)
+    const tagMatch = selectedTags.length === 0 || selectedTags.some(tag => job.title.toLowerCase().includes(tag.toLowerCase()));
+
+    return locationMatch && titleMatch && tagMatch;
   });
+
+  const handleCheckboxChange = (event) => {
+    const { id, checked } = event.target;
+    console.log({checked});
+    console.log({id});
+    setTags({
+      ...tags,
+      [id]: checked
+    });
+  };
+console.log({tags});
+
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -149,32 +174,46 @@ function JobsListLayout() {
 
               <div class="tags-container">
                 <div class="tag">
-                  <input type="checkbox" id="tag1" />
-                  <label for="tag1">front-end dev</label>
+                  <input type="checkbox" id="frontend" 
+                  checked={tags.frontend}
+                   onChange={handleCheckboxChange} />
+                  <label for="frontend">front-end dev</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag2" />
-                  <label for="tag2">angular</label>
+                  <input type="checkbox" id="angular" 
+                  checked={tags.angular2}
+                  onChange={handleCheckboxChange} />
+                  <label for="angular">angular</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag3" />
-                  <label for="tag3">react</label>
+                  <input type="checkbox" id="react" 
+                  checked={tags.react}
+                  onChange={handleCheckboxChange} />
+                  <label for="react">react</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag4" />
-                  <label for="tag4">vue js</label>
+                  <input type="checkbox" id="vuejs"
+                  checked={tags.vuejs}
+                  onChange={handleCheckboxChange}/>
+                  <label for="vuejs">vue js</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag5" />
-                  <label for="tag5">web apps</label>
+                  <input type="checkbox" id="webapp"
+                  checked={tags.webapp}
+                  onChange={handleCheckboxChange} />
+                  <label for="webapp">web apps</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag6" />
-                  <label for="tag6">design</label>
+                  <input type="checkbox" id="design"
+                  checked={tags.design}
+                  onChange={handleCheckboxChange}/>
+                  <label for="design">design</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag7" />
-                  <label for="tag7">wordpress</label>
+                  <input type="checkbox" id="wordpress"
+                  checked={tags.wordpress}
+                  onChange={handleCheckboxChange} />
+                  <label for="wordpress">wordpress</label>
                 </div>
               </div>
               <div class="clearfix"></div>
