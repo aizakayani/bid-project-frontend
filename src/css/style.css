@@ -6877,6 +6877,7 @@ table.basic-table { margin-bottom: 0; }
 
 .input-with-icon-left input {
 	padding-left: 65px;
+	width: 100%;
 }
 
 .input-with-icon-left i {
@@ -6893,6 +6894,7 @@ table.basic-table { margin-bottom: 0; }
 	box-sizing: border-box;
 	display: block;
 	border-radius: 4px 0 0 4px;
+	
 }
 
 .input-with-icon-left.no-border i {

@@ -40,6 +40,7 @@ function Home() {
       location: locationInput,
       title: titleInput,
     }));
+    window.scrollBy(0, 300);
   };
   // Function to filter jobs based on location and title
   const filteredJobs = jobsList.filter(job => {

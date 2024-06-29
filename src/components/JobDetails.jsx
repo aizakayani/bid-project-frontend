@@ -7,10 +7,12 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
+import ApplyJobPopup from "./modals/ApplyJobPopup";
 function JobDetails() {
   const { id } = useParams();
   const { jobsList } = useContext(UserContext);
   const [JobDetails, setJobDetails] = useState(null);
+  const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
 
   useEffect(() => {
     if (id && jobsList?.length > 0) {
@@ -222,6 +224,7 @@ function JobDetails() {
               <a
                 href="#small-dialog"
                 class="apply-now-button popup-with-zoom-anim"
+                onClick={()=> setShowApplyJobPopup(true)}
               >
                 Apply Now <i class="icon-material-outline-arrow-right-alt"></i>
               </a>
@@ -346,6 +349,7 @@ function JobDetails() {
           </div>
         </div>
       </div>
+      {showApplyJobPopup && <ApplyJobPopup show={showApplyJobPopup} handleClose={()=> setShowApplyJobPopup(false)} handleSubmit={()=> setShowApplyJobPopup(false)}/>}
     </>
   );
 }
