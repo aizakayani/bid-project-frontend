@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { addJobAPI, getJobsByUser, updateJobAPI } from "../services/job";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
-import CountriesDropdown from './CountriesDropdown';
+import CountriesDropdown from "./CountriesDropdown";
 function DashboardPostJob({ updateJobData }) {
   const { setUserJobs } = useContext(UserContext);
   const [title, setTitle] = useState("");
@@ -12,7 +12,7 @@ function DashboardPostJob({ updateJobData }) {
   const [salary, setSalary] = useState("");
   const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState("");
   const handleCountryChange = (e) => {
     setSelectedCountry(e.target.value);
   };
@@ -30,6 +30,12 @@ function DashboardPostJob({ updateJobData }) {
 
   const handlePostJob = async () => {
     if (title.trim() === "") {
+      toast.error("Please enter job title to continue");
+      return;
+    }
+
+    if (selectedCountry.trim() === "") {
+      toast.error("Please select location to continue");
       return;
     }
 
@@ -37,7 +43,7 @@ function DashboardPostJob({ updateJobData }) {
       title,
       type,
       category,
-      location:selectedCountry,
+      location: selectedCountry,
       salary,
       tags,
       description,
@@ -89,8 +95,6 @@ function DashboardPostJob({ updateJobData }) {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>{updateJobData ? "Update Job" : "Post a Job"}</h3>
-
-          
         </div>
 
         {/* <!-- Row --> */}
@@ -182,18 +186,19 @@ function DashboardPostJob({ updateJobData }) {
                   </div>
 
                   <div className="col-xl-4">
-             <div className="submit-field">
-             <h5>Location</h5>
-              <div className="input-with-icon">
-             <div id="autocomplete-container">
-            <CountriesDropdown onChange={handleCountryChange} value={selectedCountry} />
-               </div>
-               <i className="icon-material-outline-location-on"></i>
-               </div>
-               </div>
-               </div>
-      
-      
+                    <div className="submit-field">
+                      <h5>Location</h5>
+                      <div className="input-with-icon">
+                        <div id="autocomplete-container">
+                          <CountriesDropdown
+                            onChange={handleCountryChange}
+                            value={selectedCountry}
+                          />
+                        </div>
+                        <i className="icon-material-outline-location-on"></i>
+                      </div>
+                    </div>
+                  </div>
 
                   <div class="col-xl-4">
                     <div class="submit-field">
