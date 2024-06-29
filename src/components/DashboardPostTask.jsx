@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { addTaskAPI, getTasksByUser, updateTaskAPI } from "../services/task";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
+import CountriesDropdown from "./CountriesDropdown";
 function DashboardPostTask({ updateTaskData }) {
   const { setUserTasks } = useContext(UserContext);
   const [title, setTitle] = useState("");
@@ -11,7 +12,10 @@ function DashboardPostTask({ updateTaskData }) {
   const [budget, setBudget] = useState("");
   const [requiredSkills, setRequiredSkills] = useState("");
   const [description, setDescription] = useState("");
-
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const handleCountryChange = (e) => {
+    setSelectedCountry(e.target.value);
+  };
   useEffect(() => {
     if (updateTaskData) {
       setTitle(updateTaskData.title);
@@ -28,14 +32,16 @@ function DashboardPostTask({ updateTaskData }) {
     if (title.trim() === "") {
       return;
     }
-    if (location.trim() === "") {
+    if (selectedCountry.trim() === "") {
+      toast.error("Please select location to continue");
       return;
     }
+
     const taskData = {
       title,
       type,
       category,
-      location,
+      location: selectedCountry,
       budget,
       requiredSkills,
       description,
@@ -89,8 +95,6 @@ function DashboardPostTask({ updateTaskData }) {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Post a Task</h3>
-
-          
           
         </div>
 
@@ -156,28 +160,18 @@ function DashboardPostTask({ updateTaskData }) {
                     </div>
                   </div>
 
-                  <div class="col-xl-4">
-                    <div class="submit-field">
-                      <h5>
-                        Location{" "}
-                        <i
-                          class="help-icon"
-                          data-tippy-placement="right"
-                          title="Leave blank if it's an online job"
-                        ></i>
-                      </h5>
-                      <div class="input-with-icon">
+                  
+                  <div className="col-xl-4">
+                    <div className="submit-field">
+                      <h5>Location</h5>
+                      <div className="input-with-icon">
                         <div id="autocomplete-container">
-                          <input
-                            id="autocomplete-input"
-                            class="with-border"
-                            type="text"
-                            placeholder="Anywhere"
-                            onChange={(e) => setLocation(e.target.value)}
-                            value={location}
+                          <CountriesDropdown
+                            onChange={handleCountryChange}
+                            value={selectedCountry}
                           />
                         </div>
-                        <i class="icon-material-outline-location-on"></i>
+                        <i className="icon-material-outline-location-on"></i>
                       </div>
                     </div>
                   </div>
