@@ -11,6 +11,8 @@ import { getJobs, getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
 import { getTasks, getTasksByUser } from "../services/task";
 import io from "socket.io-client";
+import { updateUserAPI } from "../services/user";
+import UserRolePopup from "./modals/UserRolePopup";
 function Header() {
   const {
     user,
@@ -19,6 +21,8 @@ function Header() {
     isLoggedIn,
     setUserJobs,
     setUserTasks,
+    jobsList,
+    tasksList,
     setJobsList,
     setTasksList,
     socket,
@@ -26,9 +30,12 @@ function Header() {
     setChatMessages,
   } = useContext(UserContext);
   const navigate = useNavigate();
-  const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
+  const [showNotificationsDropdown, setShowNotificationsDropdown] =
+    useState(false);
   const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [userRolePopup, setUserRolePopup] = useState(false);
+  const [initialize, setInitialize] = useState(false);
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -48,13 +55,19 @@ function Header() {
       };
       setUser(userData);
       setIsLoggedIn(true);
+      // if user has logged in from third party authentication
+      if (!decodedToken?.role) {
+        // open popup
+        setUserRolePopup(true);
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) return;
-    initializer();
-  }, [isLoggedIn]);
+    initializerWithoutLogin();
+    if (!isLoggedIn || !user?.role) return;
+    initializer(user?.role);
+  }, [isLoggedIn, user?.role]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -81,13 +94,20 @@ function Header() {
     return () => newSocket.close();
   }, [user?.id]);
 
-  const initializer = async () => {
-    // if (user.role === "freelancer") {
-    await getAllJobs();
-    await getUserJobs();
-    await getUserTasks();
-    await getAllTasks();
-    // }
+  const initializer = async (userRole) => {
+    if (userRole === "freelancer") {
+      await getUserTasks();
+    } else if (userRole === "employer") {
+      await getUserJobs();
+    }
+  };
+
+  const initializerWithoutLogin = async () => {
+    if (!initialize) {
+      setInitialize(true);
+      await getAllJobs();
+      await getAllTasks();
+    }
   };
 
   const getUserJobs = async () => {
@@ -192,6 +212,37 @@ function Header() {
       }
     }
   };
+
+  const handleSelectRole = async (role) => {
+    // update user api call\
+    // fetch jobs
+    try {
+      const payload = {
+        role,
+      };
+      const updateResult = await updateUserAPI(payload);
+      if (updateResult?.success && updateResult?.updatedToken) {
+        localStorage.setItem("token", updateResult?.updatedToken);
+        const decodedToken = jwtDecode(updateResult?.updatedToken);
+        const userData = {
+          name: decodedToken.name,
+          email: decodedToken.email,
+          role: decodedToken.role,
+          id: decodedToken.id,
+        };
+        setUser(userData);
+      } else {
+        if (!isTokenValid(updateResult)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+      setUserRolePopup(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <header id="header-container" class="fullwidth">
       {/* <!-- Header --> */}
@@ -212,7 +263,13 @@ function Header() {
                     <a onClick={() => navigate("/")}>Home</a>
                   </li>
 
-                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
+                  <li
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "30px",
+                    }}
+                  >
                     <a href="#">Find Work</a>
                     <ul class="dropdown-nav">
                       <li>
@@ -234,7 +291,13 @@ function Header() {
                       Find a Freelancer
                     </a>
                   </li>
-                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
+                  <li
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "30px",
+                    }}
+                  >
                     <a href="#">More</a>
                     <ul class="dropdown-nav">
                       <li>
@@ -271,7 +334,13 @@ function Header() {
                     <a onClick={() => navigate("/")}>Home</a>
                   </li>
 
-                  <li style={{display: 'flex', alignItems: 'center', height: '30px'}}>
+                  <li
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "30px",
+                    }}
+                  >
                     <a href="#">Find Work</a>
                     <ul class="dropdown-nav">
                       <li>
@@ -575,7 +644,11 @@ function Header() {
 
                           {/* <!-- Notification --> */}
                           <li class="notifications-not-read">
-                            <a  onClick={() => { navigate("/dashboard/message/"); }}>
+                            <a
+                              onClick={() => {
+                                navigate("/dashboard/message/");
+                              }}
+                            >
                               <span class="notification-avatar status-online">
                                 <img src={userAvatarPlaceholder} alt="" />
                               </span>
@@ -593,7 +666,9 @@ function Header() {
                     </div>
 
                     <a
-                      onClick={() => { navigate("/dashboard/message/"); }}
+                      onClick={() => {
+                        navigate("/dashboard/message/");
+                      }}
                       class="header-notifications-button ripple-effect button-sliding-icon"
                     >
                       View All Messages
@@ -609,67 +684,91 @@ function Header() {
                 {/* <!-- Messages --> */}
                 <div class="header-notifications user-menu">
                   <div class="header-notifications-trigger">
-                    <a >
-                      <div class="user-avatar status-online" onClick={
-                    ()=> {
-                      console.log('avatar')
-                    setShowProfileDropdown(!showProfileDropdown);
-                    setShowMessagesDropdown(false);
-                    setShowNotificationsDropdown(false);
-                    }}>
+                    <a>
+                      <div
+                        class="user-avatar status-online"
+                        onClick={() => {
+                          console.log("avatar");
+                          setShowProfileDropdown(!showProfileDropdown);
+                          setShowMessagesDropdown(false);
+                          setShowNotificationsDropdown(false);
+                        }}
+                      >
                         <img src={userAvatarSmall1} alt="" />
                       </div>
                     </a>
                   </div>
 
                   {/* <!-- Dropdown --> */}
-                  {showProfileDropdown &&  <div class={showProfileDropdown ? 'header-notifications-dropdown-active' : "header-notifications-dropdown"}>
-                    {/* <!-- User Status --> */}
-                    <div class="user-status">
-                      {/* <!-- User Name / Avatar --> */}
-                      <div class="user-details">
-                        <div class="user-avatar status-online">
-                          <img src={userAvatarSmall1} alt="" />
+                  {showProfileDropdown && (
+                    <div
+                      class={
+                        showProfileDropdown
+                          ? "header-notifications-dropdown-active"
+                          : "header-notifications-dropdown"
+                      }
+                    >
+                      {/* <!-- User Status --> */}
+                      <div class="user-status">
+                        {/* <!-- User Name / Avatar --> */}
+                        <div class="user-details">
+                          <div class="user-avatar status-online">
+                            <img src={userAvatarSmall1} alt="" />
+                          </div>
+                          <div class="user-name">
+                            Tom Smith <span>Freelancer</span>
+                          </div>
                         </div>
-                        <div class="user-name">
-                          Tom Smith <span>Freelancer</span>
+
+                        {/* <!-- User Status Switcher --> */}
+                        <div class="status-switch" id="snackbar-user-status">
+                          <label class="user-online current-status">
+                            Online
+                          </label>
+                          <label class="user-invisible">Invisible</label>
+                          {/* <!-- Status Indicator --> */}
+                          <span
+                            class="status-indicator"
+                            aria-hidden="true"
+                          ></span>
                         </div>
                       </div>
 
-                      {/* <!-- User Status Switcher --> */}
-                      <div class="status-switch" id="snackbar-user-status">
-                        <label class="user-online current-status">Online</label>
-                        <label class="user-invisible">Invisible</label>
-                        {/* <!-- Status Indicator --> */}
-                        <span
-                          class="status-indicator"
-                          aria-hidden="true"
-                        ></span>
-                      </div>
+                      <ul class="user-menu-small-nav">
+                        <li>
+                          <a
+                            onClick={() => {
+                              navigate("/dashboard");
+                            }}
+                          >
+                            <i class="icon-material-outline-dashboard"></i>{" "}
+                            Dashboard
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            onClick={() => {
+                              navigate("/dashboard/setting/");
+                            }}
+                          >
+                            <i class="icon-material-outline-settings"></i>{" "}
+                            Settings
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            onClick={() => {
+                              localStorage.removeItem("token");
+                              navigate("/login");
+                            }}
+                          >
+                            <i class="icon-material-outline-power-settings-new"></i>{" "}
+                            Logout
+                          </a>
+                        </li>
+                      </ul>
                     </div>
-
-                    <ul class="user-menu-small-nav">
-                      <li>
-                        <a onClick={() =>{navigate("/dashboard")} }>
-                          <i class="icon-material-outline-dashboard"></i>{" "}
-                          Dashboard
-                        </a>
-                      </li>
-                      <li>
-                        <a onClick={() => {navigate("/dashboard/setting/")}}>
-                          <i class="icon-material-outline-settings"></i>{" "}
-                          Settings
-                        </a>
-                      </li>
-                      <li>
-                        <a onClick={() =>{localStorage.removeItem('token');navigate("/login")} }>
-                          <i class="icon-material-outline-power-settings-new"></i>{" "}
-                          Logout
-                        </a>
-                      </li>
-                    </ul>
-                  </div>}
-                 
+                  )}
                 </div>
               </div>
               {/* <!-- User Menu / End -->
@@ -686,9 +785,9 @@ function Header() {
           )}
         </div>
       </div>
-
       {/* <div class="clearfix"></div> */}
-      {/* <!-- Header Container / End --> */}
+      {/* <!-- Header Container / End --> */}\{" "}
+      {userRolePopup && <UserRolePopup handleSelectRole={handleSelectRole} />}
     </header>
   );
 }
