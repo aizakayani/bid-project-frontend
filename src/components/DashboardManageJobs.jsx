@@ -100,22 +100,6 @@ function DashboardManageJobs({ handleUpdateJob }) {
                                     Pending Approval
                                   </span>
                                 </h3>
-
-                                {/* <!-- Job Listing Footer --> */}
-                                <div class="job-listing-footer">
-                                  <ul>
-                                    <li>
-                                      <i class="icon-material-outline-date-range"></i>{" "}
-                                      {`Posted on ${unixToDate(
-                                        job?.createdAt
-                                      )}`}
-                                    </li>
-                                    <li>
-                                      <i class="icon-material-outline-date-range"></i>{" "}
-                                      {`${checkExpiration(job?.createdAt)}`}
-                                    </li>
-                                  </ul>
-                                </div>
                               </div>
                             </div>
                           </div>

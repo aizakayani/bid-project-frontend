@@ -154,6 +154,80 @@ function Home() {
           </div>
         </div>
       </div>
+      {/* <!-- Icon Boxes --> */}
+      <div class="section padding-top-65 padding-bottom-65">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              {/* <!-- Section Headline --> */}
+              <div class="section-headline centered margin-top-0 margin-bottom-5">
+                <h3>How It Works?</h3>
+              </div>
+            </div>
+
+            <div class="col-xl-4 col-md-4">
+              {/* <!-- Icon Box --> */}
+              <div class="icon-box with-line">
+                {/* <!-- Icon --> */}
+                <div class="icon-box-circle">
+                  <div class="icon-box-circle-inner">
+                    <i class="icon-line-awesome-lock"></i>
+                    <div class="icon-box-check">
+                      <i class="icon-material-outline-check"></i>
+                    </div>
+                  </div>
+                </div>
+                <h3>Create an Account</h3>
+                <p>
+                  Bring to the table win-win survival strategies to ensure
+                  proactive domination going forward.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-xl-4 col-md-4">
+              {/* <!-- Icon Box --> */}
+              <div class="icon-box with-line">
+                {/* <!-- Icon --> */}
+                <div class="icon-box-circle">
+                  <div class="icon-box-circle-inner">
+                    <i class="icon-line-awesome-legal"></i>
+                    <div class="icon-box-check">
+                      <i class="icon-material-outline-check"></i>
+                    </div>
+                  </div>
+                </div>
+                <h3>Post a Task</h3>
+                <p>
+                  Efficiently unleash cross-media information without. Quickly
+                  maximize return on investment.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-xl-4 col-md-4">
+              {/* <!-- Icon Box --> */}
+              <div class="icon-box">
+                {/* <!-- Icon --> */}
+                <div class="icon-box-circle">
+                  <div class="icon-box-circle-inner">
+                    <i class=" icon-line-awesome-trophy"></i>
+                    <div class="icon-box-check">
+                      <i class="icon-material-outline-check"></i>
+                    </div>
+                  </div>
+                </div>
+                <h3>Choose an Expert</h3>
+                <p>
+                  Nanotechnology immersion along the information highway will
+                  close the loop on focusing solely.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <!-- Icon Boxes / End --> */}
 
       {/* <!-- Features Jobs --> */}
       <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
@@ -232,83 +306,6 @@ function Home() {
         </div>
       </div>
       {/* <!-- Featured Jobs / End --> */}
-
-      
-
-      {/* <!-- Icon Boxes --> */}
-      <div class="section padding-top-65 padding-bottom-65">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              {/* <!-- Section Headline --> */}
-              <div class="section-headline centered margin-top-0 margin-bottom-5">
-                <h3>How It Works?</h3>
-              </div>
-            </div>
-
-            <div class="col-xl-4 col-md-4">
-              {/* <!-- Icon Box --> */}
-              <div class="icon-box with-line">
-                {/* <!-- Icon --> */}
-                <div class="icon-box-circle">
-                  <div class="icon-box-circle-inner">
-                    <i class="icon-line-awesome-lock"></i>
-                    <div class="icon-box-check">
-                      <i class="icon-material-outline-check"></i>
-                    </div>
-                  </div>
-                </div>
-                <h3>Create an Account</h3>
-                <p>
-                  Bring to the table win-win survival strategies to ensure
-                  proactive domination going forward.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-xl-4 col-md-4">
-              {/* <!-- Icon Box --> */}
-              <div class="icon-box with-line">
-                {/* <!-- Icon --> */}
-                <div class="icon-box-circle">
-                  <div class="icon-box-circle-inner">
-                    <i class="icon-line-awesome-legal"></i>
-                    <div class="icon-box-check">
-                      <i class="icon-material-outline-check"></i>
-                    </div>
-                  </div>
-                </div>
-                <h3>Post a Task</h3>
-                <p>
-                  Efficiently unleash cross-media information without. Quickly
-                  maximize return on investment.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-xl-4 col-md-4">
-              {/* <!-- Icon Box --> */}
-              <div class="icon-box">
-                {/* <!-- Icon --> */}
-                <div class="icon-box-circle">
-                  <div class="icon-box-circle-inner">
-                    <i class=" icon-line-awesome-trophy"></i>
-                    <div class="icon-box-check">
-                      <i class="icon-material-outline-check"></i>
-                    </div>
-                  </div>
-                </div>
-                <h3>Choose an Expert</h3>
-                <p>
-                  Nanotechnology immersion along the information highway will
-                  close the loop on focusing solely.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <!-- Icon Boxes / End --> */}
 
       {/* <!-- Highest Rated Freelancers --> */}
       <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
