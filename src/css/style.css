@@ -186,7 +186,6 @@ select.with-border {
 	border: 1px solid #e0e0e0;
 	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.05);
 	width: 100%;
-	padding-left: 15px;
 }
 input.with-border:focus,
 input[type="text"].with-border:focus,
@@ -196,7 +195,7 @@ input[type="number"].with-border:focus,
 textarea.with-border:focus {
 	border: 1px solid #e0e0e0;
 	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.08);
-	padding-left: 15px;
+	
 }
 
 input[type="submit"] {
