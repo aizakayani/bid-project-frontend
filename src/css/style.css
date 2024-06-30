@@ -218,7 +218,7 @@ input[type="radio"] {
 ::placeholder {
 	color: #808080;
 	opacity: 1;
-	padding-left: 15px;
+	
 }
 
 textarea {
@@ -2724,7 +2724,7 @@ body #backtotop a {
 /* ---------------------------------- */
 /* Sidebar Styles
 ------------------------------------- */
-.sidebar-container { margin-bottom: 40px; }
+.sidebar-container { margin-bottom: 40px; margin-top: 0px; }
 .full-page-container .sidebar-container { margin-bottom: 0px; }
 
 .sidebar-widget input { margin-bottom: 0; }
@@ -15527,6 +15527,9 @@ ul.dashboard-box-list > li:hover {
 .submit-field h5 span {
 	color: #888;
 	font-weight: 500;
+}
+.submit-field input {
+padding-left: 15px;
 }
 
 .help-icon {
