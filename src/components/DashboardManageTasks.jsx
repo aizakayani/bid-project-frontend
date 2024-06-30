@@ -122,7 +122,7 @@ function DashboardManageTasks({ handleUpdateTask }) {
                           <div class="buttons-to-right always-visible">
                             <a
                               onClick={() => navigate("/dashboard/manage/bidders/:id")}
-                              class="button ripple-effect"
+                              class="button ripple-effect white-text-button"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
                               Manage Bidders <span class="button-info">3</span>

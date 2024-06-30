@@ -295,7 +295,7 @@ function DashboardPostJob({ updateJobData }) {
           <div class="col-xl-12">
             <a
               onClick={handlePostJob}
-              class="button ripple-effect big margin-top-30"
+              class="button ripple-effect big margin-top-30 white-text-button"
             >
               <i class="icon-feather-plus"></i>{" "}
               {updateJobData ? "Update Job" : "Post a Job"}

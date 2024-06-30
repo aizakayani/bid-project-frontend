@@ -108,7 +108,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                           <div class="buttons-to-right always-visible">
                             <a
                                 onClick={() => navigate("/dashboard/manage/candidate/:id")}
-                              class="button ripple-effect"
+                              class="button ripple-effect white-text-button"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
                               Manage Candidates{" "}
@@ -175,7 +175,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                     <div class="buttons-to-right always-visible">
                       <a
                        onClick={() => navigate("/dashboard/manage/candidate/:id")}
-                        class="button ripple-effect"
+                        class="button ripple-effect white-text-button"
                       >
                         <i class="icon-material-outline-supervisor-account"></i>{" "}
                         Manage Candidates <span class="button-info">3</span>
@@ -230,7 +230,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                     <div class="buttons-to-right always-visible">
                       <a
                         onClick={() => navigate("/dashboard/manage/candidate/:id")}
-                        class="button ripple-effect"
+                        class="button ripple-effect white-text-button"
                       >
                         <i class="icon-material-outline-supervisor-account"></i>{" "}
                         Manage Candidates <span class="button-info">7</span>

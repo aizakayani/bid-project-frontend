@@ -308,7 +308,7 @@ function DashboardPostTask({ updateTaskData }) {
           <div class="col-xl-12">
             <a
               onClick={handlePostOrUpdateTask}
-              class="button ripple-effect big margin-top-30"
+              class="button ripple-effect big margin-top-30 white-text-button"
             >
               <i class="icon-feather-plus"></i>{" "}
               {updateTaskAPI ? "Update Task" : "Post a Task"}

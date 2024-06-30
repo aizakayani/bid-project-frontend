@@ -11,11 +11,11 @@ function Invoice() {
       </div>
 
       {/* <!-- Invoice --> */}
-      <div id="invoice">
+      <div id="invoice" style={{background: 'white'}}>
         {/* <!-- Header --> */}
         <div class="row">
           <div class="col-xl-6">
-            <div id="logo">
+            <div id="logo" style={{height: '20px'}}>
               <img src={logo} alt="" />
             </div>
           </div>
@@ -89,7 +89,7 @@ function Invoice() {
         {/* <!-- Footer --> */}
         <div class="row">
           <div class="col-xl-12">
-            <ul id="footer">
+            <ul id="footer" className="footer-invoice">
               <li>
                 <span>www.example.com</span>
               </li>

@@ -144,7 +144,7 @@ select {
 }
 
 select {
-	padding: 5px 18px;
+	padding: 15px 18px;
 	cursor: pointer;
 }
 
@@ -185,6 +185,8 @@ textarea.with-border,
 select.with-border {
 	border: 1px solid #e0e0e0;
 	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.05);
+	width: 100%;
+	padding-left: 15px;
 }
 input.with-border:focus,
 input[type="text"].with-border:focus,
@@ -194,6 +196,7 @@ input[type="number"].with-border:focus,
 textarea.with-border:focus {
 	border: 1px solid #e0e0e0;
 	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.08);
+	padding-left: 15px;
 }
 
 input[type="submit"] {
@@ -6907,8 +6910,17 @@ table.basic-table { margin-bottom: 0; }
 
 .input-with-icon input {
 	padding-right: 45px;
+	padding-left: 15px;
+	width: 100%;
 }
-
+.footer-invoice {
+	display: flex;
+	justify-content: space-between;
+	background: transparent !important;
+}
+.footer-invoice li {
+	color: black;
+}
 .input-with-icon i {
 	position: absolute;
 	top: 50%;
@@ -7062,8 +7074,12 @@ table.basic-table { margin-bottom: 0; }
 	position: relative;
 	top: 2px;
 }
+.keyword-input-container input {
+	width: 100%;
+	padding-left: 15px;
+}
 
-input.keyword-input { margin: 0 0 15px 0; }
+input.keyword-input { margin: 0 0 15px 0;}
 
 
 /* ---------------------------------- */
@@ -10885,7 +10901,7 @@ img.mfp-img {
 	border-radius: 4px;
 	font-size: 14px;
 	padding: 9px 5px;
-	width: 100%;
+	width: 97%;
 	transition: 0.3s;
 	justify-content: center;
 }

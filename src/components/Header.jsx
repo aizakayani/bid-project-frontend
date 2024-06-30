@@ -742,6 +742,7 @@ function Header() {
                             onClick={() => {
                               navigate("/dashboard");
                             }}
+                            style={{cursor: 'pointer'}}
                           >
                             <i class="icon-material-outline-dashboard"></i>{" "}
                             Dashboard
@@ -752,6 +753,7 @@ function Header() {
                             onClick={() => {
                               navigate("/dashboard/setting/");
                             }}
+                            style={{cursor: 'pointer'}}
                           >
                             <i class="icon-material-outline-settings"></i>{" "}
                             Settings
@@ -763,6 +765,7 @@ function Header() {
                               localStorage.removeItem("token");
                               navigate("/login");
                             }}
+                            style={{cursor: 'pointer'}}
                           >
                             <i class="icon-material-outline-power-settings-new"></i>{" "}
                             Logout

@@ -223,7 +223,7 @@ function FreeLancersListLayout() {
               </label>
             </div>
             <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
-              <div style={{ display: "flex", flexWrap: "nowrap" }}>
+              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center'}}>
                 Sort by:
               </div>
               <select>
