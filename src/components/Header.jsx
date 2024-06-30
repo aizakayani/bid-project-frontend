@@ -11,8 +11,13 @@ import { getJobs, getJobsByUser } from "../services/job";
 import { isTokenValid } from "../utils/utils";
 import { getTasks, getTasksByUser } from "../services/task";
 import io from "socket.io-client";
-import { updateUserAPI } from "../services/user";
+import {
+  getFreelancersAPI,
+  getUserDetailsAPI,
+  updateUserAPI,
+} from "../services/user";
 import UserRolePopup from "./modals/UserRolePopup";
+import { getJobsApplicationsByUser } from "../services/job-applications";
 function Header() {
   const {
     user,
@@ -28,6 +33,9 @@ function Header() {
     socket,
     setSocket,
     setChatMessages,
+    setUserJobApplications,
+    freelancers,
+    setFreelancers,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -36,6 +44,8 @@ function Header() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [userRolePopup, setUserRolePopup] = useState(false);
   const [initialize, setInitialize] = useState(false);
+
+  console.log(freelancers);
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -95,8 +105,11 @@ function Header() {
   }, [user?.id]);
 
   const initializer = async (userRole) => {
+    // get user
+    await getUserDetails();
     if (userRole === "freelancer") {
       await getUserTasks();
+      await getJobApplicationsByUser();
     } else if (userRole === "employer") {
       await getUserJobs();
     }
@@ -107,6 +120,24 @@ function Header() {
       setInitialize(true);
       await getAllJobs();
       await getAllTasks();
+      await getFreelancers();
+    }
+  };
+
+  const getUserDetails = async () => {
+    // fetch jobs
+    try {
+      const response = await getUserDetailsAPI();
+      if (response?.success && response?.user) {
+        setUser({ ...response?.user });
+      } else {
+        if (!isTokenValid(response)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -144,17 +175,28 @@ function Header() {
     }
   };
 
+  const getJobApplicationsByUser = async () => {
+    try {
+      const response = await getJobsApplicationsByUser();
+      if (response?.success && response?.jobApplications) {
+        setUserJobApplications(response?.jobApplications);
+      } else {
+        if (!isTokenValid(response)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const getAllJobs = async () => {
     // fetch jobs
     try {
       const jobsResult = await getJobs();
       if (jobsResult?.success && jobsResult?.jobs?.length > 0) {
         setJobsList([...jobsResult?.jobs]);
-      } else {
-        if (!isTokenValid(jobsResult)) {
-          navigate("/login");
-          setIsLoggedIn(false);
-        }
       }
     } catch (error) {
       console.log(error);
@@ -167,11 +209,18 @@ function Header() {
       const tasksResult = await getTasks();
       if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
         setTasksList([...tasksResult?.tasks]);
-      } else {
-        if (!isTokenValid(tasksResult)) {
-          navigate("/login");
-          setIsLoggedIn(false);
-        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFreelancers = async () => {
+    // fetch jobs
+    try {
+      const response = await getFreelancersAPI();
+      if (response?.success && response?.freelancers?.length > 0) {
+        setFreelancers([...response?.freelancers]);
       }
     } catch (error) {
       console.log(error);
@@ -263,34 +312,33 @@ function Header() {
                     <a onClick={() => navigate("/")}>Home</a>
                   </li>
 
-                  <li
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "30px",
-                    }}
-                  >
-                    <a href="#">Find Work</a>
-                    <ul class="dropdown-nav">
-                      <li>
-                        <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
-                      </li>
-                      <li>
-                        <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
-                      </li>
-                      <li>
-                        <a onClick={() => navigate("/companies")}>
-                          Browse Companies
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
+                  {user?.role === "freelancer" && (
+                    <li
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        height: "30px",
+                      }}
+                    >
+                      <a href="#">Find Work</a>
+                      <ul class="dropdown-nav">
+                        <li>
+                          <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
+                        </li>
+                        <li>
+                          <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
+                        </li>
+                      </ul>
+                    </li>
+                  )}
 
-                  <li>
-                    <a onClick={() => navigate("/freelancers")}>
-                      Find a Freelancer
-                    </a>
-                  </li>
+                  {user?.role === "employer" && (
+                    <li>
+                      <a onClick={() => navigate("/freelancers")}>
+                        Find a Freelancer
+                      </a>
+                    </li>
+                  )}
                   <li
                     style={{
                       display: "flex",
@@ -696,7 +744,15 @@ function Header() {
                           setShowNotificationsDropdown(false);
                         }}
                       >
-                        <img src={userAvatarSmall1} alt="" />
+                        <img
+                          src={
+                            user?.avatar?.contentType &&
+                            user?.avatar?.base64Image
+                              ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
+                              : userAvatarSmall1
+                          }
+                          alt=""
+                        />
                       </div>
                     </a>
                   </div>
@@ -715,25 +771,33 @@ function Header() {
                         {/* <!-- User Name / Avatar --> */}
                         <div class="user-details">
                           <div class="user-avatar status-online">
-                            <img src={userAvatarSmall1} alt="" />
+                            <img
+                              src={
+                                user?.avatar?.contentType &&
+                                user?.avatar?.base64Image
+                                  ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
+                                  : userAvatarSmall1
+                              }
+                              alt=""
+                            />
                           </div>
                           <div class="user-name">
-                            Tom Smith <span>Freelancer</span>
+                            {user?.name} <span>{user?.role}</span>
                           </div>
                         </div>
 
                         {/* <!-- User Status Switcher --> */}
-                        <div class="status-switch" id="snackbar-user-status">
-                          <label class="user-online current-status">
+                        {/* <div class="status-switch" id="snackbar-user-status"> */}
+                        {/* <label class="user-online current-status">
                             Online
                           </label>
-                          <label class="user-invisible">Invisible</label>
-                          {/* <!-- Status Indicator --> */}
-                          <span
+                          <label class="user-invisible">Invisible</label> */}
+                        {/* <!-- Status Indicator --> */}
+                        {/* <span
                             class="status-indicator"
                             aria-hidden="true"
-                          ></span>
-                        </div>
+                          ></span> */}
+                        {/* </div> */}
                       </div>
 
                       <ul class="user-menu-small-nav">
@@ -742,6 +806,7 @@ function Header() {
                             onClick={() => {
                               navigate("/dashboard");
                             }}
+                            style={{ cursor: "pointer" }}
                           >
                             <i class="icon-material-outline-dashboard"></i>{" "}
                             Dashboard
@@ -752,6 +817,7 @@ function Header() {
                             onClick={() => {
                               navigate("/dashboard/setting/");
                             }}
+                            style={{ cursor: "pointer" }}
                           >
                             <i class="icon-material-outline-settings"></i>{" "}
                             Settings
@@ -763,6 +829,7 @@ function Header() {
                               localStorage.removeItem("token");
                               navigate("/login");
                             }}
+                            style={{ cursor: "pointer" }}
                           >
                             <i class="icon-material-outline-power-settings-new"></i>{" "}
                             Logout
