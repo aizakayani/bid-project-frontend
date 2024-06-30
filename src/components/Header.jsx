@@ -467,6 +467,7 @@ function Header() {
                   <div
                     class="header-notifications-trigger"
                     id={"notification-icon"}
+                    style={{cursor: 'pointer'}}
                   >
                     <a
                       onClick={() => {
@@ -573,7 +574,7 @@ function Header() {
 
                 {/* <!-- Messages --> */}
                 <div class="header-notifications">
-                  <div class="header-notifications-trigger" id={"mail-icon"}>
+                  <div class="header-notifications-trigger" id={"mail-icon"} style={{cursor: 'pointer'}}>
                     <a
                       onClick={() => {
                         setShowMessagesDropdown(!showMessagesDropdown);
@@ -687,6 +688,7 @@ function Header() {
                     <a>
                       <div
                         class="user-avatar status-online"
+                        style={{cursor: 'pointer'}}
                         onClick={() => {
                           console.log("avatar");
                           setShowProfileDropdown(!showProfileDropdown);
@@ -774,13 +776,13 @@ function Header() {
               {/* <!-- User Menu / End -->
 
 <!-- Mobile Navigation Button --> */}
-              <span class="mmenu-trigger">
+              {/* <span class="mmenu-trigger">
                 <button class="hamburger hamburger--collapse" type="button">
                   <span class="hamburger-box">
                     <span class="hamburger-inner"></span>
                   </span>
                 </button>
-              </span>
+              </span> */}
             </div>
           )}
         </div>

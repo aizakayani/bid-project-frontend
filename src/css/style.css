@@ -5917,12 +5917,67 @@ span.bookmark-icon {
 
 .bookmark-button.bookmarked .bookmark-text,
 .bookmark-button .bookmarked-text { display: none; }
+button.w-100 {
+	background-color: #eee;
+    color: #777;
+    border: 1px solid #eee;
 
+
+	}
+	button.w-100:hover {
+		background-color: #eee;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	button.w-100:focus {
+		background-color: #eee;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	button.w-100:focus-visible {
+		background-color: #eee;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	div.right-offset-menu {
+		transform: translate3d(55px, 39.375px, 0px) !important; /* Adjust this value for the desired offset */
+	}
+	button.w-100:focus,
+button.w-100:active,
+button.w-100.dropdown-toggle.show,
+button.w-100:focus-visible {
+    background-color: #eee;  /* Grey background */
+    color: #777;           /* Black text */
+    border: 1px solid #eee;  /* Grey border */
+    outline: none;           /* Remove default blue outline */
+    box-shadow: none;        /* Remove the box shadow effect */
+}
+
+/* Additionally, you might need to override the shadow from the button group */
+button.w-100:not(:disabled):not(.disabled):active,
+button.w-100:not(:disabled):not(.disabled):active:focus,
+button.w-100:focus,
+button.w-100:focus:active,
+button.w-100:active,
+button.w-100.show,
+button.w-100:focus-visible {
+    background-color: #eee; /* Ensure grey background on all active states */
+    color: #777;
+    border: 1px solid #eee;
+    outline: none;
+    box-shadow: none;
+}
 
 /* ---------------------------------- */
 /* Button with sliding icon
 ------------------------------------- */
 .button-sliding-icon { text-align: center; }
+a.white-text-button {
+	color: white !important;
+}
 .button-sliding-icon i {
 	opacity: 0;
 	max-width: 0;
@@ -14176,6 +14231,7 @@ a.apply-now-button {
 	box-shadow: 0 2px 8px rgba(102,103,107,0.15);
 	transition: 0.3s;
 	display: block;
+	text-decoration: none;
 }
 
 a.apply-now-button:hover {

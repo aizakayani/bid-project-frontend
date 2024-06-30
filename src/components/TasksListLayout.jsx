@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import { useContext, useState } from "react";
+import { Dropdown } from "react-bootstrap";
 function TasksListLayout() {
   const navigate = useNavigate();
   // const tasksList = [
@@ -14,18 +15,34 @@ function TasksListLayout() {
   //     tags: ["iOS", "Android", "Mobile App", "Design"],
   //   },
   // ];
+  const categories = [
+    "Admin Support",
+    "Customer Service",
+    "Data Analytics",
+    "Design & Creative",
+    "Legal",
+    "Software Developing",
+    "IT & Networking",
+    "Writing",
+    "Translation",
+    "Sales & Marketing",
+  ];
   const { tasksList } = useContext(UserContext);
-  const [locationInput, setLocationInput] = useState('');
-  const [titleInput, setTitleInput] = useState('');
-  const handleButtonClick = (newLocation, newTitle) => {
-    setLocationInput(newLocation);
-    setTitleInput(newTitle);
+  const [locationInput, setLocationInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Customer Service");
+  const handleSelect = (category) => {
+    setSelectedCategory(category);
   };
   // Function to filter tasks based on location and title
-  const filteredTasks = tasksList.filter(task=> {
+  const filteredTasks = tasksList.filter((task) => {
     // Convert inputs to lowercase for case-insensitive comparison
-    const locationMatch = task.location.toLowerCase().includes(locationInput.toLowerCase());
-    const titleMatch = task.title.toLowerCase().includes(titleInput.toLowerCase());
+    const locationMatch = task.location
+      .toLowerCase()
+      .includes(locationInput.toLowerCase());
+    const titleMatch = task.title
+      .toLowerCase()
+      .includes(titleInput.toLowerCase());
     return locationMatch && titleMatch;
   });
   return (
@@ -53,24 +70,26 @@ function TasksListLayout() {
             {/* <!-- Category --> */}
             <div class="sidebar-widget">
               <h3>Category</h3>
-              <select
-                class="selectpicker default"
-                multiple
-                data-selected-text-format="count"
-                data-size="7"
-                title="All Categories"
-              >
-                <option>Admin Support</option>
-                <option>Customer Service</option>
-                <option>Data Analytics</option>
-                <option>Design & Creative</option>
-                <option>Legal</option>
-                <option>Software Developing</option>
-                <option>IT & Networking</option>
-                <option>Writing</option>
-                <option>Translation</option>
-                <option>Sales & Marketing</option>
-              </select>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="primary"
+                  id="dropdown-basic"
+                  className="w-100"
+                >
+                  {selectedCategory}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="right-offset-menu">
+                  {categories.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => handleSelect(category)}
+                    >
+                      {category}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
 
             {/* <!-- Keywords --> */}
@@ -156,7 +175,14 @@ function TasksListLayout() {
         <div class="col-xl-9 col-lg-8 content-left-offset">
           <h3 class="page-title">Search Results</h3>
 
-          <div class="notify-box margin-top-15" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div
+            class="notify-box margin-top-15"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <div class="switch-container">
               <label class="switch">
                 <input type="checkbox" />
@@ -167,16 +193,17 @@ function TasksListLayout() {
               </label>
             </div>
 
-            <div style={{display: 'flex', gap: '5px', flexWrap: 'nowrap'}}>
-              <div style={{display: 'flex', flexWrap: 'nowrap'}}>Sort by:</div>
-             <select>
-        <option value="relevance">Relevance</option>
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-                <option value='random'>Random</option>
-               
-      </select>
-             </div>
+            <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
+              <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                Sort by:
+              </div>
+              <select>
+                <option value="relevance">Relevance</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="random">Random</option>
+              </select>
+            </div>
           </div>
 
           {/* <!-- Tasks Container --> */}
@@ -238,44 +265,45 @@ function TasksListLayout() {
           <div class="clearfix"></div>
           <div class="row">
             <div class="col-md-12">
-              {/* <!-- Pagination --> */} 
-              {tasksList?.length > 5 && <div class="pagination-container margin-top-60 margin-bottom-60">
-                <nav class="pagination">
-                  <ul>
-                    <li class="pagination-arrow">
-                      <a href="#" class="ripple-effect">
-                        <i class="icon-material-outline-keyboard-arrow-left"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        1
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="current-page ripple-effect">
-                        2
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        3
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        4
-                      </a>
-                    </li>
-                    <li class="pagination-arrow">
-                      <a href="#" class="ripple-effect">
-                        <i class="icon-material-outline-keyboard-arrow-right"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>}
-              
+              {/* <!-- Pagination --> */}
+              {tasksList?.length > 5 && (
+                <div class="pagination-container margin-top-60 margin-bottom-60">
+                  <nav class="pagination">
+                    <ul>
+                      <li class="pagination-arrow">
+                        <a href="#" class="ripple-effect">
+                          <i class="icon-material-outline-keyboard-arrow-left"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          1
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="current-page ripple-effect">
+                          2
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          3
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          4
+                        </a>
+                      </li>
+                      <li class="pagination-arrow">
+                        <a href="#" class="ripple-effect">
+                          <i class="icon-material-outline-keyboard-arrow-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              )}
             </div>
           </div>
           {/* <!-- Pagination / End --> */}

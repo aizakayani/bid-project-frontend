@@ -418,7 +418,7 @@ function FreeLancerDetails() {
                 </button>
 
                 {/* <!-- Copy URL --> */}
-                <div class="copy-url">
+                {/* <div class="copy-url">
                   <input
                     id="copy-url"
                     type="text"
@@ -433,7 +433,7 @@ function FreeLancerDetails() {
                   >
                     <i class="icon-material-outline-file-copy"></i>
                   </button>
-                </div>
+                </div> */}
 
                 {/* <!-- Share Buttons --> */}
                 <div class="share-buttons margin-top-25">

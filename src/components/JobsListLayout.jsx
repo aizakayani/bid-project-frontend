@@ -3,6 +3,7 @@ import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
 import { useContext, useState } from "react";
 import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
+import { Dropdown } from "react-bootstrap";
 function JobsListLayout() {
   const navigate = useNavigate();
   // const { jobsList } = useContext(UserContext);
@@ -16,46 +17,70 @@ function JobsListLayout() {
   //     logo: companyLogo1,
   //   },
   // ];
- const { jobsList } = useContext(UserContext);
- const[isMenuOpen, setIsMenuOpen] = useState(false);
- const [locationInput, setLocationInput] = useState('');
-  const [titleInput, setTitleInput] = useState('');
+  const { jobsList } = useContext(UserContext);
+  const [locationInput, setLocationInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    "Accounting and Finance"
+  );
   const [tags, setTags] = useState({
-    frontend:false,
-    angular:false,
-    react:false,
-    vuejs:false,
-    webapp:false,
-    design:false,
-    wordpress:false
-  
+    frontend: false,
+    angular: false,
+    react: false,
+    vuejs: false,
+    webapp: false,
+    design: false,
+    wordpress: false,
   });
+  const categories = [
+    "Accounting and Finance",
+    "Clerical & Data Entry",
+    "Counseling",
+    "Court Administration",
+    "Human Resources",
+    "Investigative",
+    "IT and Computers",
+    "Law Enforcement",
+    "Management",
+    "Miscellaneous",
+    "Public Relations",
+  ];
 
   // Function to filter jobs based on location and title
   // Function to filter jobs based on location, title, and tags
-  const filteredJobs = jobsList.filter(job => {
-    const locationMatch = job.location.toLowerCase().includes(locationInput.toLowerCase());
-    const titleMatch = job.title.toLowerCase().includes(titleInput.toLowerCase());
+  const filteredJobs = jobsList.filter((job) => {
+    const locationMatch = job.location
+      .toLowerCase()
+      .includes(locationInput.toLowerCase());
+    const titleMatch = job.title
+      .toLowerCase()
+      .includes(titleInput.toLowerCase());
 
     // Get selected tags
-    const selectedTags = Object.keys(tags).filter(tag => tags[tag]);
+    const selectedTags = Object.keys(tags).filter((tag) => tags[tag]);
 
     // Check if at least one selected tag exists in job tags (using job title as tag name)
-    const tagMatch = selectedTags.length === 0 || selectedTags.some(tag => job.title.toLowerCase().includes(tag.toLowerCase()));
+    const tagMatch =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) =>
+        job.title.toLowerCase().includes(tag.toLowerCase())
+      );
 
     return locationMatch && titleMatch && tagMatch;
   });
-
+  const handleSelect = (category) => {
+    setSelectedCategory(category);
+  };
   const handleCheckboxChange = (event) => {
     const { id, checked } = event.target;
-    console.log({checked});
-    console.log({id});
+    console.log({ checked });
+    console.log({ id });
     setTags({
       ...tags,
-      [id]: checked
+      [id]: checked,
     });
   };
-console.log({tags});
+  console.log({ tags });
 
   return (
     <div class="container margin-top-90">
@@ -104,9 +129,29 @@ console.log({tags});
 
             {/* <!-- Category --> */}
             <div class="sidebar-widget">
-              <h3 onClick={()=> setIsMenuOpen(!isMenuOpen)}>Category</h3>
-              {isMenuOpen &&   <select
-                class="selectpicker"
+              <h3>Category</h3>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="primary"
+                  id="dropdown-basic"
+                  className="w-100"
+                >
+                  {selectedCategory}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="right-offset-menu">
+                  {categories.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => handleSelect(category)}
+                    >
+                      {category}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+              {/* <select
+                class="selectpicker with-border"
                 multiple
                 data-selected-text-format="count"
                 data-size="7"
@@ -123,8 +168,7 @@ console.log({tags});
                 <option>Management</option>
                 <option>Miscellaneous</option>
                 <option>Public Relations</option>
-              </select>}
-            
+              </select> */}
             </div>
 
             {/* <!-- Job Types --> */}
@@ -174,45 +218,66 @@ console.log({tags});
 
               <div class="tags-container">
                 <div class="tag">
-                  <input type="checkbox" id="frontend" 
-                  checked={tags.frontend}
-                   onChange={handleCheckboxChange} />
+                  <input
+                    type="checkbox"
+                    id="frontend"
+                    checked={tags.frontend}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="frontend">front-end dev</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="angular" 
-                  checked={tags.angular2}
-                  onChange={handleCheckboxChange} />
+                  <input
+                    type="checkbox"
+                    id="angular"
+                    checked={tags.angular2}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="angular">angular</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="react" 
-                  checked={tags.react}
-                  onChange={handleCheckboxChange} />
+                  <input
+                    type="checkbox"
+                    id="react"
+                    checked={tags.react}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="react">react</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="vuejs"
-                  checked={tags.vuejs}
-                  onChange={handleCheckboxChange}/>
+                  <input
+                    type="checkbox"
+                    id="vuejs"
+                    checked={tags.vuejs}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="vuejs">vue js</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="webapp"
-                  checked={tags.webapp}
-                  onChange={handleCheckboxChange} />
+                  <input
+                    type="checkbox"
+                    id="webapp"
+                    checked={tags.webapp}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="webapp">web apps</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="design"
-                  checked={tags.design}
-                  onChange={handleCheckboxChange}/>
+                  <input
+                    type="checkbox"
+                    id="design"
+                    checked={tags.design}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="design">design</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="wordpress"
-                  checked={tags.wordpress}
-                  onChange={handleCheckboxChange} />
+                  <input
+                    type="checkbox"
+                    id="wordpress"
+                    checked={tags.wordpress}
+                    onChange={handleCheckboxChange}
+                  />
                   <label for="wordpress">wordpress</label>
                 </div>
               </div>
@@ -223,7 +288,14 @@ console.log({tags});
         <div class="col-xl-9 col-lg-8 content-left-offset">
           <h3 class="page-title">Search Results</h3>
 
-          <div class="notify-box margin-top-15" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div
+            class="notify-box margin-top-15"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <div class="switch-container">
               <label class="switch">
                 <input type="checkbox" />
@@ -234,16 +306,17 @@ console.log({tags});
               </label>
             </div>
 
-            <div style={{display: 'flex', gap: '5px', flexWrap: 'nowrap'}}>
-              <div style={{display: 'flex', flexWrap: 'nowrap'}}>Sort by:</div>
-             <select>
-        <option value="relevance">Relevance</option>
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-                <option value='random'>Random</option>
-               
-      </select>
-             </div>
+            <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
+              <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                Sort by:
+              </div>
+              <select>
+                <option value="relevance">Relevance</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="random">Random</option>
+              </select>
+            </div>
           </div>
 
           <div class="listings-container compact-list-layout margin-top-35">
@@ -305,39 +378,39 @@ console.log({tags});
           <div class="clearfix"></div>
           <div class="row">
             <div class="col-md-12">
-              {/* <!-- Pagination --> */} {
-                jobsList?. length > 5 && <div class="pagination-container margin-top-60 margin-bottom-60">
-                <nav class="pagination">
-                  <ul>
-                    <li class="pagination-arrow">
-                      <a href="#">
-                        <i class="icon-material-outline-keyboard-arrow-left"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">1</a>
-                    </li>
-                    <li>
-                      <a href="#" class="current-page">
-                        2
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">3</a>
-                    </li>
-                    <li>
-                      <a href="#">4</a>
-                    </li>
-                    <li class="pagination-arrow">
-                      <a href="#">
-                        <i class="icon-material-outline-keyboard-arrow-right"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-              }
-              
+              {/* <!-- Pagination --> */}{" "}
+              {jobsList?.length > 5 && (
+                <div class="pagination-container margin-top-60 margin-bottom-60">
+                  <nav class="pagination">
+                    <ul>
+                      <li class="pagination-arrow">
+                        <a href="#">
+                          <i class="icon-material-outline-keyboard-arrow-left"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">1</a>
+                      </li>
+                      <li>
+                        <a href="#" class="current-page">
+                          2
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">3</a>
+                      </li>
+                      <li>
+                        <a href="#">4</a>
+                      </li>
+                      <li class="pagination-arrow">
+                        <a href="#">
+                          <i class="icon-material-outline-keyboard-arrow-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              )}
             </div>
           </div>
           {/* <!-- Pagination / End --> */}

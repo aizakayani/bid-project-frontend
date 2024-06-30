@@ -82,7 +82,8 @@ function JobDetails() {
           <div class="col-xl-8 col-lg-8 content-right-offset">
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
-              <p>{JobDetails?.description}</p>
+              {/* <p>{JobDetails?.description}</p> */}
+              <p>{'A Restaurant General Manager oversees daily operations to ensure efficient service and profitability. They are responsible for staff management, customer satisfaction, inventory control, and financial reporting. The role requires strong leadership, problem-solving skills, and the ability to thrive in a fast-paced environment. Success involves balancing customer experience with operational efficiency and financial targets.'}</p>
               {/* <p>
                 Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
@@ -226,7 +227,7 @@ function JobDetails() {
                 class="apply-now-button popup-with-zoom-anim"
                 onClick={()=> setShowApplyJobPopup(true)}
               >
-                Apply Now <i class="icon-material-outline-arrow-right-alt"></i>
+                Apply Now 
               </a>
 
               {/* <!-- Sidebar Widget --> */}
@@ -273,7 +274,7 @@ function JobDetails() {
                   <span class="bookmarked-text">Bookmarked</span>
                 </button>
 
-                {/* <!-- Copy URL --> */}
+                {/* <!-- Copy URL -->
                 <div class="copy-url">
                   <input
                     id="copy-url"
@@ -289,7 +290,7 @@ function JobDetails() {
                   >
                     <i class="icon-material-outline-file-copy"></i>
                   </button>
-                </div>
+                </div> */}
 
                 {/* <!-- Share Buttons --> */}
                 <div class="share-buttons margin-top-25">

@@ -2,8 +2,10 @@ import it from "../utils/images/flags/it.svg";
 import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
 import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
 import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Dropdown } from "react-bootstrap";
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const freelancersList = [
@@ -40,6 +42,25 @@ function FreeLancersListLayout() {
       jobSuccessRate: "100%",
     },
   ];
+  const [selectedCategory, setSelectedCategory] = useState("Admin Support");
+
+  const categories = [
+    "Admin Support",
+    "Customer Service",
+    "Data Analytics",
+    "Design & Creative",
+    "Legal",
+    "Software Developing",
+    "IT & Networking",
+    "Writing",
+    "Translation",
+    "Sales & Marketing",
+  ];
+
+  // Handle category selection
+  const handleSelect = (category) => {
+    setSelectedCategory(category);
+  };
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -63,7 +84,7 @@ function FreeLancersListLayout() {
             {/* <!-- Category --> */}
             <div class="sidebar-widget">
               <h3>Category</h3>
-              <select
+              {/* <select
                 class="selectpicker default"
                 multiple
                 data-selected-text-format="count"
@@ -80,7 +101,27 @@ function FreeLancersListLayout() {
                 <option>Writing</option>
                 <option>Translation</option>
                 <option>Sales & Marketing</option>
-              </select>
+              </select> */}
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="primary"
+                  id="dropdown-basic"
+                  className="w-100"
+                >
+                  {selectedCategory}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="right-offset-menu">
+                  {categories.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => handleSelect(category)}
+                    >
+                      {category}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
 
             {/* <!-- Keywords --> */}
@@ -164,7 +205,14 @@ function FreeLancersListLayout() {
         <div class="col-xl-9 col-lg-8 content-left-offset">
           <h3 class="page-title">Search Results</h3>
 
-          <div class="notify-box margin-top-15" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div
+            class="notify-box margin-top-15"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <div class="switch-container">
               <label class="switch">
                 <input type="checkbox" />
@@ -174,22 +222,26 @@ function FreeLancersListLayout() {
                 </span>
               </label>
             </div>
-             <div style={{display: 'flex', gap: '5px', flexWrap: 'nowrap'}}>
-              <div style={{display: 'flex', flexWrap: 'nowrap'}}>Sort by:</div>
-             <select>
-        <option value="relevance" selected>Relevance</option>
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-                <option value='random'>Random</option>
-               
-      </select>
-             </div>
-     
-
+            <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
+              <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                Sort by:
+              </div>
+              <select>
+                <option value="relevance" selected>
+                  Relevance
+                </option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="random">Random</option>
+              </select>
+            </div>
           </div>
 
           {/* <!-- Freelancers List Container --> */}
-          <div class="freelancers-container freelancers-list-layout compact-list margin-top-35" style={{flexDirection: 'column'}}>
+          <div
+            class="freelancers-container freelancers-list-layout compact-list margin-top-35"
+            style={{ flexDirection: "column" }}
+          >
             {/* <!--Freelancer --> */}
             {freelancersList?.length > 0 &&
               freelancersList.map((freelancer) => {
@@ -226,11 +278,11 @@ function FreeLancersListLayout() {
                           {/* <!-- Rating --> */}
                           <div class="freelancer-rating">
                             <div class="star-rating" data-rating="4.5">
-                            <span class="star"></span>
-                            <span class="star"></span>
-                            <span class="star"></span>
-                            <span class="star"></span>
-                            <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
                             </div>
                           </div>
                         </div>
@@ -257,8 +309,11 @@ function FreeLancersListLayout() {
                           </li>
                         </ul>
                       </div>
-                      <a  onClick={() =>{navigate("/freelancer/details/:id")} }
-                        class="button button-sliding-icon ripple-effect"
+                      <a
+                        onClick={() => {
+                          navigate("/freelancer/details/:id");
+                        }}
+                        class="button button-sliding-icon ripple-effect white-text-button"
                       >
                         View Profile{" "}
                         <i class="icon-material-outline-arrow-right-alt"></i>
@@ -275,43 +330,44 @@ function FreeLancersListLayout() {
           <div class="row">
             <div class="col-md-12">
               {/* <!-- Pagination --> */}
-              {freelancersList?.length > 5 && <div class="pagination-container margin-top-40 margin-bottom-60">
-                <nav class="pagination">
-                  <ul>
-                    <li class="pagination-arrow">
-                      <a href="#" class="ripple-effect">
-                        <i class="icon-material-outline-keyboard-arrow-left"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        1
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="current-page ripple-effect">
-                        2
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        3
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="ripple-effect">
-                        4
-                      </a>
-                    </li>
-                    <li class="pagination-arrow">
-                      <a href="#" class="ripple-effect">
-                        <i class="icon-material-outline-keyboard-arrow-right"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>}
-              
+              {freelancersList?.length > 5 && (
+                <div class="pagination-container margin-top-40 margin-bottom-60">
+                  <nav class="pagination">
+                    <ul>
+                      <li class="pagination-arrow">
+                        <a href="#" class="ripple-effect">
+                          <i class="icon-material-outline-keyboard-arrow-left"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          1
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="current-page ripple-effect">
+                          2
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          3
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="ripple-effect">
+                          4
+                        </a>
+                      </li>
+                      <li class="pagination-arrow">
+                        <a href="#" class="ripple-effect">
+                          <i class="icon-material-outline-keyboard-arrow-right"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              )}
             </div>
           </div>
           {/* <!-- Pagination / End --> */}
