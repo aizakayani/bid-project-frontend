@@ -8,11 +8,31 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import ApplyJobPopup from "./modals/ApplyJobPopup";
+import {
+  addJobApplication,
+  getJobsApplicationsByUser,
+} from "../services/job-applications";
+import toast from "react-hot-toast";
 function JobDetails() {
   const { id } = useParams();
-  const { jobsList } = useContext(UserContext);
+  const { jobsList, setUserJobApplications, userJobApplications } =
+    useContext(UserContext);
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
+  const [applied, setApplied] = useState(false);
+
+  console.log(applied);
+
+  useEffect(() => {
+    console.log(userJobApplications, id);
+    if (
+      userJobApplications?.length &&
+      userJobApplications.filter((application) => application.jobId === id)
+        ?.length
+    ) {
+      setApplied(true);
+    }
+  }, [id, userJobApplications?.length]);
 
   useEffect(() => {
     if (id && jobsList?.length > 0) {
@@ -23,6 +43,39 @@ function JobDetails() {
       }
     }
   }, [id, jobsList]);
+
+  const handleJobApplication = async (
+    applicantCV,
+    applicantName,
+    applicantEmail
+  ) => {
+    const formData = new FormData();
+    formData.append("applicantCV", applicantCV);
+    formData.append("applicantName", applicantName);
+    formData.append("applicantCV", applicantEmail);
+    formData.append("jobId", id);
+    try {
+      const response = await addJobApplication(formData);
+      if (response?.success) {
+        toast.success("Job application has been sent");
+        getJobApplicationsByUser();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to apply for job");
+    }
+  };
+  const getJobApplicationsByUser = async () => {
+    try {
+      const response = await getJobsApplicationsByUser();
+      if (response?.success && response?.jobApplications) {
+        setUserJobApplications(response?.jobApplications);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to get user job applications");
+    }
+  };
   return (
     <>
       <div class="single-page-header" data-background-image={singleJob}>
@@ -83,7 +136,11 @@ function JobDetails() {
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
               {/* <p>{JobDetails?.description}</p> */}
-              <p>{'A Restaurant General Manager oversees daily operations to ensure efficient service and profitability. They are responsible for staff management, customer satisfaction, inventory control, and financial reporting. The role requires strong leadership, problem-solving skills, and the ability to thrive in a fast-paced environment. Success involves balancing customer experience with operational efficiency and financial targets.'}</p>
+              <p>
+                {
+                  "A Restaurant General Manager oversees daily operations to ensure efficient service and profitability. They are responsible for staff management, customer satisfaction, inventory control, and financial reporting. The role requires strong leadership, problem-solving skills, and the ability to thrive in a fast-paced environment. Success involves balancing customer experience with operational efficiency and financial targets."
+                }
+              </p>
               {/* <p>
                 Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
@@ -223,11 +280,16 @@ function JobDetails() {
           <div class="col-xl-4 col-lg-4">
             <div class="sidebar-container">
               <a
-                href="#small-dialog"
                 class="apply-now-button popup-with-zoom-anim"
-                onClick={()=> setShowApplyJobPopup(true)}
+                onClick={() => setShowApplyJobPopup(true)}
+                style={
+                  applied ? { pointerEvents: "none", cursor: "default" } : {}
+                }
               >
-                Apply Now 
+                {applied ? "Applied" : "Apply Now"}{" "}
+                {!applied && (
+                  <i class="icon-material-outline-arrow-right-alt"></i>
+                )}
               </a>
 
               {/* <!-- Sidebar Widget --> */}
@@ -350,7 +412,13 @@ function JobDetails() {
           </div>
         </div>
       </div>
-      {showApplyJobPopup && <ApplyJobPopup show={showApplyJobPopup} handleClose={()=> setShowApplyJobPopup(false)} handleSubmit={()=> setShowApplyJobPopup(false)}/>}
+      {showApplyJobPopup && (
+        <ApplyJobPopup
+          show={showApplyJobPopup}
+          handleClose={() => setShowApplyJobPopup(false)}
+          handleSubmit={handleJobApplication}
+        />
+      )}
     </>
   );
 }

@@ -1,4 +1,3 @@
-
 import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
 import gb from "../utils/images/flags/gb.svg";
 import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
@@ -10,14 +9,13 @@ import au from "../utils/images/flags/au.svg";
 import it from "../utils/images/flags/it.svg";
 import fr from "../utils/images/flags/fr.svg";
 import { useContext, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
 
 function Home() {
-  
-  const { jobsList } = useContext(UserContext);
+  const { jobsList, user, isLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
   const onRightClick = () => {
     const mainContainerId = document.getElementById("freelancer-container");
@@ -31,9 +29,9 @@ function Home() {
       mainContainerId.scrollLeft -= 400;
     }
   };
-  const [locationInput, setLocationInput] = useState('');
-  const [titleInput, setTitleInput] = useState('');
-  const [searchJob, setSearchJob] = useState({location: '', title: ''});
+  const [locationInput, setLocationInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [searchJob, setSearchJob] = useState({ location: "", title: "" });
   const handleButtonClick = () => {
     setSearchJob((prevState) => ({
       ...prevState,
@@ -43,15 +41,19 @@ function Home() {
     window.scrollBy(0, 600);
   };
   // Function to filter jobs based on location and title
-  const filteredJobs = jobsList.filter(job => {
+  const filteredJobs = jobsList.filter((job) => {
     // Convert inputs to lowercase for case-insensitive comparison
-    const locationMatch = job.location.toLowerCase().includes(searchJob?.location.toLowerCase());
-    const titleMatch = job.title.toLowerCase().includes(searchJob?.title.toLowerCase());
+    const locationMatch = job.location
+      .toLowerCase()
+      .includes(searchJob?.location.toLowerCase());
+    const titleMatch = job.title
+      .toLowerCase()
+      .includes(searchJob?.title.toLowerCase());
     return locationMatch && titleMatch;
   });
-  
 
-  
+  console.log("ia loggd in...", isLoggedIn);
+
   return (
     <div>
       {/* <!-- Intro Banner
@@ -95,11 +97,11 @@ function Home() {
                   </label>
                   <div class="input-with-icon">
                     <input
-                    placeholder="Online Job"
-                    id="autocomplete-input"
-                    type="text"
-                    value={locationInput}
-                    onChange={(e) => setLocationInput(e.target.value)}
+                      placeholder="Online Job"
+                      id="autocomplete-input"
+                      type="text"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
                     />
                     <i class="icon-material-outline-location-on"></i>
                   </div>
@@ -122,10 +124,9 @@ function Home() {
                 {/* <!-- Button --> */}
                 <div class="intro-search-button">
                   <button
-                   onClick={() => handleButtonClick()}
+                    onClick={() => handleButtonClick()}
                     class="button ripple-effect"
-                 >
-
+                  >
                     Search
                   </button>
                 </div>
@@ -230,556 +231,567 @@ function Home() {
       {/* <!-- Icon Boxes / End --> */}
 
       {/* <!-- Features Jobs --> */}
-      <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              {/* <!-- Section Headline --> */}
-              <div class="section-headline margin-top-0 margin-bottom-35">
-                <h3>Featured Jobs</h3>
-                <a
-                  onClick={() => navigate("/jobs")}
-                  class="headline-link"
-                >
-                  Browse All Jobs
-                </a>
+      {(isLoggedIn == false || user?.role === "freelancer") && (
+        <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-12">
+                {/* <!-- Section Headline --> */}
+                <div class="section-headline margin-top-0 margin-bottom-35">
+                  <h3>Featured Jobs</h3>
+                  <a onClick={() => navigate("/jobs")} class="headline-link">
+                    Browse All Jobs
+                  </a>
+                </div>
+                <div class="listings-container compact-list-layout margin-top-35">
+                  {filteredJobs?.length > 0 &&
+                    filteredJobs.map((job) => {
+                      return (
+                        <a
+                          onClick={() => navigate(`/job/details/${job._id}`)}
+                          class="job-listing"
+                        >
+                          {/* <!-- Job Listing Details --> */}
+                          <div class="job-listing-details">
+                            {/* <!-- Logo --> */}
+                            <div class="job-listing-company-logo">
+                              <img
+                                src={job.companyLogo || companyLogo05}
+                                alt=""
+                              />
+                            </div>
+
+                            {/* <!-- Details --> */}
+                            <div class="job-listing-description">
+                              <h3 class="job-listing-title">{job.title}</h3>
+
+                              {/* <!-- Job Listing Footer --> */}
+                              <div class="job-listing-footer">
+                                <ul>
+                                  <li>
+                                    <i class="icon-material-outline-business"></i>{" "}
+                                    {job.company}{" "}
+                                    <div
+                                      class="verified-badge"
+                                      title="Verified Employer"
+                                      data-tippy-placement="top"
+                                    ></div>
+                                  </li>
+                                  <li>
+                                    <i class="icon-material-outline-location-on"></i>{" "}
+                                    {job.location}
+                                  </li>
+                                  <li>
+                                    <i class="icon-material-outline-business-center"></i>{" "}
+                                    {job.type}
+                                  </li>
+                                  <li>
+                                    <i class="icon-material-outline-access-time"></i>{" "}
+                                    {`${timeDifferenceFromNow(job?.createdAt)}`}
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <a
+                              onClick={() =>
+                                navigate(`job/details/:${job._id}`)
+                              }
+                              class="job-listing with-apply-button"
+                            >
+                              <span class="list-apply-button ripple-effect">
+                                Apply Now
+                              </span>
+                            </a>
+                          </div>
+                        </a>
+                      );
+                    })}
+                </div>
               </div>
-              <div class="listings-container compact-list-layout margin-top-35">
-            {filteredJobs?.length > 0 &&
-              filteredJobs.map((job) => {
-                return (
-                  <a
-                    onClick={() => navigate(`/job/details/${job._id}`)}
-                    class="job-listing"
-                  >
-                    {/* <!-- Job Listing Details --> */}
-                    <div class="job-listing-details">
-                      {/* <!-- Logo --> */}
-                      <div class="job-listing-company-logo">
-                        <img src={job.companyLogo || companyLogo05} alt="" />
-                      </div>
-
-                      {/* <!-- Details --> */}
-                      <div class="job-listing-description">
-                        <h3 class="job-listing-title">{job.title}</h3>
-
-                        {/* <!-- Job Listing Footer --> */}
-                        <div class="job-listing-footer">
-                          <ul>
-                            <li>
-                              <i class="icon-material-outline-business"></i>{" "}
-                              {job.company}{" "}
-                              <div
-                                class="verified-badge"
-                                title="Verified Employer"
-                                data-tippy-placement="top"
-                              ></div>
-                            </li>
-                            <li>
-                              <i class="icon-material-outline-location-on"></i>{" "}
-                              {job.location}
-                            </li>
-                            <li>
-                              <i class="icon-material-outline-business-center"></i>{" "}
-                              {job.type}
-                            </li>
-                            <li>
-                              <i class="icon-material-outline-access-time"></i>{" "}
-                              {`${timeDifferenceFromNow(job?.createdAt)}`}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <a
-                    onClick={() => navigate(`job/details/:${job._id}`)}
-                   class="job-listing with-apply-button"
-                  >
-                    <span class="list-apply-button ripple-effect">Apply Now</span>
-                  </a>
-                    </div>
-                  </a>
-                );
-              })}
-          </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       {/* <!-- Featured Jobs / End --> */}
 
       {/* <!-- Highest Rated Freelancers --> */}
-      <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              {/* <!-- Section Headline --> */}
-              <div class="section-headline margin-top-0 margin-bottom-25">
-                <h3>Highest Rated Freelancers</h3>
-                <a 
-                onClick={() => navigate("/freelancers")}
-                class="headline-link">Browse All Freelancers</a>
+      {(isLoggedIn == false || user?.role === "employer") && (
+        <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-12">
+                {/* <!-- Section Headline --> */}
+                <div class="section-headline margin-top-0 margin-bottom-25">
+                  <h3>Highest Rated Freelancers</h3>
+                  <a
+                    onClick={() => navigate("/freelancers")}
+                    class="headline-link"
+                  >
+                    Browse All Freelancers
+                  </a>
+                </div>
               </div>
-            </div>
 
-            <div
-              class="col-xl-12"
-              style={{ display: "flex", flexDirection: "row" }}
-            >
-              {/* <div className="left-icon" style={{width: '40px', display: 'flex', alignItems: 'center'}} > */}
-              {/* <div className="icon-container" style={{backgroundColor: '#770737', width: '40px', height: ' 40px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <div
+                class="col-xl-12"
+                style={{ display: "flex", flexDirection: "row" }}
+              >
+                {/* <div className="left-icon" style={{width: '40px', display: 'flex', alignItems: 'center'}} > */}
+                {/* <div className="icon-container" style={{backgroundColor: '#770737', width: '40px', height: ' 40px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <img src={leftArrow} alt="" width={'25px'} height={'25px'} color={'white'}/>
                     </div> */}
-              <button
-                class="slick-prev slick-arrow"
-                aria-label="Previous"
-                type="button"
-                aria-disabled="false"
-                onClick={() => onLeftClick()}
-              >
-                Previous
-              </button>
+                <button
+                  class="slick-prev slick-arrow"
+                  aria-label="Previous"
+                  type="button"
+                  aria-disabled="false"
+                  onClick={() => onLeftClick()}
+                >
+                  Previous
+                </button>
 
-              {/* </div> */}
-              <div
-                class="default-slick-carousel freelancers-container freelancers-grid-layout"
-                id="freelancer-container"
-              >
-                {/* <!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
+                {/* </div> */}
+                <div
+                  class="default-slick-carousel freelancers-container freelancers-grid-layout"
+                  id="freelancer-container"
+                >
+                  {/* <!--Freelancer --> */}
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
 
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <div class="verified-badge"></div>
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarBig1} alt="" />
-                        </a>
-                      </div>
-
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <div class="verified-badge"></div>
                           <a href="single-freelancer-profile.html">
-                            Tom Smith{" "}
-                            <img
-                              class="flag"
-                              src={gb}
-                              alt=""
-                              title="United Kingdom"
-                              data-tippy-placement="top"
-                            />
+                            <img src={userAvatarBig1} alt="" />
                           </a>
-                        </h4>
-                        <span>UI/UX Designer</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="5.0"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="single-freelancer-profile.html">
+                              Tom Smith{" "}
+                              <img
+                                class="flag"
+                                src={gb}
+                                alt=""
+                                title="United Kingdom"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>UI/UX Designer</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="5.0"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            London
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$60 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>95%</strong>
-                        </li>
-                      </ul>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              London
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$60 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>95%</strong>
+                          </li>
+                        </ul>
+                      </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
                     </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
                   </div>
-                </div>
-                {/* <!-- Freelancer / End -->
+                  {/* <!-- Freelancer / End -->
 
 					<!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
 
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <div class="verified-badge"></div>
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarBig2} alt="" />
-                        </a>
-                      </div>
-
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="#">
-                            David Peterson{" "}
-                            <img
-                              class="flag"
-                              src={de}
-                              alt=""
-                              title="Germany"
-                              data-tippy-placement="top"
-                            />
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <div class="verified-badge"></div>
+                          <a href="single-freelancer-profile.html">
+                            <img src={userAvatarBig2} alt="" />
                           </a>
-                        </h4>
-                        <span>iOS Expert + Node Dev</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="5.0"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="#">
+                              David Peterson{" "}
+                              <img
+                                class="flag"
+                                src={de}
+                                alt=""
+                                title="Germany"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>iOS Expert + Node Dev</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="5.0"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            Berlin
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$40 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>88%</strong>
-                        </li>
-                      </ul>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              Berlin
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$40 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>88%</strong>
+                          </li>
+                        </ul>
+                      </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
                     </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
                   </div>
-                </div>
-                {/* <!-- Freelancer / End -->
+                  {/* <!-- Freelancer / End -->
 
 					<!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
 
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarPlaceholder} alt="" />
-                        </a>
-                      </div>
-
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="#">
-                            Marcin Kowalski{" "}
-                            <img
-                              class="flag"
-                              src={p1}
-                              alt=""
-                              title="Poland"
-                              data-tippy-placement="top"
-                            />
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <a href="single-freelancer-profile.html">
+                            <img src={userAvatarPlaceholder} alt="" />
                           </a>
-                        </h4>
-                        <span>Front-End Developer</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="4.9"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="#">
+                              Marcin Kowalski{" "}
+                              <img
+                                class="flag"
+                                src={p1}
+                                alt=""
+                                title="Poland"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>Front-End Developer</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="4.9"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            Warsaw
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$50 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>100%</strong>
-                        </li>
-                      </ul>
-                    </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
-                  </div>
-                </div>
-                {/* <!-- Freelancer / End --> */}
-
-                {/* <!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
-
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <div class="verified-badge"></div>
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarBig3} alt="" />
-                        </a>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              Warsaw
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$50 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>100%</strong>
+                          </li>
+                        </ul>
                       </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
+                    </div>
+                  </div>
+                  {/* <!-- Freelancer / End --> */}
 
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="#">
-                            Sindy Forest{" "}
-                            <img
-                              class="flag"
-                              src={au}
-                              alt=""
-                              title="Australia"
-                              data-tippy-placement="top"
-                            />
+                  {/* <!--Freelancer --> */}
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
+
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <div class="verified-badge"></div>
+                          <a href="single-freelancer-profile.html">
+                            <img src={userAvatarBig3} alt="" />
                           </a>
-                        </h4>
-                        <span>Magento Certified Developer</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="5.0"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="#">
+                              Sindy Forest{" "}
+                              <img
+                                class="flag"
+                                src={au}
+                                alt=""
+                                title="Australia"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>Magento Certified Developer</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="5.0"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            Brisbane
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$70 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>100%</strong>
-                        </li>
-                      </ul>
-                    </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
-                  </div>
-                </div>
-                {/* <!-- Freelancer / End --> */}
-
-                {/* <!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
-
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarPlaceholder} alt="" />
-                        </a>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              Brisbane
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$70 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>100%</strong>
+                          </li>
+                        </ul>
                       </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
+                    </div>
+                  </div>
+                  {/* <!-- Freelancer / End --> */}
 
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="#">
-                            Sebastiano Piccio{" "}
-                            <img
-                              class="flag"
-                              src={it}
-                              alt=""
-                              title="Italy"
-                              data-tippy-placement="top"
-                            />
+                  {/* <!--Freelancer --> */}
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
+
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <a href="single-freelancer-profile.html">
+                            <img src={userAvatarPlaceholder} alt="" />
                           </a>
-                        </h4>
-                        <span>Laravel Dev</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="4.5"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="#">
+                              Sebastiano Piccio{" "}
+                              <img
+                                class="flag"
+                                src={it}
+                                alt=""
+                                title="Italy"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>Laravel Dev</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="4.5"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            Milan
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$80 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>89%</strong>
-                        </li>
-                      </ul>
-                    </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
-                  </div>
-                </div>
-                {/* <!-- Freelancer / End --> */}
-
-                {/* <!--Freelancer --> */}
-                <div class="freelancer">
-                  {/* <!-- Overview --> */}
-                  <div class="freelancer-overview">
-                    <div class="freelancer-overview-inner">
-                      {/* <!-- Bookmark Icon --> */}
-                      <span class="bookmark-icon"></span>
-
-                      {/* <!-- Avatar --> */}
-                      <div class="freelancer-avatar">
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarPlaceholder} alt="" />
-                        </a>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              Milan
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$80 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>89%</strong>
+                          </li>
+                        </ul>
                       </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
+                    </div>
+                  </div>
+                  {/* <!-- Freelancer / End --> */}
 
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="#">
-                            Gabriel Lagueux{" "}
-                            <img
-                              class="flag"
-                              src={fr}
-                              alt=""
-                              title="France"
-                              data-tippy-placement="top"
-                            />
+                  {/* <!--Freelancer --> */}
+                  <div class="freelancer">
+                    {/* <!-- Overview --> */}
+                    <div class="freelancer-overview">
+                      <div class="freelancer-overview-inner">
+                        {/* <!-- Bookmark Icon --> */}
+                        <span class="bookmark-icon"></span>
+
+                        {/* <!-- Avatar --> */}
+                        <div class="freelancer-avatar">
+                          <a href="single-freelancer-profile.html">
+                            <img src={userAvatarPlaceholder} alt="" />
                           </a>
-                        </h4>
-                        <span>WordPress Expert</span>
-                      </div>
+                        </div>
 
-                      {/* <!-- Rating --> */}
-                      <div class="freelancer-rating">
-                        <div class="star-rating" data-rating="5.0"></div>
+                        {/* <!-- Name --> */}
+                        <div class="freelancer-name">
+                          <h4>
+                            <a href="#">
+                              Gabriel Lagueux{" "}
+                              <img
+                                class="flag"
+                                src={fr}
+                                alt=""
+                                title="France"
+                                data-tippy-placement="top"
+                              />
+                            </a>
+                          </h4>
+                          <span>WordPress Expert</span>
+                        </div>
+
+                        {/* <!-- Rating --> */}
+                        <div class="freelancer-rating">
+                          <div class="star-rating" data-rating="5.0"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Details --> */}
-                  <div class="freelancer-details">
-                    <div class="freelancer-details-list">
-                      <ul>
-                        <li>
-                          Location{" "}
-                          <strong>
-                            <i class="icon-material-outline-location-on"></i>{" "}
-                            Paris
-                          </strong>
-                        </li>
-                        <li>
-                          Rate <strong>$50 / hr</strong>
-                        </li>
-                        <li>
-                          Job Success <strong>100%</strong>
-                        </li>
-                      </ul>
+                    {/* <!-- Details --> */}
+                    <div class="freelancer-details">
+                      <div class="freelancer-details-list">
+                        <ul>
+                          <li>
+                            Location{" "}
+                            <strong>
+                              <i class="icon-material-outline-location-on"></i>{" "}
+                              Paris
+                            </strong>
+                          </li>
+                          <li>
+                            Rate <strong>$50 / hr</strong>
+                          </li>
+                          <li>
+                            Job Success <strong>100%</strong>
+                          </li>
+                        </ul>
+                      </div>
+                      <a
+                        href="single-freelancer-profile.html"
+                        class="button button-sliding-icon ripple-effect"
+                      >
+                        View Profile{" "}
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
                     </div>
-                    <a
-                      href="single-freelancer-profile.html"
-                      class="button button-sliding-icon ripple-effect"
-                    >
-                      View Profile{" "}
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
                   </div>
+                  {/* <!-- Freelancer / End --> */}
                 </div>
-                {/* <!-- Freelancer / End --> */}
-              </div>
-              {/* <div className="right-icon" style={{width: '35px',display: 'flex', alignItems: 'center'}}> */}
-              {/* <div className="icon-container">
+                {/* <div className="right-icon" style={{width: '35px',display: 'flex', alignItems: 'center'}}> */}
+                {/* <div className="icon-container">
                 <img src={rightArrow} alt="" width={'25px'} height={'25px'} />
                 </div> */}
-              <button
-                class="slick-next slick-arrow"
-                aria-label="Next"
-                type="button"
-                aria-disabled="false"
-                onClick={() => onRightClick()}
-              >
-                Next
-              </button>
+                <button
+                  class="slick-next slick-arrow"
+                  aria-label="Next"
+                  type="button"
+                  aria-disabled="false"
+                  onClick={() => onRightClick()}
+                >
+                  Next
+                </button>
 
-              {/* </div> */}
+                {/* </div> */}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       {/* <!-- Highest Rated Freelancers / End--> */}
 
       <div class="section padding-top-70 padding-bottom-75">
@@ -836,9 +848,7 @@ function Home() {
         </div>
       </div>
       {/* <!-- Counters / End --> */}
-        {/* <!-- Logo Carousel --> */}
-       
-
+      {/* <!-- Logo Carousel --> */}
     </div>
   );
 }

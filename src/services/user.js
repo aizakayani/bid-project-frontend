@@ -156,3 +156,22 @@ export const removeUserResumeAPI = () => {
       });
   });
 };
+
+export const getFreelancersAPI = () => {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/users/freelancers", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(error);
+      });
+  });
+};
