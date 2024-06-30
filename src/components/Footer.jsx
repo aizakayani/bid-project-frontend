@@ -1,5 +1,10 @@
 import logo2 from "../utils/images/logo2.png";
-function Footer() {
+import ApplyJobPopup from "./modals/ApplyJobPopup";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+function Footer()
+ {
+  const navigate = useNavigate();
   return (
     //         <!-- Footer
     // ================================================== -->
@@ -80,9 +85,6 @@ function Footer() {
                         data-size="5"
                       >
                         <option selected>English</option>
-                        <option>Français</option>
-                        <option>Español</option>
-                        <option>Deutsch</option>
                       </select>
                     </div>
                   </div>
@@ -105,7 +107,9 @@ function Footer() {
                 <h3>For Candidates</h3>
                 <ul>
                   <li>
-                    <a href="#">
+                    <a onClick={() => {
+                          navigate("/jobs");
+                        }}>
                       <span>Browse Jobs</span>
                     </a>
                   </li>
@@ -120,7 +124,9 @@ function Footer() {
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/dashboard/bookmarks/");
+                        }}>
                       <span>My Bookmarks</span>
                     </a>
                   </li>
@@ -134,22 +140,30 @@ function Footer() {
                 <h3>For Employers</h3>
                 <ul>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/freelancers");
+                        }}>
                       <span>Browse Candidates</span>
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/dashboard/PostJob");
+                        }}>
                       <span>Post a Job</span>
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/dashboard/PostTask");
+                        }}>
                       <span>Post a Task</span>
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/pricing");
+                        }}>
                       <span>Plans & Pricing</span>
                     </a>
                   </li>
@@ -163,7 +177,9 @@ function Footer() {
                 <h3>Helpful Links</h3>
                 <ul>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/contact");
+                        }}>
                       <span>Contact</span>
                     </a>
                   </li>
@@ -187,7 +203,9 @@ function Footer() {
                 <h3>Account</h3>
                 <ul>
                   <li>
-                    <a href="#">
+                  <a onClick={() => {
+                          navigate("/register");
+                        }}>
                       <span>Log In</span>
                     </a>
                   </li>

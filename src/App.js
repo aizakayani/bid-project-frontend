@@ -25,6 +25,9 @@ import DashboardSettings from "./components/DashboardSettings";
 import DashboardMessages from "./components/DashboardMessages";
 import DashboardManageCandidates from "./components/DashboardManageCandidates";
 import DashboardManageBidders from "./components/DashboardManageBidders";
+import DashboardBookmarks from "./components/DashboardBookmarks";
+import DashboardPostTask from "./components/DashboardPostTask";
+import DashboardPostJob from "./components/DashboardPostJob";
 
 function App() {
   return (
@@ -176,7 +179,30 @@ function App() {
               </Layout>
             }
           />
-
+         <Route
+            path="/dashboard/bookmarks/"
+            element={
+              <Layout>
+                <DashboardBookmarks/>
+              </Layout>
+            }
+          />     
+          <Route
+            path="/dashboard/PostTask/"
+            element={
+              <Layout>
+                <DashboardPostTask/>
+              </Layout>
+            }
+          />     
+          <Route
+            path="/dashboard/PostJob/"
+            element={
+              <Layout>
+                <DashboardPostJob/>
+              </Layout>
+            }
+          />     
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
