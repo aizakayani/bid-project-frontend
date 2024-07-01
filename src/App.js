@@ -28,6 +28,7 @@ import DashboardManageBidders from "./components/DashboardManageBidders";
 import DashboardBookmarks from "./components/DashboardBookmarks";
 import DashboardPostTask from "./components/DashboardPostTask";
 import DashboardPostJob from "./components/DashboardPostJob";
+import OrderConformation from "./components/OrderConfirmation";
 
 function App() {
   return (
@@ -203,6 +204,14 @@ function App() {
               </Layout>
             }
           />     
+          <Route
+            path="/Order/Confirmation/"
+            element={
+              <Layout>
+                <OrderConformation/>
+              </Layout>
+            }
+          />  
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

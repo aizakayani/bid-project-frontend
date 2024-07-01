@@ -346,8 +346,7 @@ function Header() {
                       height: "30px",
                     }}
                   >
-                    <a href="#">More</a>
-                    <ul class="dropdown-nav">
+
                       <li>
                         <a onClick={() => navigate("/blog")}>Blog</a>
                       </li>
@@ -356,15 +355,6 @@ function Header() {
                           Pricing Plans
                         </a>
                       </li>
-                      <li>
-                        <a onClick={() => navigate("/checkout")}>Checkout</a>
-                      </li>
-                      <li>
-                        <a onClick={() => navigate("/invoice")}>
-                          Invoice Template
-                        </a>
-                      </li>
-                    </ul>
                   </li>
                 </ul>
               </nav>

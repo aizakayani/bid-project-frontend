@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 function Checkout() {
+  const navigate = useNavigate();
   return (
     <>
       {/* <!-- Titlebar
@@ -167,8 +169,10 @@ function Checkout() {
             </div>
             {/* <!-- Payment Methods Accordion / End --> */}
 
-            <a
-              href="pages-order-confirmation.html"
+            
+            <a onClick={() => {
+              navigate("/Order/Confirmation");
+            }}
               class="button big ripple-effect margin-top-40 margin-bottom-65"
             >
               Proceed Payment

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 function Footer()
  {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   return (
     //         <!-- Footer
     // ================================================== -->
