@@ -401,6 +401,105 @@ function DashboardSettings() {
               </div>
             </div>
           </div>
+          {/* <!-- Dashboard Box --> */}
+          {role === "employer" && (
+           <div class="col-xl-12">
+            <div class="dashboard-box margin-top-0">
+              {/* <!-- Headline --> */}
+              <div class="headline">
+                <h3>
+                  <i class="icon-material-outline-account-circle"></i> Comapny Details
+                </h3>
+              </div>
+
+              <div class="content with-padding padding-bottom-0">
+                <div class="row">
+                  <div class="col-auto">
+                    <div
+                      class="avatar-wrapper"
+                      data-tippy-placement="bottom"
+                      title="Change Avatar"
+                      onClick={handleAvatarClick}
+                    >
+                      <img class="profile-pic" src={avatar} alt="" />
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ visibility: "hidden" }}
+                        accept="image/*"
+                      />
+                      <div class="upload-button"></div>
+                      <input class="file-upload" type="file" accept="image/*" />
+                    </div>
+                    <h5>Company Logo</h5>
+                  </div>
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="submit-field">
+                          <h5>Company Name</h5>
+                          <input
+                            type="text"
+                            class="with-border"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      {/* <div class="col-xl-6">
+                        <div class="submit-field">
+                          <h5>Last Name</h5>
+                          <input
+                            type="text"
+                            class="with-border"
+                            value="Smith"
+                          />
+                        </div>
+                      </div> */}
+
+                      <div class="col-xl-6">
+                        <div class="submit-field">
+                          <h5>Company Email</h5>
+                          <input
+                            type="text"
+                            class="with-border"
+                            placeholder="tom@example.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div class="col-xl-6">
+                        <div class="submit-field">
+                          <h5>Location</h5>
+                          <select
+                            class="selectpicker with-border"
+                            data-size="7"
+                            title="Select Job Type"
+                            data-live-search="true"
+                            value={location || ""}
+                            onChange={(e) => {
+                              setLocation(e.target.value);
+                            }}
+                          >
+                            <option value={""}>{"Please select"}</option>
+                            {countries.map((country) => {
+                              return <option value={country}>{country}</option>;
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+           )}
+
 
           {/* <!-- Dashboard Box --> */}
           {role === "freelancer" && (
