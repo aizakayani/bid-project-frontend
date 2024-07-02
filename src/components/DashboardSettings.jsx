@@ -28,7 +28,7 @@ function DashboardSettings() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-
+  const [description, setDescription] = useState("");
   const fileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const resumeInputRef = useRef(null);
@@ -474,22 +474,15 @@ function DashboardSettings() {
                       </div>
                       <div class="col-xl-6">
                         <div class="submit-field">
-                          <h5>Location</h5>
-                          <select
-                            class="selectpicker with-border"
-                            data-size="7"
-                            title="Select Job Type"
-                            data-live-search="true"
-                            value={location || ""}
-                            onChange={(e) => {
-                              setLocation(e.target.value);
-                            }}
-                          >
-                            <option value={""}>{"Please select"}</option>
-                            {countries.map((country) => {
-                              return <option value={country}>{country}</option>;
-                            })}
-                          </select>
+                      
+                          <h5>Description</h5>
+                          <textarea
+                          cols="30"
+                          rows="5"
+                          class="with-border"
+                          onChange={(e) => setDescription(e.target.value)}
+                          value={description}
+                        ></textarea>
                         </div>
                       </div>
                     </div>
