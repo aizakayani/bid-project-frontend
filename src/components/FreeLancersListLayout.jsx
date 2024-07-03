@@ -4,22 +4,44 @@ import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
 import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { UserContext } from "../context/userContext";
 function FreeLancersListLayout() {
   const navigate = useNavigate();
-  const { freelancers } = useContext(UserContext);
-  console.log({freelancers});
-  //const freelancersList = [
-  // {
-     // name: "Sebastiano Piccio",
-      //avatar: userAvatarBig1,
-      //title: "Laravel Dev",
-     // location: "Milan",
-     // rate: "$80 / hr",
-     // jobSuccessRate: "89%",
-    //},
+  const freelancersList = [
+    {
+      name: "Sebastiano Piccio",
+      avatar: userAvatarBig1,
+      title: "Laravel Dev",
+      location: "Milan",
+      rate: "$80 / hr",
+      jobSuccessRate: "89%",
+    },
+    {
+      name: "David Peterson",
+      avatar: userAvatarBig2,
+      title: "iOS Expert + Node Dev",
+      location: "Berlin",
+      rate: "$40 / hr",
+      jobSuccessRate: "88%",
+    },
+    {
+      name: "Marcin Kowalski",
+      avatar: userAvatarBig3,
+      title: "Front-End Developer",
+      location: "Warsaw",
+      rate: "$50 / hr",
+      jobSuccessRate: "100%",
+    },
+    {
+      name: "Sindy Forest",
+      avatar: userAvatarBig1,
+      title: "Magento Certified Developer",
+      location: "Brisbane",
+      rate: "$70 / hr",
+      jobSuccessRate: "100%",
+    },
+  ];
   const [selectedCategory, setSelectedCategory] = useState("Admin Support");
 
   const categories = [
@@ -221,8 +243,8 @@ function FreeLancersListLayout() {
             style={{ flexDirection: "column" }}
           >
             {/* <!--Freelancer --> */}
-            {freelancers?.length > 0 &&
-              freelancers.map((freelancer) => {
+            {freelancersList?.length > 0 &&
+              freelancersList.map((freelancer) => {
                 return (
                   <div class="freelancer">
                     {/* <!-- Overview --> */}
@@ -308,7 +330,7 @@ function FreeLancersListLayout() {
           <div class="row">
             <div class="col-md-12">
               {/* <!-- Pagination --> */}
-              {freelancers?.length > 5 && (
+              {freelancersList?.length > 5 && (
                 <div class="pagination-container margin-top-40 margin-bottom-60">
                   <nav class="pagination">
                     <ul>

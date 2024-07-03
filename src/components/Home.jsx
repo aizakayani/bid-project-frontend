@@ -13,9 +13,23 @@ import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
+import { Dropdown } from "react-bootstrap";
 
 function Home() {
   const { jobsList, user, isLoggedIn, freelancers } = useContext(UserContext);
+  const categories = [
+    "Admin Support",
+    "Customer Service",
+    "Data Analytics",
+    "Design & Creative",
+    "Legal",
+    "Software Developing",
+    "IT & Networking",
+    "Writing",
+    "Translation",
+    "Sales & Marketing",
+  ];
+  const [selectedCategory, setSelectedCategory] = useState("All categories");
   const navigate = useNavigate();
   const onRightClick = () => {
     const mainContainerId = document.getElementById("freelancer-container");
@@ -32,6 +46,9 @@ function Home() {
   const [locationInput, setLocationInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [searchJob, setSearchJob] = useState({ location: "", title: "" });
+  const handleSelect = (category) => {
+    setSelectedCategory(category);
+  };
   const handleButtonClick = () => {
     setSearchJob((prevState) => ({
       ...prevState,
@@ -64,6 +81,7 @@ function Home() {
         data-background-image="images/section-background.jpg"
       >
         <div class="container">
+          {/* <div className="background-image-container"></div> */}
           {/* <!-- Intro Headline --> */}
           <div class="row">
             <div class="col-md-12">
@@ -82,13 +100,13 @@ function Home() {
                 <br />
                 <br />
                 <div class="row">
-			<div class="col-md-12">
-				<div class="banner-headline-alt">
-					<h3>Don't Just Dream, Do</h3>
-					<span>Find the best jobs in the digital industry</span>
-				</div>
-			</div>
-		</div>
+                  <div class="col-md-12">
+                    <div class="banner-headline-alt">
+                      <h3>Don't Just Dream, Do</h3>
+                      <span>Find the best jobs in the digital industry</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -145,46 +163,68 @@ function Home() {
           </div>
           {/* <!-- Search Bar --> */}
           <div class="row">
-	      <div class="col-md-12">
-		        <div class="intro-banner-search-form margin-top-95">
-			      <div class="intro-search-field with-autocomplete">
-				<label for="autocomplete-input" class="field-title ripple-effect">Where?</label>
-				<div class="input-with-icon">
-					<input id="autocomplete-input" type="text" placeholder="Online Job"/>
-					<i class="icon-material-outline-location-on"></i>
-				</div>
-			</div>
-    {/* <!-- Search Field --> */}
-			<div class="intro-search-field">
-				<label for ="intro-keywords" class="field-title ripple-effect">What you need done?</label>
-				<input id="intro-keywords" type="text" placeholder="e.g. build me a website"/>
-			</div>
+            <div class="col-md-12">
+              <div class="intro-banner-search-form margin-top-95">
+                <div class="intro-search-field with-autocomplete">
+                  <label
+                    for="autocomplete-input"
+                    class="field-title ripple-effect"
+                  >
+                    Where?
+                  </label>
+                  <div class="input-with-icon">
+                    <input
+                      id="autocomplete-input"
+                      type="text"
+                      placeholder="Online Job"
+                    />
+                    <i class="icon-material-outline-location-on"></i>
+                  </div>
+                </div>
+                {/* <!-- Search Field --> */}
+                <div class="intro-search-field">
+                  <label for="intro-keywords" class="field-title ripple-effect">
+                    What you need done?
+                  </label>
+                  <input
+                    id="intro-keywords"
+                    type="text"
+                    placeholder="e.g. build me a website"
+                  />
+                </div>
 
-			{/* <!-- Search Field --> */}
-			<div class="intro-search-field">
-				<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-					<option>Admin Support</option>
-					<option>Customer Service</option>
-					<option>Data Analytics</option>
-					<option>Design & Creative</option>
-					<option>Legal</option>
-					<option>Software Developing</option>
-					<option>IT & Networking</option>
-					<option>Writing</option>
-					<option>Translation</option>
-					<option>Sales & Marketing</option>
-				</select>
-			</div>
-      {/* <!-- Button --> */}
-			<div class="intro-search-button">
-				<button class="button ripple-effect">Search</button>
-			</div>
+                {/* <!-- Search Field --> */}
+                <div class="intro-search-field" style={{justifyContent: 'center'}}>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="primary"
+                      id="dropdown-basic"
+                      className="w-101"
+                    >
+                      {selectedCategory}
+                    </Dropdown.Toggle>
 
-		</div>
-		
-	</div>
-</div>
-{/* <!-- Search Field End --> */}
+                    <Dropdown.Menu className="right-offset-menu">
+                      {categories.map((category, index) => (
+                        <Dropdown.Item
+                          key={index}
+                          onClick={() => handleSelect(category)}
+                        >
+                          {category}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                
+                </div>
+                {/* <!-- Button --> */}
+                <div class="intro-search-button">
+                  <button class="button ripple-effect">Search</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <!-- Search Field End --> */}
 
           {/* <!-- Stats --> */}
           <div class="row">
@@ -281,122 +321,124 @@ function Home() {
         </div>
       </div>
       {/* <!-- Icon Boxes / End --> */}
-     {/* <!-- Category Boxes -->*/}
-<div class="section margin-top-65">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12">
+      {/* <!-- Category Boxes -->*/}
+      <div class="section margin-top-65">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="section-headline centered margin-bottom-15">
+                <h3>Popular Job Categories</h3>
+              </div>
 
-				<div class="section-headline centered margin-bottom-15">
-					<h3>Popular Job Categories</h3>
-				</div>
+              {/*<!-- Category Boxes Container -->*/}
+              <div class="categories-container">
+                {/*<!-- Category Box -->*/}
+                <a href="jobs-grid-layout-full-page.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-file-code-o"></i>
+                  </div>
+                  <div class="category-box-counter">612</div>
+                  <div class="category-box-content">
+                    <h3>Web & Software Dev</h3>
+                    <p>Software Engineer, Web / Mobile Developer & More</p>
+                  </div>
+                </a>
 
-				{/*<!-- Category Boxes Container -->*/}
-				<div class="categories-container">
+                {/*<!-- Category Box -->*/}
+                <a
+                  href="jobs-list-layout-full-page-map.html"
+                  class="category-box"
+                >
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-cloud-upload"></i>
+                  </div>
+                  <div class="category-box-counter">113</div>
+                  <div class="category-box-content">
+                    <h3>Data Science & Analitycs</h3>
+                    <p>Data Specialist / Scientist, Data Analyst & More</p>
+                  </div>
+                </a>
 
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-grid-layout-full-page.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-file-code-o"></i>
-						</div>
-						<div class="category-box-counter">612</div>
-						<div class="category-box-content">
-							<h3>Web & Software Dev</h3>
-							<p>Software Engineer, Web / Mobile Developer & More</p>
-						</div>
-					</a>
+                {/*<!-- Category Box -->*/}
+                <a
+                  href="jobs-list-layout-full-page-map.html"
+                  class="category-box"
+                >
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-suitcase"></i>
+                  </div>
+                  <div class="category-box-counter">186</div>
+                  <div class="category-box-content">
+                    <h3>Accounting & Consulting</h3>
+                    <p>Auditor, Accountant, Fnancial Analyst & More</p>
+                  </div>
+                </a>
 
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-list-layout-full-page-map.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-cloud-upload"></i>
-						</div>
-						<div class="category-box-counter">113</div>
-						<div class="category-box-content">
-							<h3>Data Science & Analitycs</h3>
-							<p>Data Specialist / Scientist, Data Analyst & More</p>
-						</div>
-					</a>
+                {/*<!-- Category Box -->*/}
+                <a href="jobs-list-layout-1.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-pencil"></i>
+                  </div>
+                  <div class="category-box-counter">298</div>
+                  <div class="category-box-content">
+                    <h3>Writing & Translations</h3>
+                    <p>Copywriter, Creative Writer, Translator & More</p>
+                  </div>
+                </a>
 
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-list-layout-full-page-map.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-suitcase"></i>
-						</div>
-						<div class="category-box-counter">186</div>
-						<div class="category-box-content">
-							<h3>Accounting & Consulting</h3>
-							<p>Auditor, Accountant, Fnancial Analyst & More</p>
-						</div>
-					</a>
+                {/*	<!-- Category Box -->*/}
+                <a href="jobs-list-layout-2.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-pie-chart"></i>
+                  </div>
+                  <div class="category-box-counter">549</div>
+                  <div class="category-box-content">
+                    <h3>Sales & Marketing</h3>
+                    <p>Brand Manager, Marketing Coordinator & More</p>
+                  </div>
+                </a>
 
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-list-layout-1.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-pencil"></i>
-						</div>
-						<div class="category-box-counter">298</div>
-						<div class="category-box-content">
-							<h3>Writing & Translations</h3>
-							<p>Copywriter, Creative Writer, Translator & More</p>
-						</div>
-					</a>
+                {/*<!-- Category Box -->*/}
+                <a href="jobs-list-layout-1.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-image"></i>
+                  </div>
+                  <div class="category-box-counter">873</div>
+                  <div class="category-box-content">
+                    <h3>Graphics & Design</h3>
+                    <p>Creative Director, Web Designer & More</p>
+                  </div>
+                </a>
 
-				{/*	<!-- Category Box -->*/}
-					<a href="jobs-list-layout-2.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-pie-chart"></i>
-						</div>
-						<div class="category-box-counter">549</div>						
-						<div class="category-box-content">
-							<h3>Sales & Marketing</h3>
-							<p>Brand Manager, Marketing Coordinator & More</p>
-						</div>
-					</a>
+                {/*<!-- Category Box -->*/}
+                <a href="jobs-list-layout-2.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-bullhorn"></i>
+                  </div>
+                  <div class="category-box-counter">125</div>
+                  <div class="category-box-content">
+                    <h3>Digital Marketing</h3>
+                    <p>Darketing Analyst, Social Profile Admin & More</p>
+                  </div>
+                </a>
+                {/*<!-- Category Box -->*/}
 
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-list-layout-1.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-image"></i>
-						</div>
-						<div class="category-box-counter">873</div>
-						<div class="category-box-content">
-							<h3>Graphics & Design</h3>
-							<p>Creative Director, Web Designer & More</p>
-						</div>
-					</a>
-
-					{/*<!-- Category Box -->*/}
-					<a href="jobs-list-layout-2.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-bullhorn"></i>
-						</div>
-						<div class="category-box-counter">125</div>
-						<div class="category-box-content">
-							<h3>Digital Marketing</h3>
-							<p>Darketing Analyst, Social Profile Admin & More</p>
-						</div>
-					</a>
-           {/*<!-- Category Box -->*/}
-					
-					<a href="jobs-grid-layout-full-page.html" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-graduation-cap"></i>
-						</div>
-						<div class="category-box-counter">445</div>
-						<div class="category-box-content">
-							<h3>Education & Training</h3>
-							<p>Advisor, Coach, Education Coordinator & More</p>
-						</div>
-					</a>
-
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div>
-{/*<!-- Category Boxes / End -->*/}
+                <a href="jobs-grid-layout-full-page.html" class="category-box">
+                  <div class="category-box-icon">
+                    <i class="icon-line-awesome-graduation-cap"></i>
+                  </div>
+                  <div class="category-box-counter">445</div>
+                  <div class="category-box-content">
+                    <h3>Education & Training</h3>
+                    <p>Advisor, Coach, Education Coordinator & More</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*<!-- Category Boxes / End -->*/}
 
       {/* <!-- Features Jobs --> */}
       {(isLoggedIn == false || user?.role === "freelancer") && (
@@ -481,23 +523,38 @@ function Home() {
         </div>
       )}
       {/* <!-- Featured Jobs / End --> */}
-      <div class="photo-section" data-background-image="images/section-background.jpg">
-     {/* <!-- Infobox -->*/}
-	<div class="text-content white-font">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-8 col-sm-12">
-					<h2>Hire experts or be hired. <br/> For any job, any time.</h2>
-					<p>Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation is on the runway towards.</p>
-					<a onClick={() => navigate("/pricing")} class="button button-sliding-icon ripple-effect big margin-top-20">Get Started <i class="icon-material-outline-arrow-right-alt"></i></a>
-				</div>
-			</div>
+      <div
+        class="photo-section"
+        data-background-image="images/section-background.jpg"
+      >
+        {/* <!-- Infobox -->*/}
+        <div class="text-content white-font">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-md-8 col-sm-12">
+                <h2>
+                  Hire experts or be hired. <br /> For any job, any time.
+                </h2>
+                <p>
+                  Bring to the table win-win survival strategies to ensure
+                  proactive domination. At the end of the day, going forward, a
+                  new normal that has evolved from generation is on the runway
+                  towards.
+                </p>
+                <a
+                  onClick={() => navigate("/pricing")}
+                  class="button button-sliding-icon ripple-effect big margin-top-20"
+                >
+                  Get Started{" "}
+                  <i class="icon-material-outline-arrow-right-alt"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
-		</div>
-	  </div>
-
-   {/* <!-- Infobox  End-->*/}
-   </div>
+        {/* <!-- Infobox  End-->*/}
+      </div>
       {/* <!-- Highest Rated Freelancers --> */}
       {(isLoggedIn == false || user?.role === "employer") && (
         <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
@@ -541,80 +598,84 @@ function Home() {
                 >
                   {/* <!--Freelancer --> */}
                   {freelancers?.length > 0 &&
-                     freelancers.map((freelancer) => {
-                   return(
-                  <div class="freelancer">
-                    {/* <!-- Overview --> */}
-                    <div class="freelancer-overview">
-                      <div class="freelancer-overview-inner">
-                        {/* <!-- Bookmark Icon --> */}
-                        <span class="bookmark-icon"></span>
+                    freelancers.map((freelancer) => {
+                      return (
+                        <div class="freelancer">
+                          {/* <!-- Overview --> */}
+                          <div class="freelancer-overview">
+                            <div class="freelancer-overview-inner">
+                              {/* <!-- Bookmark Icon --> */}
+                              <span class="bookmark-icon"></span>
 
-                        {/* <!-- Avatar --> */}
-                        <div class="freelancer-avatar">
-                          <div class="verified-badge"></div>
-                          <a href="single-freelancer-profile.html">
-                            <img src={freelancer.avatar} alt="" />
-                          </a>
-                        </div>
+                              {/* <!-- Avatar --> */}
+                              <div class="freelancer-avatar">
+                                <div class="verified-badge"></div>
+                                <a href="single-freelancer-profile.html">
+                                  <img src={freelancer.avatar} alt="" />
+                                </a>
+                              </div>
 
-                        {/* <!-- Name --> */}
-                        <div class="freelancer-name">
-                          <h4>
-                            <a href="single-freelancer-profile.html">
-                          {freelancer?.name}{" "}
-                              <img
-                                class="flag"
-                                src={gb}
-                                alt=""
-                                title="United Kingdom"
-                                data-tippy-placement="top"
-                              />
+                              {/* <!-- Name --> */}
+                              <div class="freelancer-name">
+                                <h4>
+                                  <a href="single-freelancer-profile.html">
+                                    {freelancer?.name}{" "}
+                                    <img
+                                      class="flag"
+                                      src={gb}
+                                      alt=""
+                                      title="United Kingdom"
+                                      data-tippy-placement="top"
+                                    />
+                                  </a>
+                                </h4>
+                                <span>{freelancer?.title}</span>
+                              </div>
+
+                              {/* <!-- Rating --> */}
+                              <div class="freelancer-rating">
+                                <div
+                                  class="star-rating"
+                                  data-rating="5.0"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* <!-- Details --> */}
+                          <div class="freelancer-details">
+                            <div class="freelancer-details-list">
+                              <ul>
+                                <li>
+                                  Location{" "}
+                                  <strong>
+                                    <i class="icon-material-outline-location-on"></i>{" "}
+                                    {freelancer?.location}
+                                  </strong>
+                                </li>
+                                <li>
+                                  Rate <strong>{freelancer?.rate}</strong>
+                                </li>
+                                <li>
+                                  Job Success{" "}
+                                  <strong>{freelancer?.jobSuccessRate}</strong>
+                                </li>
+                              </ul>
+                            </div>
+                            <a
+                              onClick={() => {
+                                navigate("/freelancer/details/:id");
+                              }}
+                              class="button button-sliding-icon ripple-effect"
+                            >
+                              View Profile{" "}
+                              <i class="icon-material-outline-arrow-right-alt"></i>
                             </a>
-                          </h4>
-                          <span>{freelancer?.title}</span>
+                          </div>
                         </div>
-
-                        {/* <!-- Rating --> */}
-                        <div class="freelancer-rating">
-                          <div class="star-rating" data-rating="5.0"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="freelancer-details">
-                      <div class="freelancer-details-list">
-                        <ul>
-                          <li>
-                            Location{" "}
-                            <strong>
-                              <i class="icon-material-outline-location-on"></i>{" "}
-                              {freelancer?.location}
-                            </strong>
-                          </li>
-                          <li>
-                            Rate <strong>{freelancer?.rate}</strong>
-                          </li>
-                          <li>
-                            Job Success <strong>{freelancer?.jobSuccessRate}</strong>
-                          </li>
-                        </ul>
-                      </div>
-                      <a
-                        onClick={() => {
-                          navigate("/freelancer/details/:id");
-                        }}
-                        class="button button-sliding-icon ripple-effect"
-                      >
-                        View Profile{" "}
-                        <i class="icon-material-outline-arrow-right-alt"></i>
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-                  </div>
+                      );
+                    })}
+                </div>
                 {/* <div className="right-icon" style={{width: '35px',display: 'flex', alignItems: 'center'}}> */}
                 {/* <div className="icon-container">
                 <img src={rightArrow} alt="" width={'25px'} height={'25px'} />
@@ -690,102 +751,7 @@ function Home() {
           </div>
         </div>
       </div>
-      {/* <!-- Counters / End --> */}
-     {/* <!-- Testimonials -->*/}
-<div class="section gray padding-top-65 padding-bottom-55">
-	
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12">
-				{/*<!-- Section Headline -->*/}
-				<div class="section-headline centered margin-top-0 margin-bottom-5">
-					<h3>Testimonials</h3>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	{/*<!-- Categories Carousel /-->*/}
-	<div class="fullwidth-carousel-container margin-top-20">
-		<div class="testimonial-carousel testimonials">
-
-			{/*<!-- Item -->*/}
-			<div class="fw-carousel-review">
-				<div class="testimonial-box">
-					<div class="testimonial-avatar">
-						<img src="images/user-avatar-small-02.jpg" alt=""/>
-					</div>
-					<div class="testimonial-author">
-						<h4>Sindy Forest</h4>
-						 <span>Freelancer</span>
-					</div>
-					<div class="testimonial">Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas. Dramatically maintain clicks-and-mortar solutions without functional solutions.</div>
-				</div>
-			</div>
-
-		{/*<!-- Item -->*/}
-			<div class="fw-carousel-review">
-				<div class="testimonial-box">
-					<div class="testimonial-avatar">
-						<img src="images/user-avatar-small-01.jpg" alt=""/>
-					</div>
-					<div class="testimonial-author">
-						<h4>Tom Smith</h4>
-						 <span>Freelancer</span>
-					</div>
-					<div class="testimonial">Completely synergize resource taxing relationships via premier niche markets. Professionally cultivate one-to-one customer service with robust ideas. Dynamically innovate resource-leveling customer service for state of the art.</div>
-				</div>
-			</div>
-
-			{/*<!-- Item -->*/}
-			<div class="fw-carousel-review">
-				<div class="testimonial-box">
-					<div class="testimonial-avatar">
-						<img src="images/user-avatar-placeholder.png" alt=""/>
-					</div>
-					<div class="testimonial-author">
-						<h4>Sebastiano Piccio</h4>
-						 <span>Employer</span>
-					</div>
-					<div class="testimonial">Completely synergize resource taxing relationships via premier niche markets. Professionally cultivate one-to-one customer service with robust ideas. Dynamically innovate resource-leveling customer service for state of the art.</div>
-				</div>
-			</div>
-
-		{/*<!-- Item -->*/}
-			<div class="fw-carousel-review">
-				<div class="testimonial-box">
-					<div class="testimonial-avatar">
-						<img src="images/user-avatar-small-03.jpg" alt=""/>
-					</div>
-					<div class="testimonial-author">
-						<h4>David Peterson</h4>
-						 <span>Freelancer</span>
-					</div>
-					<div class="testimonial">Collaboratively administrate turnkey channels whereas virtual e-tailers. Objectively seize scalable metrics whereas proactive e-services. Seamlessly empower fully researched growth strategies and interoperable sources.</div>
-				</div>
-			</div>
-
-			{/*<!-- Item -->*/}
-			<div class="fw-carousel-review">
-				<div class="testimonial-box">
-					<div class="testimonial-avatar">
-						<img src="images/user-avatar-placeholder.png" alt=""/>
-					</div>
-					<div class="testimonial-author">
-						<h4>Marcin Kowalski</h4>
-						 <span>Freelancer</span>
-					</div>
-					<div class="testimonial">Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas. Dramatically maintain clicks-and-mortar solutions without functional solutions.</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	{/*<!-- Categories Carousel / End -->*/}
-
-</div>
-{/*<!-- Testimonials / End -->*/}
-      {/* <!-- Logo Carousel --> */}
     </div>
   );
 }

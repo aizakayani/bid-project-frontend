@@ -5967,13 +5967,65 @@ button.w-100:focus:active,
 button.w-100:active,
 button.w-100.show,
 button.w-100:focus-visible {
-    background-color: #eee; /* Ensure grey background on all active states */
+    background-color: #fff; /* Ensure grey background on all active states */
     color: #777;
     border: 1px solid #eee;
     outline: none;
     box-shadow: none;
 }
+button.w-101 {
+	background-color: #fff;
+    color: #777;
+    border: 1px solid #eee;
 
+
+	}
+	button.w-101:hover {
+		background-color: #fff;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	button.w-101:focus {
+		background-color: #fff;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	button.w-101:focus-visible {
+		background-color: #fff;
+		color: #777;
+    border: 1px solid #eee;
+
+	}
+	div.right-offset-menu {
+		transform: translate3d(55px, 39.375px, 0px) !important; /* Adjust this value for the desired offset */
+	}
+	button.w-101:focus,
+button.w-101:active,
+button.w-101.dropdown-toggle.show,
+button.w-101:focus-visible {
+	background-color: #fff; /* Grey background */
+    color: #777;           /* Black text */
+    border: 1px solid #eee;  /* Grey border */
+    outline: none;           /* Remove default blue outline */
+    box-shadow: none;        /* Remove the box shadow effect */
+}
+
+/* Additionally, you might need to override the shadow from the button group */
+button.w-101:not(:disabled):not(.disabled):active,
+button.w-101:not(:disabled):not(.disabled):active:focus,
+button.w-101:focus,
+button.w-101:focus:active,
+button.w-101:active,
+button.w-101.show,
+button.w-101:focus-visible {
+    background-color: #fff; 
+    color: #777;
+    border: 1px solid #eee;
+    outline: none;
+    box-shadow: none;
+}
 /* ---------------------------------- */
 /* Button with sliding icon
 ------------------------------------- */
@@ -7522,6 +7574,7 @@ input:checked + .switch-button:before {
 }
 
 .intro-banner .background-image-container {
+	background-image: url('../utils/images/background-image.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 100% 60%;
@@ -7975,6 +8028,7 @@ input:checked + .switch-button:before {
 	padding: 25px;
 	border-radius: 4px;
 	transition: 0.35s;
+	text-decoration: none;
 }
 
 /* IE 11 Fixes */
@@ -8874,7 +8928,7 @@ transform: translateY(-18px);
 	font-size: 80px;
 	transform: translateY(-100%);
 	color: #66676b;
-	opacity: 0;
+	opacity: 1;
 	transition: 0.3s;
 }
 
@@ -9622,7 +9676,6 @@ transform: translateY(-18px);
 }
 
 .slick-slide {
-    display: none;
     float: left;
 
     height: 100%;
