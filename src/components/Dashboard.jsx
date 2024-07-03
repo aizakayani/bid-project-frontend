@@ -29,6 +29,7 @@ function Dashboard() {
   const [taskMenuOpen, setTaskMenuOpen] = useState(false);
   const [updateJobData, setUpdateJobData] = useState(null);
   const [updateTaskData, setUpdateTaskData] = useState(null);
+  const [manageBiddersTaskId, setManageBiddersTaskId] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     if (userJobs?.length > 0) {
@@ -272,9 +273,18 @@ function Dashboard() {
           />
         )}
         {dashboardType === "managetasks" && (
-          <DashboardManageTasks handleUpdateTask={handleUpdateTask} />
+          <DashboardManageTasks
+            handleUpdateTask={handleUpdateTask}
+            setManageBiddersTaskId={setManageBiddersTaskId}
+            setDashboardType={setDashboardType}
+          />
         )}
-        {dashboardType === "managebidders" && <DashboardManageBidders />}
+        {dashboardType === "managebidders" && (
+          <DashboardManageBidders
+            manageBiddersTaskId={manageBiddersTaskId}
+            setManageBiddersTaskId={setManageBiddersTaskId}
+          />
+        )}
         {dashboardType === "activebids" && <DashboardMyActiveBids />}
         {dashboardType === "posttask" && (
           <DashboardPostTask
