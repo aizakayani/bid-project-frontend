@@ -411,13 +411,11 @@ const flags = importAll(
 );
 
 // Create the array of objects
-export const countryFlags = countries.map((country) => {
-  const flagName =
+export const getCountryFlag = (country) => {
+  const flag =
     countryAbbreviations[country].replace(/\s+/g, "-").toLowerCase() + ".svg";
-  return {
-    [`${country}`]: flags[flagName],
-  };
-});
+  return flags[flag];
+};
 export const getFreelancerDetails = (id, list) => {
   let details = null;
   if (list?.length > 0) {
