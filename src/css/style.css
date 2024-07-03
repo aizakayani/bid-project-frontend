@@ -7574,7 +7574,7 @@ input:checked + .switch-button:before {
 }
 
 .intro-banner .background-image-container {
-	background-image: url('../utils/images/background-image.jpg');
+	/* background-image: url('../utils/images/background-image.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 100% 60%;
