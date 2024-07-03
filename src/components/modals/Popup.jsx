@@ -18,12 +18,12 @@ const Popup = ({
       <Modal.Body>{description}</Modal.Body>
       <Modal.Footer>
         {closeButtonText && (
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose} style={{background: '#f4f4f4', color: '#888'}}>
             {closeButtonText}
           </Button>
         )}
         {okButtonText && (
-          <Button variant="primary" onClick={handleOk}>
+          <Button variant="primary" onClick={handleOk} className='class="button-primary' style={{background: '#770737'}}>
             {okButtonText}
           </Button>
         )}

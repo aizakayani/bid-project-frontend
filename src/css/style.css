@@ -5791,7 +5791,9 @@ body .button.big i {
 .centered-button .button {
 	margin: 0 auto;
 }
-
+.modal-footer .button-primary {
+	background-color: #770737;
+}
 
 /* Bookmark Button */
 span.bookmark-icon {

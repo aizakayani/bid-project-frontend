@@ -76,6 +76,14 @@ function Home() {
         <div class="container">
           {/* <div className="background-image-container"></div> */}
           {/* <!-- Intro Headline --> */}
+         {user?.role === "freelancer" ? <div class="row" style={{marginBottom: '30px'}}>
+                  <div class="col-md-12">
+                    <div class="banner-headline-alt">
+                      <h3>Don't Just Dream, Do</h3>
+                      <span>Find the best jobs in the digital industry</span>
+                    </div>
+                  </div>
+                </div> : 
           <div class="row">
             <div class="col-md-12">
               <div class="banner-headline">
@@ -92,70 +100,13 @@ function Home() {
                 </h3>
                 <br />
                 <br />
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="banner-headline-alt">
-                      <h3>Don't Just Dream, Do</h3>
-                      <span>Find the best jobs in the digital industry</span>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
-          </div>
+          </div> }
 
           {/* <!-- Search Bar --> */}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="intro-banner-search-form margin-top-95">
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field with-autocomplete">
-                  <label
-                    for="autocomplete-input"
-                    class="field-title ripple-effect"
-                  >
-                    Where?
-                  </label>
-                  <div class="input-with-icon">
-                    <input
-                      placeholder="Online Job"
-                      id="autocomplete-input"
-                      type="text"
-                      value={locationInput}
-                      onChange={(e) => setLocationInput(e.target.value)}
-                    />
-                    <i class="icon-material-outline-location-on"></i>
-                  </div>
-                </div>
-
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field">
-                  <label for="intro-keywords" class="field-title ripple-effect">
-                    What job you want?
-                  </label>
-                  <input
-                    id="intro-keywords"
-                    placeholder="Job Title or Keywords"
-                    type="text"
-                    value={titleInput}
-                    onChange={(e) => setTitleInput(e.target.value)}
-                  />
-                </div>
-
-                {/* <!-- Button --> */}
-                <div class="intro-search-button">
-                  <button
-                    onClick={() => handleButtonClick()}
-                    class="button ripple-effect"
-                  >
-                    Search
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* <!-- Search Bar --> */}
-          <div class="row">
+          {user?.role === "freelancer" ?  <div class="row">
             <div class="col-md-12">
               <div class="intro-banner-search-form margin-top-95">
                 <div class="intro-search-field with-autocomplete">
@@ -216,7 +167,58 @@ function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> : <div class="row">
+            <div class="col-md-12">
+              <div class="intro-banner-search-form margin-top-95">
+                {/* <!-- Search Field --> */}
+                <div class="intro-search-field with-autocomplete">
+                  <label
+                    for="autocomplete-input"
+                    class="field-title ripple-effect"
+                  >
+                    Where?
+                  </label>
+                  <div class="input-with-icon">
+                    <input
+                      placeholder="Online Job"
+                      id="autocomplete-input"
+                      type="text"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                    />
+                    <i class="icon-material-outline-location-on"></i>
+                  </div>
+                </div>
+
+                {/* <!-- Search Field --> */}
+                <div class="intro-search-field">
+                  <label for="intro-keywords" class="field-title ripple-effect">
+                    What job you want?
+                  </label>
+                  <input
+                    id="intro-keywords"
+                    placeholder="Job Title or Keywords"
+                    type="text"
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
+                  />
+                </div>
+
+                {/* <!-- Button --> */}
+                <div class="intro-search-button">
+                  <button
+                    onClick={() => handleButtonClick()}
+                    class="button ripple-effect"
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>}
+          
+          {/* <!-- Search Bar --> */}
+         
           {/* <!-- Search Field End --> */}
 
           {/* <!-- Stats --> */}
@@ -315,7 +317,7 @@ function Home() {
       </div>
       {/* <!-- Icon Boxes / End --> */}
       {/* <!-- Category Boxes -->*/}
-      <div class="section margin-top-65">
+      {user?.role === "freelancer" && <div class="section margin-top-65">
         <div class="container">
           <div class="row">
             <div class="col-xl-12">
@@ -430,7 +432,8 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
+      
       {/*<!-- Category Boxes / End -->*/}
 
       {/* <!-- Features Jobs --> */}
@@ -521,7 +524,7 @@ function Home() {
         data-background-image="images/section-background.jpg"
       >
         {/* <!-- Infobox -->*/}
-        <div class="text-content white-font">
+        {user?.role === "freelancer" &&  <div class="text-content white-font">
           <div class="container">
             <div class="row">
               <div class="col-lg-6 col-md-8 col-sm-12">
@@ -544,7 +547,8 @@ function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
+       
 
         {/* <!-- Infobox  End-->*/}
       </div>
@@ -659,7 +663,7 @@ function Home() {
                               onClick={() => {
                                 navigate("/freelancer/details/:id");
                               }}
-                              class="button button-sliding-icon ripple-effect"
+                              class="button button-sliding-icon ripple-effect white-text-button"
                             >
                               View Profile{" "}
                               <i class="icon-material-outline-arrow-right-alt"></i>
