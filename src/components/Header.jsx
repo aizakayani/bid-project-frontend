@@ -18,6 +18,7 @@ import {
 } from "../services/user";
 import UserRolePopup from "./modals/UserRolePopup";
 import { getJobsApplicationsByUser } from "../services/job-applications";
+import { getBidsByUserAPI } from "../services/bids";
 function Header() {
   const {
     user,
@@ -26,8 +27,6 @@ function Header() {
     isLoggedIn,
     setUserJobs,
     setUserTasks,
-    jobsList,
-    tasksList,
     setJobsList,
     setTasksList,
     socket,
@@ -36,6 +35,7 @@ function Header() {
     setUserJobApplications,
     freelancers,
     setFreelancers,
+    setUserBids,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -44,8 +44,6 @@ function Header() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [userRolePopup, setUserRolePopup] = useState(false);
   const [initialize, setInitialize] = useState(false);
-
-  console.log(freelancers);
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -108,10 +106,11 @@ function Header() {
     // get user
     await getUserDetails();
     if (userRole === "freelancer") {
-      await getUserTasks();
       await getJobApplicationsByUser();
+      await getBidsByUser();
     } else if (userRole === "employer") {
       await getUserJobs();
+      await getUserTasks();
     }
   };
 
@@ -180,6 +179,22 @@ function Header() {
       const response = await getJobsApplicationsByUser();
       if (response?.success && response?.jobApplications) {
         setUserJobApplications(response?.jobApplications);
+      } else {
+        if (!isTokenValid(response)) {
+          navigate("/login");
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const getBidsByUser = async () => {
+    try {
+      const response = await getBidsByUserAPI();
+      if (response?.success && response?.bids) {
+        setUserBids(response?.bids);
       } else {
         if (!isTokenValid(response)) {
           navigate("/login");
@@ -505,7 +520,7 @@ function Header() {
                   <div
                     class="header-notifications-trigger"
                     id={"notification-icon"}
-                    style={{cursor: 'pointer'}}
+                    style={{ cursor: "pointer" }}
                   >
                     <a
                       onClick={() => {
@@ -612,7 +627,11 @@ function Header() {
 
                 {/* <!-- Messages --> */}
                 <div class="header-notifications">
-                  <div class="header-notifications-trigger" id={"mail-icon"} style={{cursor: 'pointer'}}>
+                  <div
+                    class="header-notifications-trigger"
+                    id={"mail-icon"}
+                    style={{ cursor: "pointer" }}
+                  >
                     <a
                       onClick={() => {
                         setShowMessagesDropdown(!showMessagesDropdown);
@@ -726,7 +745,7 @@ function Header() {
                     <a>
                       <div
                         class="user-avatar status-online"
-                        style={{cursor: 'pointer'}}
+                        style={{ cursor: "pointer" }}
                         onClick={() => {
                           console.log("avatar");
                           setShowProfileDropdown(!showProfileDropdown);

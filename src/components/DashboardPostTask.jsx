@@ -95,7 +95,6 @@ function DashboardPostTask({ updateTaskData }) {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Post a Task</h3>
-          
         </div>
 
         {/* <!-- Row --> */}
@@ -160,7 +159,6 @@ function DashboardPostTask({ updateTaskData }) {
                     </div>
                   </div>
 
-                  
                   <div className="col-xl-4">
                     <div className="submit-field">
                       <h5>Location</h5>
@@ -185,14 +183,14 @@ function DashboardPostTask({ updateTaskData }) {
                             <input
                               class="with-border"
                               type="text"
-                              placeholder="Minimum"
+                              placeholder="5 - 10"
                               onChange={(e) => setBudget(e.target.value)}
                               value={budget}
                             />
-                            <i class="currency">USD</i>
+                            <i class="currency">$</i>
                           </div>
                         </div>
-                        <div class="col-xl-6">
+                        {/* <div class="col-xl-6">
                           <div class="input-with-icon">
                             <input
                               class="with-border"
@@ -201,7 +199,7 @@ function DashboardPostTask({ updateTaskData }) {
                             />
                             <i class="currency">USD</i>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div class="feedback-yes-no margin-top-0">
                         <div class="radio">
@@ -279,7 +277,7 @@ function DashboardPostTask({ updateTaskData }) {
                         onChange={(e) => setDescription(e.target.value)}
                         value={description}
                       ></textarea>
-                      <div class="uploadButton margin-top-30">
+                      {/* <div class="uploadButton margin-top-30">
                         <input
                           class="uploadButton-input"
                           type="file"
@@ -297,7 +295,7 @@ function DashboardPostTask({ updateTaskData }) {
                           Images or documents that might be helpful in
                           describing your project
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -311,7 +309,7 @@ function DashboardPostTask({ updateTaskData }) {
               class="button ripple-effect big margin-top-30 white-text-button"
             >
               <i class="icon-feather-plus"></i>{" "}
-              {updateTaskAPI ? "Update Task" : "Post a Task"}
+              {updateTaskData ? "Update Task" : "Post a Task"}
             </a>
           </div>
         </div>

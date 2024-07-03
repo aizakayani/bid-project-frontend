@@ -8,35 +8,7 @@ import { UserContext } from "../context/userContext";
 import { getJobsApplicationsByJobIds } from "../services/job-applications";
 import { saveAs } from "file-saver";
 function DashboardManageCandidates({ setDashboardType }) {
-  const {
-    setJobApplications,
-    jobApplications,
-    userJobs,
-    setNewMessageContext,
-  } = useContext(UserContext);
-  useEffect(() => {
-    if (userJobs?.length > 0) {
-      // get JobIds
-      const jobIds = userJobs.map((job) => job._id);
-      console.log(jobIds);
-      getJobApplications(jobIds);
-    }
-  }, [userJobs?.length]);
-
-  const getJobApplications = async (jobIds) => {
-    // fetch jobs
-    try {
-      const jobApplicationsResult = await getJobsApplicationsByJobIds(jobIds);
-      if (
-        jobApplicationsResult?.success &&
-        jobApplicationsResult?.jobApplications?.length > 0
-      ) {
-        setJobApplications([...jobApplicationsResult?.jobApplications]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { jobApplications, setNewMessageContext } = useContext(UserContext);
   const downloadPdf = (applicantCV) => {
     // Example buffer data (replace with your actual PDF buffer)
     const pdfBuffer = new Uint8Array(applicantCV?.data?.data);
@@ -56,8 +28,6 @@ function DashboardManageCandidates({ setDashboardType }) {
           <span class="margin-top-7">
             Job Applications for <a href="#">Full Stack PHP Developer</a>
           </span>
-
-         
         </div>
 
         {/* <!-- Row --> */}

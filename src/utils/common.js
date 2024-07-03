@@ -418,3 +418,23 @@ export const countryFlags = countries.map((country) => {
     [`${country}`]: flags[flagName],
   };
 });
+export const getFreelancerDetails = (id, list) => {
+  let details = null;
+  if (list?.length > 0) {
+    details = list.find((item) => item._id === id);
+  }
+  return details;
+};
+
+export const getDeliveryTime = (deliveryTime) => {
+  switch (deliveryTime) {
+    case "less-three":
+      return "Less than 3 months";
+    case "three-to-six":
+      return "3 to 6 months";
+    case "more-six":
+      return "More than 6 months";
+    default:
+      return "unknown";
+  }
+};

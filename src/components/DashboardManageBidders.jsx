@@ -3,18 +3,37 @@ import de from "../utils/images/flags/de.svg";
 import sk from "../utils/images/flags/sk.svg";
 import pl from "../utils/images/flags/pl.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/userContext";
+import { getDeliveryTime, getFreelancerDetails } from "../utils/common";
 function DashboardManageBidders() {
+  const { userTasks, sortedBids, freelancers } = useContext(UserContext);
+  const [selectedTask, setSelectedTask] = useState(userTasks[0]._id || "");
+
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Manage Bidders</h3>
-          <span class="margin-top-7">
-            Bids for <a href="#">Food Delivery Mobile Application</a>
-          </span>
-
-          
+          {userTasks?.length > 0 && (
+            <span class="margin-top-7">
+              Bids for{" "}
+              <select
+                class="selectpicker with-border"
+                data-size="7"
+                onChange={(e) => {
+                  setSelectedTask(e.target.value);
+                }}
+                value={selectedTask}
+              >
+                {userTasks?.length > 0 &&
+                  userTasks?.map((task) => (
+                    <option value={task._id}>{task.title}</option>
+                  ))}
+              </select>
+            </span>
+          )}
         </div>
 
         {/* <!-- Row --> */}
@@ -25,8 +44,8 @@ function DashboardManageBidders() {
               {/* <!-- Headline --> */}
               <div class="headline">
                 <h3>
-                  <i class="icon-material-outline-supervisor-account"></i> 3
-                  Bidders
+                  <i class="icon-material-outline-supervisor-account"></i>{" "}
+                  {sortedBids[selectedTask]?.length}
                 </h3>
                 <div class="sort-by">
                   <select class="selectpicker hide-tick">
@@ -38,260 +57,115 @@ function DashboardManageBidders() {
               </div>
 
               <div class="content">
-                <ul class="dashboard-box-list">
-                  <li>
-                    {/* <!-- Overview --> */}
-                    <div class="freelancer-overview manage-candidates">
-                      <div class="freelancer-overview-inner">
-                        {/* <!-- Avatar --> */}
-                        <div class="freelancer-avatar">
-                          <div class="verified-badge"></div>
-                          <a href="#">
-                            <img src={userAvatarBig2} alt="" />
-                          </a>
-                        </div>
+                {sortedBids[selectedTask]?.length && (
+                  <ul class="dashboard-box-list">
+                    {sortedBids[selectedTask]?.map((bid) => {
+                      const freelancerDetails = getFreelancerDetails(
+                        bid.userId,
+                        freelancers
+                      );
+                      console.log(freelancerDetails, selectedTask, freelancers);
+                      return (
+                        <li>
+                          {/* <!-- Overview --> */}
+                          <div class="freelancer-overview manage-candidates">
+                            <div class="freelancer-overview-inner">
+                              {/* <!-- Avatar --> */}
+                              <div class="freelancer-avatar">
+                                {/* <div class="verified-badge"></div> */}
+                                <a href="#">
+                                  <img
+                                    src={
+                                      freelancerDetails?.avatar
+                                        ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
+                                        : userAvatarBig2
+                                    }
+                                    alt=""
+                                  />
+                                </a>
+                              </div>
 
-                        {/* <!-- Name --> */}
-                        <div class="freelancer-name">
-                          <h4>
-                            <a href="#">
-                              David Peterson{" "}
-                              <img
-                                class="flag"
-                                src={de}
-                                alt=""
-                                title="Germany"
-                                data-tippy-placement="top"
-                              />
-                            </a>
-                          </h4>
+                              {/* <!-- Name --> */}
+                              <div class="freelancer-name">
+                                <h4>
+                                  <a href="#">
+                                    {freelancerDetails?.name || "Bidder"}{" "}
+                                    <img
+                                      class="flag"
+                                      src={de}
+                                      alt=""
+                                      title="Germany"
+                                      data-tippy-placement="top"
+                                    />
+                                  </a>
+                                </h4>
 
-                          {/* <!-- Details --> */}
-                          <span class="freelancer-detail-item">
-                            <a href="#">
-                              <i class="icon-feather-mail"></i>{" "}
-                              david@example.com
-                            </a>
-                          </span>
+                                {/* <!-- Details --> */}
 
-                          {/* <!-- Rating --> */}
-                          <div class="freelancer-rating">
-                            <div class="star-rating" data-rating="5.0"></div>
+                                {freelancerDetails?.email && (
+                                  <span class="freelancer-detail-item">
+                                    <a href="#">
+                                      <i class="icon-feather-mail"></i>{" "}
+                                      {freelancerDetails?.email}
+                                    </a>
+                                  </span>
+                                )}
+
+                                {/* <!-- Rating --> */}
+                                <div class="freelancer-rating">
+                                  <div
+                                    class="star-rating"
+                                    data-rating="5.0"
+                                  ></div>
+                                </div>
+
+                                {/* <!-- Bid Details --> */}
+                                <ul class="dashboard-task-info bid-info">
+                                  <li>
+                                    <strong>{`${bid.bidRate}`}</strong>
+                                    <span>Fixed Price</span>
+                                  </li>
+                                  <li>
+                                    <strong>
+                                      {getDeliveryTime(bid?.deliveryTime)}
+                                    </strong>
+                                    <span>Delivery Time</span>
+                                  </li>
+                                </ul>
+
+                                {/* <!-- Buttons --> */}
+                                <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
+                                  <a
+                                    href="#small-dialog-1"
+                                    class="popup-with-zoom-anim button ripple-effect"
+                                  >
+                                    <i class="icon-material-outline-check"></i>{" "}
+                                    Accept Offer
+                                  </a>
+                                  <a
+                                    href="#small-dialog-2"
+                                    class="popup-with-zoom-anim button dark ripple-effect"
+                                  >
+                                    <i class="icon-feather-mail"></i> Send
+                                    Message
+                                  </a>
+                                  {/* <a
+                                  href="#"
+                                  class="button gray ripple-effect ico"
+                                  title="Remove Bid"
+                                  data-tippy-placement="top"
+                                >
+                                  <i class="icon-feather-trash-2"></i>
+                                </a> */}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-
-                          {/* <!-- Bid Details --> */}
-                          <ul class="dashboard-task-info bid-info">
-                            <li>
-                              <strong>$3,200</strong>
-                              <span>Fixed Price</span>
-                            </li>
-                            <li>
-                              <strong>14 Days</strong>
-                              <span>Delivery Time</span>
-                            </li>
-                          </ul>
-
-                          {/* <!-- Buttons --> */}
-                          <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-                            <a
-                              href="#small-dialog-1"
-                              class="popup-with-zoom-anim button ripple-effect"
-                            >
-                              <i class="icon-material-outline-check"></i> Accept
-                              Offer
-                            </a>
-                            <a
-                              href="#small-dialog-2"
-                              class="popup-with-zoom-anim button dark ripple-effect"
-                            >
-                              <i class="icon-feather-mail"></i> Send Message
-                            </a>
-                            <a
-                              href="#"
-                              class="button gray ripple-effect ico"
-                              title="Remove Bid"
-                              data-tippy-placement="top"
-                            >
-                              <i class="icon-feather-trash-2"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    {/* <!-- Overview --> */}
-                    <div class="freelancer-overview manage-candidates">
-                      <div class="freelancer-overview-inner">
-                        {/* <!-- Avatar --> */}
-                        <div class="freelancer-avatar">
-                          <a href="#">
-                            <img
-                              src={userAvatarPlaceholder}
-                              alt=""
-                            />
-                          </a>
-                        </div>
-
-                        {/* <!-- Name --> */}
-                        <div class="freelancer-name">
-                          <h4>
-                            <a href="#">
-                              Oldrich Ćuk{" "}
-                              <img
-                                class="flag"
-                                src={sk}
-                                alt=""
-                                title="Slovakia"
-                                data-tippy-placement="top"
-                              />
-                            </a>
-                          </h4>
-
-                          {/* <!-- Details --> */}
-                          <span class="freelancer-detail-item">
-                            <a href="#">
-                              <i class="icon-feather-mail"></i>{" "}
-                              oldrich@example.com
-                            </a>
-                          </span>
-                          <span class="freelancer-detail-item">
-                            <i class="icon-feather-phone"></i> (+421)
-                            123-456-789
-                          </span>
-
-                          {/* <!-- Rating --> */}
-                          <br></br>
-                          <span class="company-not-rated">
-                            Minimum of 3 votes required
-                          </span>
-
-                          {/* <!-- Bid Details --> */}
-                          <ul class="dashboard-task-info bid-info">
-                            <li>
-                              <strong>$3,000</strong>
-                              <span>Fixed Price</span>
-                            </li>
-                            <li>
-                              <strong>14 Days</strong>
-                              <span>Delivery Time</span>
-                            </li>
-                          </ul>
-
-                          {/* <!-- Buttons --> */}
-                          <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-                            <a
-                              href="#small-dialog-1"
-                              class="popup-with-zoom-anim button ripple-effect"
-                            >
-                              <i class="icon-material-outline-check"></i> Accept
-                              Offer
-                            </a>
-                            <a
-                              href="#small-dialog-2"
-                              class="popup-with-zoom-anim button dark ripple-effect"
-                            >
-                              <i class="icon-feather-mail"></i> Send Message
-                            </a>
-                            <a
-                              href="#"
-                              class="button gray ripple-effect ico"
-                              title="Remove Bid"
-                              data-tippy-placement="top"
-                            >
-                              <i class="icon-feather-trash-2"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    {/* <!-- Overview --> */}
-                    <div class="freelancer-overview manage-candidates">
-                      <div class="freelancer-overview-inner">
-                        {/* <!-- Avatar --> */}
-                        <div class="freelancer-avatar">
-                          <div class="verified-badge"></div>
-                          <a href="#">
-                            <img
-                              src={userAvatarPlaceholder}
-                              alt=""
-                            />
-                          </a>
-                        </div>
-
-                        {/* <!-- Name --> */}
-                        <div class="freelancer-name">
-                          <h4>
-                            <a href="#">
-                              Kuba Adamczyk{" "}
-                              <img
-                                class="flag"
-                                src={pl}
-                                alt=""
-                                title="Poland"
-                                data-tippy-placement="top"
-                              />
-                            </a>
-                          </h4>
-
-                          {/* <!-- Details --> */}
-                          <span class="freelancer-detail-item">
-                            <a href="#">
-                              <i class="icon-feather-mail"></i> kuba@example.com
-                            </a>
-                          </span>
-                          <span class="freelancer-detail-item">
-                            <i class="icon-feather-phone"></i> (+48) 123-456-789
-                          </span>
-
-                          {/* <!-- Rating --> */}
-                          <div class="freelancer-rating">
-                            <div class="star-rating" data-rating="5.0"></div>
-                          </div>
-
-                          {/* <!-- Bid Details --> */}
-                          <ul class="dashboard-task-info bid-info">
-                            <li>
-                              <strong>$2,700</strong>
-                              <span>Fixed Price</span>
-                            </li>
-                            <li>
-                              <strong>30 Days</strong>
-                              <span>Delivery Time</span>
-                            </li>
-                          </ul>
-
-                          {/* <!-- Buttons --> */}
-                          <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-                            <a
-                              href="#small-dialog-1"
-                              class="popup-with-zoom-anim button ripple-effect"
-                            >
-                              <i class="icon-material-outline-check"></i> Accept
-                              Offer
-                            </a>
-                            <a
-                              href="#small-dialog-2"
-                              class="popup-with-zoom-anim button dark ripple-effect"
-                            >
-                              <i class="icon-feather-mail"></i> Send Message
-                            </a>
-                            <a
-                              href="#"
-                              class="button gray ripple-effect ico"
-                              title="Remove Bid"
-                              data-tippy-placement="top"
-                            >
-                              <i class="icon-feather-trash-2"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
             </div>
           </div>
@@ -302,7 +176,7 @@ function DashboardManageBidders() {
         <div class="dashboard-footer-spacer"></div>
         <div class="small-footer margin-top-15">
           <div class="small-footer-copyrights">
-          2024 <strong>Bid Bridge</strong>. All Rights Reserved.
+            2024 <strong>Bid Bridge</strong>. All Rights Reserved.
           </div>
           <ul class="footer-social-links">
             <li>

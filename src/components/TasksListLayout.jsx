@@ -31,6 +31,7 @@ function TasksListLayout() {
   const [locationInput, setLocationInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Customer Service");
+  console.log(tasksList);
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
@@ -213,7 +214,7 @@ function TasksListLayout() {
               filteredTasks?.map((task) => {
                 return (
                   <a
-                    onClick={() => navigate("/task/details")}
+                    onClick={() => navigate(`/task/details/${task._id}`)}
                     class="task-listing"
                   >
                     {/* <!-- Job Listing Details --> */}
