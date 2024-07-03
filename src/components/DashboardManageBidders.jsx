@@ -5,7 +5,11 @@ import pl from "../utils/images/flags/pl.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
-import { getDeliveryTime, getFreelancerDetails } from "../utils/common";
+import {
+  getCountryFlag,
+  getDeliveryTime,
+  getFreelancerDetails,
+} from "../utils/common";
 function DashboardManageBidders() {
   const { userTasks, sortedBids, freelancers } = useContext(UserContext);
   const [selectedTask, setSelectedTask] = useState(userTasks[0]._id || "");
@@ -64,7 +68,6 @@ function DashboardManageBidders() {
                         bid.userId,
                         freelancers
                       );
-                      console.log(freelancerDetails, selectedTask, freelancers);
                       return (
                         <li>
                           {/* <!-- Overview --> */}
@@ -90,13 +93,17 @@ function DashboardManageBidders() {
                                 <h4>
                                   <a href="#">
                                     {freelancerDetails?.name || "Bidder"}{" "}
-                                    <img
-                                      class="flag"
-                                      src={de}
-                                      alt=""
-                                      title="Germany"
-                                      data-tippy-placement="top"
-                                    />
+                                    {freelancerDetails?.data?.location && (
+                                      <img
+                                        class="flag"
+                                        src={getCountryFlag(
+                                          freelancerDetails?.data?.location
+                                        )}
+                                        alt=""
+                                        title="Germany"
+                                        data-tippy-placement="top"
+                                      />
+                                    )}
                                   </a>
                                 </h4>
 
