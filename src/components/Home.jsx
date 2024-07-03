@@ -71,7 +71,7 @@ function Home() {
       {/* <!-- add class "disable-gradient" to enable consistent background overlay --> */}
       <div
         class="intro-banner"
-        data-background-image="images/section-background.jpg"
+        // data-background-image="images/section-background.jpg"
       >
         <div class="container">
           {/* <div className="background-image-container"></div> */}
