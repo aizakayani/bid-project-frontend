@@ -1,13 +1,17 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
-import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
+import {
+  addOneMonthToUnixDate,
+  timeDifferenceFromNow,
+  unixToDate,
+} from "../utils/utils";
 import Popup from "./modals/Popup";
 import { deleteTaskAPI, getTasksByUser } from "../services/task";
 import toast from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 function DashboardManageTasks({ handleUpdateTask }) {
   const navigate = useNavigate();
-  const { userTasks, setUserTasks } = useContext(UserContext);
+  const { userTasks, setUserTasks, sortedBids } = useContext(UserContext);
   const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
   // const checkExpiration = (createdTime) => {
@@ -19,6 +23,36 @@ function DashboardManageTasks({ handleUpdateTask }) {
   //     return `Expiring on ${unixToDate(expiringDate)}`;
   //   }
   // };
+
+  const getBidsCount = (taskId) => {
+    if (sortedBids[`${taskId}`]) {
+      return sortedBids[`${taskId}`].length;
+    } else {
+      return 0;
+    }
+  };
+
+  const getAvgBid = (taskId) => {
+    let avg = 0;
+    if (sortedBids[`${taskId}`]) {
+      let total = 0;
+      let count = 0;
+
+      sortedBids[`${taskId}`].forEach((bid) => {
+        let bidRate = parseInt(bid.bidRate, 10);
+        if (!isNaN(bidRate)) {
+          total += bidRate;
+          count++;
+        }
+      });
+
+      if (count > 0) {
+        avg = total / count;
+      }
+    }
+
+    return avg;
+  };
 
   const handleDeleteTask = async () => {
     try {
@@ -54,8 +88,6 @@ function DashboardManageTasks({ handleUpdateTask }) {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Manage Tasks</h3>
-
-          
         </div>
 
         {/* <!-- Row --> */}
@@ -84,9 +116,14 @@ function DashboardManageTasks({ handleUpdateTask }) {
                               <div class="job-listing-description">
                                 <h3 class="job-listing-title">
                                   <a href="#">{task.title}</a>{" "}
-                                  <span class="dashboard-status-button yellow">
-                                    Expiring
-                                  </span>
+                                  {task?.requiredSkills?.split(",")?.length &&
+                                    task?.requiredSkills
+                                      ?.split(",")
+                                      ?.map((tag) => (
+                                        <span class="dashboard-status-button yellow">
+                                          {tag}
+                                        </span>
+                                      ))}
                                 </h3>
 
                                 {/* <!-- Job Listing Footer --> */}
@@ -94,7 +131,9 @@ function DashboardManageTasks({ handleUpdateTask }) {
                                   <ul>
                                     <li>
                                       <i class="icon-material-outline-access-time"></i>{" "}
-                                      23 hours left
+                                      {`Updated on ${timeDifferenceFromNow(
+                                        task?.createdAt
+                                      )}`}
                                     </li>
                                   </ul>
                                 </div>
@@ -105,27 +144,36 @@ function DashboardManageTasks({ handleUpdateTask }) {
                           {/* <!-- Task Details --> */}
                           <ul class="dashboard-task-info">
                             <li>
-                              <strong>3</strong>
+                              <strong>{getBidsCount(task._id)}</strong>
                               <span>Bids</span>
                             </li>
                             <li>
-                              <strong>$22</strong>
+                              <strong>{`$${getAvgBid(task._id)}`}</strong>
                               <span>Avg. Bid</span>
                             </li>
                             <li>
-                              <strong>$15 - $30</strong>
-                              <span>Hourly Rate</span>
+                              <strong>{`$${task.budget}`}</strong>
+                              <span>
+                                {task.type === "hourly"
+                                  ? "Hourly rate"
+                                  : "Fixed price"}
+                              </span>
                             </li>
                           </ul>
 
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
                             <a
-                              onClick={() => navigate("/dashboard/manage/bidders/:id")}
+                              onClick={() =>
+                                navigate("/dashboard/manage/bidders/:id")
+                              }
                               class="button ripple-effect white-text-button"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
-                              Manage Bidders <span class="button-info">3</span>
+                              Manage Bidders{" "}
+                              <span class="button-info">
+                                {getBidsCount(task._id)}
+                              </span>
                             </a>
                             <a
                               onClick={() => {

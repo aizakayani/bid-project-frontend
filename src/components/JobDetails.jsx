@@ -13,6 +13,7 @@ import {
   getJobsApplicationsByUser,
 } from "../services/job-applications";
 import toast from "react-hot-toast";
+import { countries } from "countries-list";
 function JobDetails() {
   const { id } = useParams();
   const { jobsList, setUserJobApplications, userJobApplications } =
@@ -20,8 +21,6 @@ function JobDetails() {
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
-
-  console.log(applied);
 
   useEffect(() => {
     console.log(userJobApplications, id);
@@ -90,7 +89,7 @@ function JobDetails() {
                     </a>
                   </div>
                   <div class="header-details">
-                    <h3>Restaurant General Manager</h3>
+                    <h3>{JobDetails?.title}</h3>
                     <h5>About the Employer</h5>
                     <ul>
                       <li>

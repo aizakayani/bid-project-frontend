@@ -84,7 +84,7 @@ function App() {
             }
           />
           <Route
-            path="/task/details"
+            path="/task/details/:id"
             element={
               <Layout>
                 <TaskDetails />
@@ -144,7 +144,7 @@ function App() {
             path="/freelancer/details/:id"
             element={
               <Layout>
-                <FreeLancerDetails/>
+                <FreeLancerDetails />
               </Layout>
             }
           />
@@ -152,7 +152,7 @@ function App() {
             path="/dashboard/setting/"
             element={
               <Layout>
-                <DashboardSettings/>
+                <DashboardSettings />
               </Layout>
             }
           />
@@ -160,7 +160,7 @@ function App() {
             path="/dashboard/message/"
             element={
               <Layout>
-                <DashboardMessages/>
+                <DashboardMessages />
               </Layout>
             }
           />
@@ -168,7 +168,7 @@ function App() {
             path="/dashboard/manage/candidate/:id"
             element={
               <Layout>
-                <DashboardManageCandidates/>
+                <DashboardManageCandidates />
               </Layout>
             }
           />
@@ -176,42 +176,42 @@ function App() {
             path="/dashboard/manage/bidders/:id"
             element={
               <Layout>
-                <DashboardManageBidders/>
+                <DashboardManageBidders />
               </Layout>
             }
           />
-         <Route
+          <Route
             path="/dashboard/bookmarks/"
             element={
               <Layout>
-                <DashboardBookmarks/>
+                <DashboardBookmarks />
               </Layout>
             }
-          />     
+          />
           <Route
             path="/dashboard/PostTask/"
             element={
               <Layout>
-                <DashboardPostTask/>
+                <DashboardPostTask />
               </Layout>
             }
-          />     
+          />
           <Route
             path="/dashboard/PostJob/"
             element={
               <Layout>
-                <DashboardPostJob/>
+                <DashboardPostJob />
               </Layout>
             }
-          />     
+          />
           <Route
             path="/Order/Confirmation/"
             element={
               <Layout>
-                <OrderConformation/>
+                <OrderConformation />
               </Layout>
             }
-          />  
+          />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

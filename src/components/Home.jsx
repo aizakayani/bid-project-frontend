@@ -1,13 +1,6 @@
-import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
+
 import gb from "../utils/images/flags/gb.svg";
-import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
-import de from "../utils/images/flags/de.svg";
-import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
-import p1 from "../utils/images/flags/pl.svg";
-import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
-import au from "../utils/images/flags/au.svg";
-import it from "../utils/images/flags/it.svg";
-import fr from "../utils/images/flags/fr.svg";
+
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
@@ -751,7 +744,6 @@ function Home() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

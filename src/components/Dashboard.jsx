@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DashboardMain from "./DashboardMain";
 import DashboardMessages from "./DashboardMessages";
 import DashboardBookmarks from "./DashboardBookmarks";
@@ -12,13 +12,77 @@ import DashboardManageBidders from "./DashboardManageBidders";
 import DashboardMyActiveBids from "./DashboardMyActiveBids";
 import DashboardPostTask from "./DashboardPostTask";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { getJobsApplicationsByJobIds } from "../services/job-applications";
+import { getBidsByTaskIds } from "../services/bids";
 function Dashboard() {
+  const {
+    user,
+    userJobs,
+    userTasks,
+    setJobApplications,
+    setBids,
+    setSortedBids,
+  } = useContext(UserContext);
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
   const [taskMenuOpen, setTaskMenuOpen] = useState(false);
   const [updateJobData, setUpdateJobData] = useState(null);
   const [updateTaskData, setUpdateTaskData] = useState(null);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (userJobs?.length > 0) {
+      // get JobIds
+      const jobIds = userJobs.map((job) => job._id);
+      getJobApplications(jobIds);
+    }
+  }, [userJobs?.length]);
+
+  useEffect(() => {
+    if (userTasks?.length > 0) {
+      // get JobIds
+      const taskIds = userTasks.map((task) => task._id);
+      getTaskBids(taskIds);
+    }
+  }, [userTasks?.length]);
+
+  const getJobApplications = async (jobIds) => {
+    // fetch jobs
+    try {
+      const jobApplicationsResult = await getJobsApplicationsByJobIds(jobIds);
+      if (
+        jobApplicationsResult?.success &&
+        jobApplicationsResult?.jobApplications?.length > 0
+      ) {
+        setJobApplications([...jobApplicationsResult?.jobApplications]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTaskBids = async (taskIds) => {
+    // fetch jobs
+    try {
+      const bidsResult = await getBidsByTaskIds(taskIds);
+      if (bidsResult?.success && bidsResult?.bids?.length > 0) {
+        setBids([...bidsResult?.bids]);
+        // sort bids with task id
+        const sortedBidsWithTaskId = {};
+        bidsResult?.bids?.forEach((bid) => {
+          if (sortedBidsWithTaskId[`${bid.taskId}`]?.length) {
+            sortedBidsWithTaskId[`${bid.taskId}`].push(bid);
+          } else {
+            sortedBidsWithTaskId[`${bid.taskId}`] = [bid];
+          }
+          setSortedBids({ ...sortedBidsWithTaskId });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleUpdateJob = (jobData) => {
     setUpdateJobData(jobData);
     setDashboardType("postjob");
@@ -77,39 +141,41 @@ function Dashboard() {
                   </ul>
 
                   <ul data-submenu-title="Organize and Manage">
-                    <li>
-                      <a
-                        href="#"
-                        onClick={() => setJobMenuOpen(!jobMenuOpen)}
-                        className="job-task-menu"
-                      >
-                        <i class="icon-material-outline-business-center"></i>{" "}
-                        Jobs
-                      </a>
-                      {jobMenuOpen && (
-                        <ul>
-                          <li>
-                            <a onClick={() => setDashboardType("managejobs")}>
-                              Manage Jobs <span class="nav-tag">3</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() =>
-                                setDashboardType("managecandidates")
-                              }
-                            >
-                              Manage Candidates
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => setDashboardType("postjob")}>
-                              Post a Job
-                            </a>
-                          </li>
-                        </ul>
-                      )}
-                    </li>
+                    {user?.role === "employer" && (
+                      <li>
+                        <a
+                          href="#"
+                          onClick={() => setJobMenuOpen(!jobMenuOpen)}
+                          className="job-task-menu"
+                        >
+                          <i class="icon-material-outline-business-center"></i>{" "}
+                          Jobs
+                        </a>
+                        {jobMenuOpen && (
+                          <ul>
+                            <li>
+                              <a onClick={() => setDashboardType("managejobs")}>
+                                Manage Jobs <span class="nav-tag">3</span>
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                onClick={() =>
+                                  setDashboardType("managecandidates")
+                                }
+                              >
+                                Manage Candidates
+                              </a>
+                            </li>
+                            <li>
+                              <a onClick={() => setDashboardType("postjob")}>
+                                Post a Job
+                              </a>
+                            </li>
+                          </ul>
+                        )}
+                      </li>
+                    )}
                     <li>
                       <a
                         href="#"
@@ -120,28 +186,41 @@ function Dashboard() {
                       </a>
                       {taskMenuOpen && (
                         <ul>
-                          <li>
-                            <a onClick={() => setDashboardType("managetasks")}>
-                              Manage Tasks <span class="nav-tag">2</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              onClick={() => setDashboardType("managebidders")}
-                            >
-                              Manage Bidders
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => setDashboardType("activebids")}>
-                              My Active Bids <span class="nav-tag">4</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={() => setDashboardType("posttask")}>
-                              Post a Task
-                            </a>
-                          </li>
+                          {user?.role === "employer" && (
+                            <li>
+                              <a
+                                onClick={() => setDashboardType("managetasks")}
+                              >
+                                Manage Tasks{" "}
+                                <span class="nav-tag">{userTasks?.length}</span>
+                              </a>
+                            </li>
+                          )}
+                          {user?.role === "employer" && (
+                            <li>
+                              <a
+                                onClick={() =>
+                                  setDashboardType("managebidders")
+                                }
+                              >
+                                Manage Bidders
+                              </a>
+                            </li>
+                          )}
+                          {user?.role === "freelancer" && (
+                            <li>
+                              <a onClick={() => setDashboardType("activebids")}>
+                                My Active Bids <span class="nav-tag">4</span>
+                              </a>
+                            </li>
+                          )}
+                          {user?.role === "employer" && (
+                            <li>
+                              <a onClick={() => setDashboardType("posttask")}>
+                                Post a Task
+                              </a>
+                            </li>
+                          )}
                         </ul>
                       )}
                     </li>
@@ -154,7 +233,12 @@ function Dashboard() {
                       </a>
                     </li>
                     <li>
-                      <a onClick={() =>{localStorage.removeItem('token');navigate("/jobs")} }>
+                      <a
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          navigate("/jobs");
+                        }}
+                      >
                         <i class="icon-material-outline-power-settings-new"></i>{" "}
                         Logout
                       </a>

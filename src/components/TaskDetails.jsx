@@ -7,7 +7,71 @@ import it from "../utils/images/flags/it.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import singleTask from "../utils/images/single-task.jpg";
 import browseCompanies2 from "../utils/images/browse-companies-02.png";
+import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/userContext";
+import { timeDifferenceFromNow } from "../utils/utils";
+import { addBidAPI, getBidsByUserAPI } from "../services/bids";
+import toast from "react-hot-toast";
 function TaskDetails() {
+  const { id } = useParams();
+  const { tasksList, userBids, setUserBids } = useContext(UserContext);
+  const [taskDetails, setTaskDetails] = useState(null);
+  const [bidRate, setBidRate] = useState("");
+  const [selectedDeliveryTime, setSelectedDeliveryTime] =
+    useState("less-three");
+  const [applied, setApplied] = useState(false);
+  useEffect(() => {
+    console.log(userBids, id);
+    if (
+      userBids?.length &&
+      userBids.filter((bid) => bid.taskId === id)?.length
+    ) {
+      setApplied(true);
+    }
+  }, [id, userBids?.length]);
+  useEffect(() => {
+    if (id && tasksList?.length > 0) {
+      const filteredTask = tasksList.find((task) => task._id === id);
+      if (filteredTask) {
+        console.log(filteredTask);
+        setTaskDetails(filteredTask);
+      }
+    }
+  }, [id, tasksList]);
+  const handleAddBid = async () => {
+    try {
+      if (bidRate.trim() === "") {
+        toast.error("Please enter bid rate to Place a bid");
+        return;
+      }
+      const payload = {
+        bidRate,
+        deliveryTime: selectedDeliveryTime,
+        createdAt: Date.now() / 1000,
+        taskId: id,
+      };
+      const response = await addBidAPI(payload);
+      if (response?.success) {
+        toast.success("Bid sent to employer");
+        getBidsByUser();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to place bid");
+    }
+  };
+  const getBidsByUser = async () => {
+    try {
+      const response = await getBidsByUserAPI();
+      if (response?.success && response?.bids) {
+        setUserBids(response?.bids);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to get user bids");
+    }
+  };
   return (
     <>
       <div class="single-page-header" data-background-image={singleTask}>
@@ -22,7 +86,7 @@ function TaskDetails() {
                     </a>
                   </div>
                   <div class="header-details">
-                    <h3>Food Delivery Mobile Application</h3>
+                    <h3>{taskDetails?.title}</h3>
                     <h5>About the Employer</h5>
                     <ul>
                       <li>
@@ -51,7 +115,7 @@ function TaskDetails() {
                 <div class="right-side">
                   <div class="salary-box">
                     <div class="salary-type">Project Budget</div>
-                    <div class="salary-amount">$2,500 - $4,500</div>
+                    <div class="salary-amount">{taskDetails?.budget}</div>
                   </div>
                 </div>
               </div>
@@ -66,34 +130,11 @@ function TaskDetails() {
             {/* <!-- Description --> */}
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Project Description</h3>
-              <p>
-                Leverage agile frameworks to provide a robust synopsis for high
-                level overviews. Iterative approaches to corporate strategy
-                foster collaborative thinking to further the overall value
-                proposition. Organically grow the holistic world view of
-                disruptive innovation via workplace diversity and empowerment.
-              </p>
-
-              <p>
-                Bring to the table win-win survival strategies to ensure
-                proactive domination. At the end of the day, going forward, a
-                new normal that has evolved from generation X is on the runway
-                heading towards a streamlined cloud solution. User generated
-                content in real-time will have multiple touchpoints for
-                offshoring.
-              </p>
-
-              <p>
-                Capitalize on low hanging fruit to identify a ballpark value
-                added activity to beta test. Override the digital divide with
-                additional clickthroughs from DevOps. Nanotechnology immersion
-                along the information highway will close the loop on focusing
-                solely on the bottom line.
-              </p>
+              <p>{taskDetails?.description}</p>
             </div>
 
             {/* <!-- Atachments --> */}
-            <div class="single-page-section">
+            {/* <div class="single-page-section">
               <h3>Attachments</h3>
               <div class="attachments-container">
                 <a href="#" class="attachment-box ripple-effect">
@@ -101,16 +142,16 @@ function TaskDetails() {
                   <i>PDF</i>
                 </a>
               </div>
-            </div>
+            </div> */}
 
             {/* <!-- Skills --> */}
             <div class="single-page-section">
               <h3>Skills Required</h3>
               <div class="task-tags">
-                <span>iOS</span>
-                <span>Android</span>
-                <span>mobile apps</span>
-                <span>design</span>
+                {taskDetails?.requiredSkills?.split(",")?.length > 0 &&
+                  taskDetails?.requiredSkills?.split(",")?.map((skill) => {
+                    return <span style={{ marginRight: 4 }}>{skill}</span>;
+                  })}
               </div>
             </div>
             <div class="clearfix"></div>
@@ -314,7 +355,7 @@ function TaskDetails() {
           <div class="col-xl-4 col-lg-4">
             <div class="sidebar-container">
               <div class="countdown green margin-bottom-35">
-                6 days, 23 hours left
+                {`${timeDifferenceFromNow(taskDetails?.createdAt)}`}
               </div>
 
               <div class="sidebar-widget">
@@ -335,7 +376,7 @@ function TaskDetails() {
                     <input
                       class="bidding-slider"
                       type="text"
-                      value=""
+                      value={bidRate}
                       data-slider-handle="custom"
                       data-slider-currency="$"
                       data-slider-min="2500"
@@ -343,6 +384,7 @@ function TaskDetails() {
                       data-slider-value="auto"
                       data-slider-step="50"
                       data-slider-tooltip="hide"
+                      onChange={(e) => setBidRate(e.target.value)}
                     />
 
                     {/* <!-- Headline --> */}
@@ -351,29 +393,34 @@ function TaskDetails() {
                     </span>
 
                     {/* <!-- Fields --> */}
-                    <div class="bidding-fields">
-                      <div class="bidding-field">
-                        {/* <!-- Quantity Buttons --> */}
-                        <div class="qtyButtons">
-                          <div class="qtyDec"></div>
-                          <input type="text" name="qtyInput" value="1" />
-                          <div class="qtyInc"></div>
-                        </div>
-                      </div>
-                      <div class="bidding-field">
-                        <select class="selectpicker default">
-                          <option selected>Days</option>
-                          <option>Hours</option>
-                        </select>
-                      </div>
-                    </div>
+                    <select
+                      class="selectpicker with-border"
+                      data-size="7"
+                      data-live-search="true"
+                      value={selectedDeliveryTime}
+                      onChange={(e) => {
+                        setSelectedDeliveryTime(e.target.value);
+                      }}
+                    >
+                      <option value={"less-three"}>
+                        {"Less than 3 months"}
+                      </option>
+                      <option value={"three-to-six"}>{"3 to 6 months"}</option>
+                      <option value={"more-six"}>{"More than 6 months"}</option>
+                    </select>
 
                     {/* <!-- Button --> */}
                     <button
                       id="snackbar-place-bid"
                       class="button ripple-effect move-on-hover full-width margin-top-30"
+                      onClick={handleAddBid}
+                      style={
+                        applied
+                          ? { pointerEvents: "none", cursor: "default" }
+                          : {}
+                      }
                     >
-                      <span>Place a Bid</span>
+                      <span>{applied ? "Bid sent" : "Place a Bid"}</span>
                     </button>
                   </div>
                   <div class="bidding-signup">
