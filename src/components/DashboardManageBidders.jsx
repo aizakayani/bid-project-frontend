@@ -10,9 +10,19 @@ import {
   getDeliveryTime,
   getFreelancerDetails,
 } from "../utils/common";
-function DashboardManageBidders() {
+function DashboardManageBidders({
+  manageBiddersTaskId,
+  setManageBiddersTaskId,
+}) {
   const { userTasks, sortedBids, freelancers } = useContext(UserContext);
   const [selectedTask, setSelectedTask] = useState(userTasks[0]._id || "");
+
+  useEffect(() => {
+    if (manageBiddersTaskId) {
+      setSelectedTask(manageBiddersTaskId);
+      setManageBiddersTaskId(null);
+    }
+  }, []);
 
   return (
     <div class="dashboard-content-container" data-simplebar>

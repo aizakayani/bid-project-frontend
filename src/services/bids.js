@@ -38,13 +38,13 @@ export const getBidsByTaskIds = (taskIds) => {
 
 export const addBidAPI = (payload) => {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/job-applications/add`, {
+    fetch(`http://localhost:3000/bids/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": localStorage.getItem("token"),
       },
-      body: payload,
+      body: JSON.stringify(payload),
     })
       .then((res) => res.json())
       .then((result) => {

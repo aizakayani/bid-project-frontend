@@ -9,7 +9,11 @@ import Popup from "./modals/Popup";
 import { deleteTaskAPI, getTasksByUser } from "../services/task";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-function DashboardManageTasks({ handleUpdateTask }) {
+function DashboardManageTasks({
+  handleUpdateTask,
+  setManageBiddersTaskId,
+  setDashboardType,
+}) {
   const navigate = useNavigate();
   const { userTasks, setUserTasks, sortedBids } = useContext(UserContext);
   const [showDeleteTaskPopup, setShowDeleteTaskPopup] = useState(false);
@@ -164,9 +168,10 @@ function DashboardManageTasks({ handleUpdateTask }) {
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
                             <a
-                              onClick={() =>
-                                navigate("/dashboard/manage/bidders/:id")
-                              }
+                              onClick={() => {
+                                setManageBiddersTaskId(task._id);
+                                setDashboardType("managebidders");
+                              }}
                               class="button ripple-effect white-text-button"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
