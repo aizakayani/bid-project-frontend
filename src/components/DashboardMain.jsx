@@ -102,9 +102,6 @@ function DashboardMain () {
                     <div class="note-footer">
                       <span class="note-priority high">High Priority</span>
                       <div class="note-buttons">
-                        <a href="#" title="Edit" data-tippy-placement="top">
-                          <i class="icon-feather-edit"></i>
-                        </a>
                         <a href="#" title="Remove" data-tippy-placement="top">
                           <i class="icon-feather-trash-2"></i>
                         </a>
@@ -117,9 +114,6 @@ function DashboardMain () {
                     <div class="note-footer">
                       <span class="note-priority low">Low Priority</span>
                       <div class="note-buttons">
-                        <a href="#" title="Edit" data-tippy-placement="top">
-                          <i class="icon-feather-edit"></i>
-                        </a>
                         <a href="#" title="Remove" data-tippy-placement="top">
                           <i class="icon-feather-trash-2"></i>
                         </a>
@@ -132,9 +126,6 @@ function DashboardMain () {
                     <div class="note-footer">
                       <span class="note-priority medium">Medium Priority</span>
                       <div class="note-buttons">
-                        <a href="#" title="Edit" data-tippy-placement="top">
-                          <i class="icon-feather-edit"></i>
-                        </a>
                         <a href="#" title="Remove" data-tippy-placement="top">
                           <i class="icon-feather-trash-2"></i>
                         </a>
