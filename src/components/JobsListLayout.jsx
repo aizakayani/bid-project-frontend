@@ -230,7 +230,7 @@ function JobsListLayout() {
                   <input
                     type="checkbox"
                     id="angular"
-                    checked={tags.angular2}
+                    checked={tags.angular}
                     onChange={handleCheckboxChange}
                   />
                   <label for="angular">angular</label>

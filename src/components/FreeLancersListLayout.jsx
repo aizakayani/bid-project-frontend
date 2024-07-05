@@ -8,10 +8,11 @@ import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { getCountryFlag } from "../utils/common";
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const { freelancers } = useContext(UserContext);
-  console.log(freelancers);
+  console.log({freelancers});
   // const freelancersList = [
   //   // {
   //   //   name: "Sebastiano Piccio",
@@ -22,8 +23,20 @@ function FreeLancersListLayout() {
   //   //   jobSuccessRate: "89%",
   //   // },
   // ];
-  const [selectedCategory, setSelectedCategory] = useState("Admin Support");
-
+  const [locationInput, setLocationInput] = useState("");
+  const [skillsInput, setSkillsInput] = useState("");
+  const [tags, setTags] = useState({
+    frontend: false,
+    angular: false,
+    react: false,
+    vuejs: false,
+    webapp: false,
+    design: false,
+    wordpress: false,
+  });
+  const [selectedCategory, setSelectedCategory] = useState(
+    "Admin Support"
+  );
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -36,11 +49,36 @@ function FreeLancersListLayout() {
     "Translation",
     "Sales & Marketing",
   ];
+  const filteredFreelancers = freelancers.filter((freelancer) => {
+    const locationMatch = freelancer?.location?.toLowerCase().includes(locationInput?.toLowerCase());
+    const skillsMatch = freelancer?.data?.skills.toLowerCase().includes(skillsInput?.toLowerCase());
 
-  // Handle category selection
+    // Get selected tags
+    const selectedTags = Object.keys(tags).filter((tag) => tags[tag]);
+
+    // Check if at least one selected tag exists in freelancers tags (using freelancer title as tag name)
+    const tagMatch =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) =>
+        freelancer?.data?.skills.toLowerCase().includes(tag?.toLowerCase())
+      );
+console.log({})
+    return locationMatch && skillsMatch && tagMatch;
+  });
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
+  const handleCheckboxChange = (event) => {
+    const { id, checked } = event.target;
+    console.log({ checked });
+    console.log({ id });
+    setTags({
+      ...tags,
+      [id]: checked,
+    });
+  };
+  
+  console.log({freelancers});
   return (
     <div class="container margin-top-90">
       <div class="row">
@@ -52,9 +90,11 @@ function FreeLancersListLayout() {
               <div class="input-with-icon">
                 <div id="autocomplete-container">
                   <input
+                    placeholder="Location"
                     id="autocomplete-input"
                     type="text"
-                    placeholder="Location"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
                   />
                 </div>
                 <i class="icon-material-outline-location-on"></i>
@@ -110,9 +150,11 @@ function FreeLancersListLayout() {
               <div class="keywords-container">
                 <div class="keyword-input-container">
                   <input
+                    id="intro-keywords"
+                    placeholder="Job Title"
                     type="text"
-                    class="keyword-input"
-                    placeholder="e.g. task title"
+                    value={skillsInput}
+                    onChange={(e) => setSkillsInput(e.target.value)}
                   />
                   <button class="keyword-input-button ripple-effect">
                     <i class="icon-material-outline-add"></i>
@@ -131,32 +173,61 @@ function FreeLancersListLayout() {
 
               <div class="tags-container">
                 <div class="tag">
-                  <input type="checkbox" id="tag1" />
+                  <input type="checkbox"
+                    id="frontend"
+                    checked={tags.frontend}
+                    onChange={handleCheckboxChange} />
                   <label for="tag1">front-end dev</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag2" />
+                  <input type="checkbox"
+                    id="angular"
+                    checked={tags.angular}
+                    onChange={handleCheckboxChange} />
                   <label for="tag2">angular</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag3" />
+                  <input type="checkbox"
+                    id="react"
+                    checked={tags.react}
+                    onChange={handleCheckboxChange} />
                   <label for="tag3">react</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag4" />
-                  <label for="tag4">vue js</label>
+                  <input
+                    type="checkbox"
+                    id="vuejs"
+                    checked={tags.vuejs}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label for="vuejs">vue js</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag5" />
-                  <label for="tag5">web apps</label>
+                  <input
+                    type="checkbox"
+                    id="webapp"
+                    checked={tags.webapp}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label for="webapp">web apps</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag6" />
-                  <label for="tag6">design</label>
+                  <input
+                    type="checkbox"
+                    id="design"
+                    checked={tags.design}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label for="design">design</label>
                 </div>
                 <div class="tag">
-                  <input type="checkbox" id="tag7" />
-                  <label for="tag7">wordpress</label>
+                  <input
+                    type="checkbox"
+                    id="wordpress"
+                    checked={tags.wordpress}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label for="wordpress">wordpress</label>
                 </div>
               </div>
               <div class="clearfix"></div>
@@ -223,8 +294,8 @@ function FreeLancersListLayout() {
             style={{ flexDirection: "column" }}
           >
             {/* <!--Freelancer --> */}
-            {freelancers?.length > 0 &&
-              freelancers.map((freelancer) => {
+            {filteredFreelancers?.length > 0 &&
+              filteredFreelancers.map((freelancer) => {
                 return (
                   <div class="freelancer">
                     {/* <!-- Overview --> */}
@@ -236,7 +307,7 @@ function FreeLancersListLayout() {
                         {/* <!-- Avatar --> */}
                         <div class="freelancer-avatar">
                           <a href="single-freelancer-profile.html">
-                            <img src={freelancer.avatar} alt="" />
+                            <img src={freelancer?.avatar} alt="" />
                           </a>
                         </div>
 
@@ -244,17 +315,18 @@ function FreeLancersListLayout() {
                         <div class="freelancer-name">
                           <h4>
                             <a href="#">
-                              {freelancer.name}{" "}
+                              {freelancer?.name}{" "}
                               <img
                                 class="flag"
-                                src={it}
+                                src={getCountryFlag(
+                                  freelancer?.data?.location
+                                )}
                                 alt=""
                                 title="Italy"
                                 data-tippy-placement="top"
                               />
                             </a>
                           </h4>
-                          <span>{freelancer.title}</span>
                           {/* <!-- Rating --> */}
                           <div class="freelancer-rating">
                             <div class="star-rating" data-rating="4.5">
@@ -277,15 +349,11 @@ function FreeLancersListLayout() {
                             Location{" "}
                             <strong>
                               <i class="icon-material-outline-location-on"></i>{" "}
-                              {freelancer.location}
+                              {freelancer?.data?.location}
                             </strong>
                           </li>
                           <li>
-                            Rate <strong>{freelancer.rate}</strong>
-                          </li>
-                          <li>
-                            Job Success{" "}
-                            <strong>{freelancer.jobSuccessRate}</strong>
+                            Rate <strong>{freelancer?.data?.hourlyRate}</strong>
                           </li>
                         </ul>
                       </div>
@@ -310,7 +378,7 @@ function FreeLancersListLayout() {
           <div class="row">
             <div class="col-md-12">
               {/* <!-- Pagination --> */}
-              {freelancers?.length > 5 && (
+              {filteredFreelancers?.length > 5 && (
                 <div class="pagination-container margin-top-40 margin-bottom-60">
                   <nav class="pagination">
                     <ul>

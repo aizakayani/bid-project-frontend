@@ -164,7 +164,9 @@ function DashboardBookmarks () {
 
 											{/* <!-- Name --> */}
 											<div class="freelancer-name">
-												<h4><a href="#">David Peterson <img class="flag" src={de} alt="" title="Germany" data-tippy-placement="top" /></a></h4>
+												<h4><a href="#">David Peterson 
+													<img class="flag" src={de} alt="" title="Germany" data-tippy-placement="top" />
+													</a></h4>
 												<span>iOS Expert + Node Dev</span>
 												{/* <!-- Rating --> */}
 												<div class="freelancer-rating">

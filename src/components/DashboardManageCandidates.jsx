@@ -7,6 +7,7 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import { getJobsApplicationsByJobIds } from "../services/job-applications";
 import { saveAs } from "file-saver";
+import { getCountryFlag } from "../utils/common";
 function DashboardManageCandidates({ setDashboardType }) {
   const { jobApplications, setNewMessageContext } = useContext(UserContext);
   const downloadPdf = (applicantCV) => {
@@ -18,7 +19,9 @@ function DashboardManageCandidates({ setDashboardType }) {
 
     // Use FileSaver to save the file
     saveAs(blob, "downloaded.pdf");
+    
   };
+  console.log({jobApplications});
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -67,7 +70,9 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     {`${jobApplication.applicantName} `}
                                     <img
                                       class="flag"
-                                      src={au}
+                                      src={getCountryFlag(
+                                       jobApplication?.location
+                                      )}
                                       alt=""
                                       title="Australia"
                                       data-tippy-placement="top"
@@ -156,7 +161,9 @@ function DashboardManageCandidates({ setDashboardType }) {
                               Sindy Forest{" "}
                               <img
                                 class="flag"
-                                src={au}
+                                // src={getCountryFlag(
+                                //   freelancerDetails?.data?.location
+                                // )}
                                 alt=""
                                 title="Australia"
                                 data-tippy-placement="top"

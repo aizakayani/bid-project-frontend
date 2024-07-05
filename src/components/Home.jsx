@@ -7,6 +7,7 @@ import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow, unixToDate } from "../utils/utils";
 import { Dropdown } from "react-bootstrap";
+import { getCountryFlag } from "../utils/common";
 
 function Home() {
   const { jobsList, user, isLoggedIn, freelancers } = useContext(UserContext);
@@ -619,7 +620,9 @@ function Home() {
                                     {freelancer?.name}{" "}
                                     <img
                                       class="flag"
-                                      src={gb}
+                                      src={getCountryFlag(
+                                        freelancer?.data?.location
+                                      )}
                                       alt=""
                                       title="United Kingdom"
                                       data-tippy-placement="top"
@@ -647,15 +650,11 @@ function Home() {
                                   Location{" "}
                                   <strong>
                                     <i class="icon-material-outline-location-on"></i>{" "}
-                                    {freelancer?.location}
+                                    {freelancer?.data?.location}
                                   </strong>
                                 </li>
                                 <li>
-                                  Rate <strong>{freelancer?.rate}</strong>
-                                </li>
-                                <li>
-                                  Job Success{" "}
-                                  <strong>{freelancer?.jobSuccessRate}</strong>
+                                  Rate <strong>{freelancer?.data?.hourlyRate}</strong>
                                 </li>
                               </ul>
                             </div>
