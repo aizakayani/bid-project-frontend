@@ -1,6 +1,10 @@
+import { useState } from "react";
+import EditBidPopup from "./modals/EditBidPopup";
+
 function DashboardMyActiveBids () {
-    return(
-        <div class="dashboard-content-container" data-simplebar>
+	const [openEditBidModal, setOpenEditBidModal] = useState(false);
+    return( <>
+	<div class="dashboard-content-container" data-simplebar>
 		<div class="dashboard-content-inner" >
 			
 			{/* <!-- Dashboard Headline --> */}
@@ -46,7 +50,7 @@ function DashboardMyActiveBids () {
 
 									{/* <!-- Buttons --> */}
 									<div class="buttons-to-right always-visible">
-										<a href="#small-dialog" class="popup-with-zoom-anim button dark ripple-effect ico" title="Edit Bid" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+										<a href="#small-dialog" class="popup-with-zoom-anim button dark ripple-effect ico" title="Edit Bid" data-tippy-placement="top" onClick={()=> setOpenEditBidModal(true)}><i class="icon-feather-edit"></i></a>
 										<a href="#" class="button red ripple-effect ico" title="Cancel Bid" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
 									</div>
 								</li>
@@ -170,7 +174,13 @@ function DashboardMyActiveBids () {
 			{/* <!-- Footer / End --> */}
 
 		</div>
+		
 	</div>
+	{openEditBidModal && 
+		<EditBidPopup handleClose={()=> setOpenEditBidModal(false)} handleSubmit={()=> setOpenEditBidModal(false)} show={openEditBidModal}/>
+		}
+	</>
+        
     )
 }
 export default DashboardMyActiveBids;
