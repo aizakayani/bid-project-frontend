@@ -1,4 +1,8 @@
+import { useState } from "react";
+import AddNotePopup from "./modals/AddNotePopup";
+
 function DashboardMain () {
+  const [openNotePopup, setOpenNotePopup] = useState(false);
     return (
         <div class="dashboard-content-container" data-simplebar>
         <div class="dashboard-content-inner">
@@ -140,8 +144,9 @@ function DashboardMain () {
                 </div>
                 <div class="add-note-button">
                   <a
-                    href="#small-dialog"
+                  href="#small-dialog"
                     class="popup-with-zoom-anim button full-width button-sliding-icon"
+                    onClick={()=> setOpenNotePopup(true)}
                   >
                     Add Note{" "}
                     <i class="icon-material-outline-arrow-right-alt"></i>
@@ -412,6 +417,7 @@ function DashboardMain () {
           </div>
           {/* <!-- Footer / End --> */}
         </div>
+        {openNotePopup && <AddNotePopup show={openNotePopup} handleClose={()=>setOpenNotePopup(false)} handleSubmit={()=>setOpenNotePopup(false)}/>}
       </div>
     )
 }

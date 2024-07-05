@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, ModalTitle } from "react-bootstrap";
 
 const EditBidPopup = ({ show, handleClose, handleSubmit }) => {
