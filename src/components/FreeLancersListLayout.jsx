@@ -7,9 +7,9 @@ import { getCountryFlag } from "../utils/common";
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const { freelancers } = useContext(UserContext);
-  
+  console.log({freelancers});
   const [locationInput, setLocationInput] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Admin Support");
+  const [selectedCategory, setSelectedCategory] = useState("All categories");
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -63,8 +63,11 @@ function FreeLancersListLayout() {
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
     const tagsMatch = selectedTags.length === 0 || 
       selectedTags.some(tag => freelancer?.data?.skills?.toLowerCase().includes(tag));
-    
-    return locationMatch && tagsMatch;
+    //   const categoryMatch = selectedCategory.trim() === 'All categories' ||
+    // freelancer?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
+
+  // Final filter condition combining location, tags,  and category
+  return locationMatch && tagsMatch ;
   });
 
   return (
@@ -247,7 +250,7 @@ function FreeLancersListLayout() {
                 </div>
               ))
             ) : (
-              <p className="no-freelancer">No freelancers found based on the current filters.</p>
+              <p className="no-freelancer">No freelancers found.</p>
             )}
           </div>
           

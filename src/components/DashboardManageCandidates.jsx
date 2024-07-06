@@ -103,7 +103,7 @@ function DashboardManageCandidates({ setDashboardType }) {
                                 {/* <!-- Buttons --> */}
                                 <div class="buttons-to-right always-visible margin-top-25 margin-bottom-5">
                                   <a
-                                    class="button ripple-effect"
+                                    class="button ripple-effect white-text-button"
                                     onClick={() =>
                                       downloadPdf(jobApplication.applicantCV)
                                     }
