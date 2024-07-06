@@ -4,6 +4,8 @@ import { UserContext } from "../context/userContext";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function Login() {
   const navigate = useNavigate();
   const { setUser, setIsLoggedIn } = useContext(UserContext);
@@ -130,7 +132,13 @@ function Login() {
                 onClick={handleLogin}
                 disabled={loading}
               >
-                {loading ? "Login" : "Login"}
+                {loading ?( <>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </>
+          ) : (
+            'Login'
+          )}
               </button>
 
               {/* <!-- Social Login --> */}

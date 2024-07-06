@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 function Pricing() {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function Pricing() {
     }
   };
   console.log(isMonthly,isYearly);
+
   return (
     <>
       <div id="titlebar" class="gradient">
@@ -76,7 +77,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:basic')}
             className="button full-width margin-top-20"
           >
             Buy Now
@@ -103,7 +104,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:standard')}
             className="button full-width margin-top-20"
           >
             Buy Now
@@ -131,7 +132,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:professional')}
             className="button full-width margin-top-20"
           >
             Buy Now

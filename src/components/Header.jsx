@@ -402,11 +402,6 @@ function Header() {
                       <li>
                         <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
                       </li>
-                      <li>
-                        <a onClick={() => navigate("/companies")}>
-                          Browse Companies
-                        </a>
-                      </li>
                     </ul>
                   </li>
 
@@ -431,16 +426,7 @@ function Header() {
                                 Job Page
                               </a>
                             </li>
-                            <li>
-                              <a
-                                a
-                                onClick={() => {
-                                  navigate("/CompanyDetails");
-                                }}
-                              >
-                                Company Profile
-                              </a>
-                            </li>
+                    
                             <li>
                               <a
                                 onClick={() => {
@@ -467,14 +453,6 @@ function Header() {
                         <li>
                           <a onClick={() => navigate("/pricing")}>
                             Pricing Plans
-                          </a>
-                        </li>
-                        <li>
-                          <a onClick={() => navigate("/checkout")}>Checkout</a>
-                        </li>
-                        <li>
-                          <a onClick={() => navigate("/invoice")}>
-                            Invoice Template
                           </a>
                         </li>
                       </ul>

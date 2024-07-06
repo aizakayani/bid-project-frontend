@@ -14988,7 +14988,7 @@ a.dashboard-responsive-nav-trigger { display: none; }
 	transform: translateY(-50%);
 	right: 30px;
 	z-index: 100;
-	height: 33px;
+	/* height: 33px; */
 }
 
 .dashboard-box .headline .bootstrap-select.btn-group .dropdown-toggle .filter-option {

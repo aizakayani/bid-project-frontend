@@ -10,7 +10,7 @@ import { Dropdown } from "react-bootstrap";
 import { getCountryFlag } from "../utils/common";
 
 function Home() {
-  const { jobsList, user, isLoggedIn, freelancers } = useContext(UserContext);
+  const { jobsList, user, isLoggedIn, freelancers,tasksList,employers } = useContext(UserContext);
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -227,15 +227,15 @@ function Home() {
             <div class="col-md-12">
               <ul class="intro-stats margin-top-45 hide-under-992px">
                 <li>
-                  <strong class="counter">1,586</strong>
+                  <strong class="counter">{jobsList.length}</strong>
                   <span>Jobs Posted</span>
                 </li>
                 <li>
-                  <strong class="counter">3,543</strong>
+                  <strong class="counter">{tasksList.length}</strong>
                   <span>Tasks Posted</span>
                 </li>
                 <li>
-                  <strong class="counter">1,232</strong>
+                  <strong class="counter">{freelancers.length}</strong>
                   <span>Freelancers</span>
                 </li>
               </ul>
@@ -268,8 +268,8 @@ function Home() {
                 </div>
                 <h3>Create an Account</h3>
                 <p>
-                  Bring to the table win-win survival strategies to ensure
-                  proactive domination going forward.
+                Join our community of skilled professionals today! 
+                Start by creating your account below and unleash your freelance potential.
                 </p>
               </div>
             </div>
@@ -288,8 +288,8 @@ function Home() {
                 </div>
                 <h3>Post a Task</h3>
                 <p>
-                  Efficiently unleash cross-media information without. Quickly
-                  maximize return on investment.
+                Get started on your project today!
+                 Describe your task below to connect with talented freelancers ready to bring your vision to life.
                 </p>
               </div>
             </div>
@@ -308,8 +308,9 @@ function Home() {
                 </div>
                 <h3>Choose an Expert</h3>
                 <p>
-                  Nanotechnology immersion along the information highway will
-                  close the loop on focusing solely.
+                Find the perfect freelancer for your project! 
+                Browse profiles, review portfolios, and connect with experts who match your needs.
+                Start collaborating today to turn your ideas into reality.
                 </p>
               </div>
             </div>
@@ -329,11 +330,10 @@ function Home() {
               {/*<!-- Category Boxes Container -->*/}
               <div class="categories-container">
                 {/*<!-- Category Box -->*/}
-                <a href="jobs-grid-layout-full-page.html" class="category-box">
+                <a class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-file-code-o"></i>
                   </div>
-                  <div class="category-box-counter">612</div>
                   <div class="category-box-content">
                     <h3>Web & Software Dev</h3>
                     <p>Software Engineer, Web / Mobile Developer & More</p>
@@ -342,13 +342,13 @@ function Home() {
 
                 {/*<!-- Category Box -->*/}
                 <a
-                  href="jobs-list-layout-full-page-map.html"
+                 
                   class="category-box"
                 >
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-cloud-upload"></i>
                   </div>
-                  <div class="category-box-counter">113</div>
+                 
                   <div class="category-box-content">
                     <h3>Data Science & Analitycs</h3>
                     <p>Data Specialist / Scientist, Data Analyst & More</p>
@@ -357,13 +357,12 @@ function Home() {
 
                 {/*<!-- Category Box -->*/}
                 <a
-                  href="jobs-list-layout-full-page-map.html"
                   class="category-box"
                 >
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-suitcase"></i>
                   </div>
-                  <div class="category-box-counter">186</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Accounting & Consulting</h3>
                     <p>Auditor, Accountant, Fnancial Analyst & More</p>
@@ -371,11 +370,11 @@ function Home() {
                 </a>
 
                 {/*<!-- Category Box -->*/}
-                <a href="jobs-list-layout-1.html" class="category-box">
+                <a class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-pencil"></i>
                   </div>
-                  <div class="category-box-counter">298</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Writing & Translations</h3>
                     <p>Copywriter, Creative Writer, Translator & More</p>
@@ -383,11 +382,11 @@ function Home() {
                 </a>
 
                 {/*	<!-- Category Box -->*/}
-                <a href="jobs-list-layout-2.html" class="category-box">
+                <a class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-pie-chart"></i>
                   </div>
-                  <div class="category-box-counter">549</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Sales & Marketing</h3>
                     <p>Brand Manager, Marketing Coordinator & More</p>
@@ -395,11 +394,11 @@ function Home() {
                 </a>
 
                 {/*<!-- Category Box -->*/}
-                <a href="jobs-list-layout-1.html" class="category-box">
+                <a class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-image"></i>
                   </div>
-                  <div class="category-box-counter">873</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Graphics & Design</h3>
                     <p>Creative Director, Web Designer & More</p>
@@ -407,11 +406,11 @@ function Home() {
                 </a>
 
                 {/*<!-- Category Box -->*/}
-                <a href="jobs-list-layout-2.html" class="category-box">
+                <a  class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-bullhorn"></i>
                   </div>
-                  <div class="category-box-counter">125</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Digital Marketing</h3>
                     <p>Darketing Analyst, Social Profile Admin & More</p>
@@ -419,11 +418,11 @@ function Home() {
                 </a>
                 {/*<!-- Category Box -->*/}
 
-                <a href="jobs-grid-layout-full-page.html" class="category-box">
+                <a class="category-box">
                   <div class="category-box-icon">
                     <i class="icon-line-awesome-graduation-cap"></i>
                   </div>
-                  <div class="category-box-counter">445</div>
+                  {/* <div class="category-box-counter"></div> */}
                   <div class="category-box-content">
                     <h3>Education & Training</h3>
                     <p>Advisor, Coach, Education Coordinator & More</p>
@@ -704,7 +703,7 @@ function Home() {
                   <i class="icon-line-awesome-suitcase"></i>
                   <div class="counter-inner">
                     <h3>
-                      <span class="counter">1,586</span>
+                      <span class="counter">{jobsList.length}</span>
                     </h3>
                     <span class="counter-title">Jobs Posted</span>
                   </div>
@@ -715,7 +714,7 @@ function Home() {
                   <i class="icon-line-awesome-legal"></i>
                   <div class="counter-inner">
                     <h3>
-                      <span class="counter">3,543</span>
+                      <span class="counter">{tasksList.length}</span>
                     </h3>
                     <span class="counter-title">Tasks Posted</span>
                   </div>
@@ -726,7 +725,7 @@ function Home() {
                   <i class="icon-line-awesome-user"></i>
                   <div class="counter-inner">
                     <h3>
-                      <span class="counter">2,413</span>
+                      <span class="counter">{freelancers.length + employers.length}</span>
                     </h3>
                     <span class="counter-title">Active Members</span>
                   </div>

@@ -1,6 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 function Checkout() {
   const navigate = useNavigate();
+  const [isMonthly, setIsMonthly] = useState(true);
+  const [isYearly, setIsYearly] = useState(false);
+  const handleBillingCycleChange = (billingCycle) => {
+    if (billingCycle === 'monthly') {
+      setIsMonthly(true);
+      setIsYearly(false);
+    } else {
+      setIsMonthly(false);
+      setIsYearly(true);
+    }
+  };
+  const { plan } = useParams();
+  console.log({plan});
+  console.log({isYearly});
   return (
     <>
       {/* <!-- Titlebar
@@ -34,7 +50,8 @@ function Checkout() {
                   id="radio-5"
                   name="radio-payment-type"
                   type="radio"
-                  checked
+                  checked={isMonthly}
+                  onChange={() => handleBillingCycleChange('monthly')}
                 />
                 <label for="radio-5">
                   <span class="radio-label"></span>
@@ -47,15 +64,18 @@ function Checkout() {
 
               {/* <!-- Radio --> */}
               <div class="radio">
-                <input id="radio-6" name="radio-payment-type" type="radio" />
+                <input id="radio-6" name="radio-payment-type" type="radio" 
+                checked={isYearly}
+                onChange={() => handleBillingCycleChange('yearly')}
+                />
                 <label for="radio-6">
                   <span class="radio-label"></span>
                   Billed Yearly
                   <span class="billing-cycle-details">
                     <span class="discounted-price-tag">$529.20 / year</span>
-                    <span class="regular-price-tag line-through">
+                    {/* <span class="regular-price-tag line-through">
                       588.00 / year
-                    </span>
+                    </span> */}
                   </span>
                 </label>
               </div>
@@ -88,7 +108,7 @@ function Checkout() {
                 </div>
               </div>
 
-              <div class="payment-tab">
+              {/* <div class="payment-tab">
                 <div class="payment-tab-trigger">
                   <input
                     type="radio"
@@ -165,7 +185,7 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             {/* <!-- Payment Methods Accordion / End --> */}
 
@@ -188,14 +208,14 @@ function Checkout() {
               </div>
               <div class="boxed-widget-inner">
                 <ul>
-                  <li>
-                    Standard Plan <span>$49.00</span>
+                  <li> {`${plan === ':basic' ? 'Basic' : plan === ':standard' ? 'Standard' : 'Professional'} Plan`}
+                    <span> {plan === ':basic'  && isMonthly ? '$19' : plan === ':basic' && isYearly ?  '$205': plan === ':standard' && isMonthly ? '$49' : plan === ':standard' && isYearly ? '$529' : plan === ':professional' && isMonthly ? '$99' : plan === ':professional' && isYearly ? '$1096' : '' } / {isMonthly ? 'monthly' : 'yearly'}</span>
                   </li>
                   <li>
                     VAT (20%) <span>$9.80</span>
                   </li>
                   <li class="total-costs">
-                    Final Price <span>$58.80</span>
+                    Final Price <span>{plan === ':basic'  && isMonthly ? '$28.8' : plan === ':basic' && isYearly ?  '$214.8': plan === ':standard' && isMonthly ? '$58.8' : plan === ':standard' && isYearly ? '$538.8' : plan === ':professional' && isMonthly ? '$108.8' : plan === ':professional' && isYearly ? '$1105.8' : '' } / {isMonthly ? 'monthly' : 'yearly' }</span>
                   </li>
                 </ul>
               </div>

@@ -125,7 +125,7 @@ function App() {
             }
           />
           <Route
-            path="/checkout"
+            path="/checkout/:plan"
             element={
               <Layout>
                 <Checkout />

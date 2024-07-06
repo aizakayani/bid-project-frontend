@@ -119,11 +119,6 @@ function Footer()
                     </a>
                   </li>
                   <li>
-                    <a href="#">
-                      <span>Job Alerts</span>
-                    </a>
-                  </li>
-                  <li>
                   <a onClick={() => {
                           navigate("/dashboard/bookmarks/");
                         }}>
@@ -184,14 +179,9 @@ function Footer()
                     </a>
                   </li>
                   <li>
-                    <a href="#">
-                      <span>Privacy Policy</span>
-                    </a>
                   </li>
                   <li>
-                    <a href="#">
-                      <span>Terms of Use</span>
-                    </a>
+                   
                   </li>
                 </ul>
               </div>

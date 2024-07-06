@@ -23,6 +23,7 @@ function Dashboard() {
     setJobApplications,
     setBids,
     setSortedBids,
+    jobsList
   } = useContext(UserContext);
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
