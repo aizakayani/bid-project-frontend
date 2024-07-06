@@ -157,7 +157,8 @@ function Dashboard() {
                           <ul>
                             <li>
                               <a onClick={() => setDashboardType("managejobs")}>
-                                Manage Jobs <span class="nav-tag">3</span>
+                                Manage Jobs{" "}
+                                <span class="nav-tag">{userJobs?.length}</span>
                               </a>
                             </li>
                             <li>
@@ -271,6 +272,7 @@ function Dashboard() {
           <DashboardPostJob
             updateJobData={updateJobData}
             setUpdateJobData={setUpdateJobData}
+            setDashboardType={setDashboardType}
           />
         )}
         {dashboardType === "managetasks" && (

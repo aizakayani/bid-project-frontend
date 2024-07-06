@@ -5,7 +5,7 @@ import { addOneMonthToUnixDate, unixToDate } from "../utils/utils";
 import Popup from "./modals/Popup";
 import { deleteJobAPI, getJobsByUser } from "../services/job";
 import toast from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 function DashboardManageJobs({ handleUpdateJob }) {
   const navigate = useNavigate();
   const { userJobs, setUserJobs } = useContext(UserContext);
@@ -57,8 +57,6 @@ function DashboardManageJobs({ handleUpdateJob }) {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Manage Jobs</h3>
-
-          
         </div>
 
         {/* <!-- Row --> */}
@@ -78,6 +76,7 @@ function DashboardManageJobs({ handleUpdateJob }) {
                 <ul class="dashboard-box-list">
                   {userJobs?.length > 0 &&
                     userJobs.map((job) => {
+                      console.log(job);
                       return (
                         <li>
                           {/* <!-- Job Listing --> */}
@@ -96,9 +95,17 @@ function DashboardManageJobs({ handleUpdateJob }) {
                               <div class="job-listing-description">
                                 <h3 class="job-listing-title">
                                   <a href="#">{job.title}</a>{" "}
-                                  <span class="dashboard-status-button green">
+                                  {/* <span class="dashboard-status-button green">
                                     Pending Approval
-                                  </span>
+                                  </span> */}
+                                  {job?.tags?.split(",")?.length &&
+                                    job?.tags
+                                      ?.split(",")
+                                      ?.map((tag) => (
+                                        <span class="dashboard-status-button green">
+                                          {tag}
+                                        </span>
+                                      ))}
                                 </h3>
                               </div>
                             </div>
@@ -107,7 +114,9 @@ function DashboardManageJobs({ handleUpdateJob }) {
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
                             <a
-                                onClick={() => navigate("/dashboard/manage/candidate/:id")}
+                              onClick={() =>
+                                navigate("/dashboard/manage/candidate/:id")
+                              }
                               class="button ripple-effect white-text-button"
                             >
                               <i class="icon-material-outline-supervisor-account"></i>{" "}
@@ -181,7 +190,9 @@ function DashboardManageJobs({ handleUpdateJob }) {
       <Popup
         show={showDeleteJobPopup}
         title={"Delete job"}
-        description={"Are you sure you want to delete job?"}
+        description={
+          "Are you sure you want to delete job? Corresponding job applications will also be deleted"
+        }
         okButtonText={"Delete"}
         closeButtonText={"Cancel"}
         handleOk={handleDeleteJob}

@@ -51,7 +51,7 @@ function JobDetails() {
     const formData = new FormData();
     formData.append("applicantCV", applicantCV);
     formData.append("applicantName", applicantName);
-    formData.append("applicantCV", applicantEmail);
+    formData.append("applicantEmail", applicantEmail);
     formData.append("jobId", id);
     try {
       const response = await addJobApplication(formData);

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Modal } from "react-bootstrap";
+import { UserContext } from "../../context/userContext";
 
 const ApplyJobPopup = ({ show, handleClose, handleSubmit }) => {
+  const { user } = useContext(UserContext);
   const [applicantCV, setApplicantCV] = useState(null);
-  const [applicantName, setApplicantName] = useState(null);
-  const [applicantEmail, setApplicantEmail] = useState(null);
+  const [applicantName, setApplicantName] = useState(user?.name || "");
+  const [applicantEmail, setApplicantEmail] = useState(user?.email || "");
   console.log(applicantCV);
   return (
     <Modal show={show} onHide={handleClose}>
