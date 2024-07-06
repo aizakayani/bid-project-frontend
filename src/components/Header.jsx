@@ -36,6 +36,8 @@ function Header() {
     freelancers,
     setFreelancers,
     setUserBids,
+    chatConversations,
+    setChatConversations,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -59,7 +61,7 @@ function Header() {
         name: decodedToken.name,
         email: decodedToken.email,
         role: decodedToken.role,
-        id: decodedToken.id,
+        _id: decodedToken.id,
       };
       setUser(userData);
       setIsLoggedIn(true);
@@ -78,10 +80,10 @@ function Header() {
   }, [isLoggedIn, user?.role]);
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?._id) return;
     if (socket) return;
     const newSocket = io("http://localhost:3000", {
-      query: { userId: user.id },
+      query: { userId: user?._id },
     });
     setSocket(newSocket);
 
@@ -91,16 +93,47 @@ function Header() {
       newSocket.emit("chat-history");
     });
 
-    newSocket.on("chat-message", (msg) => {
-      setChatMessages((prevMessages) => [...prevMessages, msg]);
+    newSocket.on("chat-message", (conversation) => {
+      // console.log("lalalalla", chatConversations);
+      // let chatConversationsCopy = [...chatConversations];
+      // const index = chatConversationsCopy.findIndex(
+      //   (obj) => obj.channel === conversation.channel
+      // );
+
+      // if (index !== -1) {
+      //   // Update existing object
+      //   chatConversationsCopy[index] = conversation;
+      // } else {
+      //   // Add new object
+      //   chatConversationsCopy.push(conversation);
+      // }
+      // console.log("HIIII", chatConversationsCopy);
+      // setChatConversations([...chatConversationsCopy]);
+      setChatConversations((prevChatConversations) => {
+        console.log("lalalalla", prevChatConversations);
+        let chatConversationsCopy = [...prevChatConversations];
+        const index = chatConversationsCopy.findIndex(
+          (obj) => obj.channel === conversation.channel
+        );
+
+        if (index !== -1) {
+          // Update existing object
+          chatConversationsCopy[index] = conversation;
+        } else {
+          // Add new object
+          chatConversationsCopy.push(conversation);
+        }
+        console.log("HIIII", chatConversationsCopy);
+        return chatConversationsCopy;
+      });
     });
 
-    newSocket.on("chat-history", (msgs) => {
-      setChatMessages([...msgs]);
+    newSocket.on("chat-history", (conversations) => {
+      setChatConversations([...conversations]);
     });
 
-    return () => newSocket.close();
-  }, [user?.id]);
+    // return () => newSocket.close();
+  }, [user?._id]);
 
   const initializer = async (userRole) => {
     // get user
@@ -292,7 +325,7 @@ function Header() {
           name: decodedToken.name,
           email: decodedToken.email,
           role: decodedToken.role,
-          id: decodedToken.id,
+          _id: decodedToken.id,
         };
         setUser(userData);
       } else {
@@ -361,15 +394,12 @@ function Header() {
                       height: "30px",
                     }}
                   >
-
-                      <li>
-                        <a onClick={() => navigate("/blog")}>Blog</a>
-                      </li>
-                      <li>
-                        <a onClick={() => navigate("/pricing")}>
-                          Pricing Plans
-                        </a>
-                      </li>
+                    <li>
+                      <a onClick={() => navigate("/blog")}>Blog</a>
+                    </li>
+                    <li>
+                      <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
+                    </li>
                   </li>
                 </ul>
               </nav>
