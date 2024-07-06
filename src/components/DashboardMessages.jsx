@@ -33,121 +33,103 @@ function DashboardMessages() {
   const {
     newMessageContext,
     setNewMessageContext,
-    chatMessages,
+    chatConversations,
     socket,
     user,
   } = useContext(UserContext);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const [conversations, setConversations] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   useEffect(() => {
-    if (chatMessages) {
+    if (chatConversations) {
       if (newMessageContext) {
         // check if receiver with new message context already exists then just open chat
-        const filteredMessages = chatMessages.filter(
-          (message) => message.receiver === newMessageContext?.receiver?.id
+        const filteredConversation = chatConversations.find((message) =>
+          message.channel.includes(newMessageContext?.receiver?.id)
         );
-        if (filteredMessages?.length > 0) {
-          const messageData = {
-            conversationReceiver: newMessageContext.receiver.id,
-            conversationName: newMessageContext.receiver.name,
-            conversationMessages: [...filteredMessages],
-          };
+        if (filteredConversation) {
           setNewMessageContext(null);
-          setSelectedConversation(messageData);
-        } else {
-          setSelectedConversation({
-            conversationReceiver: newMessageContext.receiver.id,
-            conversatisetSelectedConversationonName:
-              newMessageContext.receiver.name,
-            conversationMessages: [],
-          });
+          setSelectedConversation(filteredConversation);
         }
       }
-      if (chatMessages?.length > 0) {
-        const groupedMessages = groupMessages(chatMessages);
-        console.log("HUI", groupedMessages);
-        setConversations(groupedMessages);
+      if (chatConversations?.length > 0) {
         // set first conversation if none is selected
-        console.log(
-          groupedMessages?.length > 0,
-          !newMessageContext,
-          !selectedConversation
-        );
-        if (groupedMessages?.length > 0 && !newMessageContext) {
+        if (chatConversations?.length > 0 && !newMessageContext) {
           if (selectedConversation) {
-            const selectedCoversationCopy = groupedMessages?.find(
-              (groupedMessage) =>
-                groupedMessage.conversationReceiver ===
-                selectedConversation.conversationReceiver
+            const updatedSelectedConversation = chatConversations?.find(
+              (conversation) =>
+                conversation.channel === selectedConversation.channel
             );
-            if (selectedCoversationCopy) {
-              setSelectedConversation(selectedCoversationCopy);
+            if (updatedSelectedConversation) {
+              setSelectedConversation({ ...updatedSelectedConversation });
             }
           } else {
-            setSelectedConversation(groupedMessages[0]);
+            setSelectedConversation(chatConversations[0]);
           }
         }
       }
     }
     // return () => setNewMessageContext(null);
-  }, [newMessageContext, chatMessages]);
+  }, [newMessageContext, chatConversations]);
 
-  const groupMessages = (messages) => {
-    console.log("MESSAGES", messages);
-    const groupedMessages = [];
-    messages.forEach((message) => {
-      const { receiver, sender, receiverName, senderName } = message;
-      // get index
-      let conversationIndex = -1;
-      groupedMessages?.length > 0 &&
-        groupedMessages.forEach((groupedMessage, index) => {
-          if (
-            groupedMessage.conversationGroup === `${receiver}-${sender}` ||
-            groupedMessage.conversationGroup === `${sender}-${receiver}`
-          ) {
-            conversationIndex = index;
-          }
-        });
-      if (conversationIndex === -1) {
-        groupedMessages.push({
-          conversationGroup: `${receiver}-${sender}`,
-          conversationName: sender === user.id ? receiverName : senderName,
-          conversationReceiver: sender === user.id ? receiver : sender,
-          conversationMessages: [message],
-        });
-      } else {
-        groupedMessages[conversationIndex].conversationMessages.push(message);
-      }
-    });
-    return groupedMessages;
-  };
+  // const groupMessages = (messages) => {
+  //   console.log("MESSAGES", messages);
+  //   const groupedMessages = [];
+  //   messages.forEach((message) => {
+  //     const { receiver, sender, receiverName, senderName } = message;
+  //     // get index
+  //     let conversationIndex = -1;
+  //     groupedMessages?.length > 0 &&
+  //       groupedMessages.forEach((groupedMessage, index) => {
+  //         if (
+  //           groupedMessage.conversationGroup === `${receiver}-${sender}` ||
+  //           groupedMessage.conversationGroup === `${sender}-${receiver}`
+  //         ) {
+  //           conversationIndex = index;
+  //         }
+  //       });
+  //     if (conversationIndex === -1) {
+  //       groupedMessages.push({
+  //         conversationGroup: `${receiver}-${sender}`,
+  //         conversationName: sender === user?._id ? receiverName : senderName,
+  //         conversationReceiver: sender === user?._id ? receiver : sender,
+  //         conversationMessages: [message],
+  //       });
+  //     } else {
+  //       groupedMessages[conversationIndex].conversationMessages.push(message);
+  //     }
+  //   });
+  //   return groupedMessages;
+  // };
 
-  const sortedConversations = conversations.sort((a, b) => {
-    // Extract the last message's createdAt timestamp for both conversations
-    const lastMessageA =
-      a.conversationMessages[a.conversationMessages.length - 1]?.createdAt;
-    const lastMessageB =
-      b.conversationMessages[b.conversationMessages.length - 1]?.createdAt;
+  // const sortedConversations = conversations.sort((a, b) => {
+  //   // Extract the last message's createdAt timestamp for both conversations
+  //   const lastMessageA =
+  //     a.conversationMessages[a.conversationMessages.length - 1]?.createdAt;
+  //   const lastMessageB =
+  //     b.conversationMessages[b.conversationMessages.length - 1]?.createdAt;
 
-    // Compare the timestamps for sorting
-    return lastMessageB - lastMessageA;
-  });
+  //   // Compare the timestamps for sorting
+  //   return lastMessageB - lastMessageA;
+  // });
+
+  const sortedConversations = [];
 
   const handleSendMessage = () => {
     if (!socket) return;
-    if (selectedConversation) {
-      socket.emit("chat-message", {
-        message: newMessage,
-        receiverId: newMessageContext
-          ? newMessageContext.receiver.id
-          : selectedConversation.conversationReceiver,
-      });
-      setNewMessage("");
-      if (newMessageContext) {
-        setNewMessageContext(null);
-      }
+    // if (selectedConversation) {
+    socket.emit("chat-message", {
+      message: newMessage,
+      receiverId: newMessageContext
+        ? newMessageContext.receiver.id
+        : selectedConversation.recepients?.find(
+            (recepient) => recepient.id !== user?._id
+          ).id,
+    });
+    setNewMessage("");
+    if (newMessageContext) {
+      setNewMessageContext(null);
     }
+    // }
   };
   return (
     <div class="dashboard-content-container" data-simplebar>
@@ -155,8 +137,6 @@ function DashboardMessages() {
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Messages</h3>
-
-          
         </div>
 
         <div class="messages-container margin-top-0">
@@ -196,37 +176,49 @@ function DashboardMessages() {
                     </a>
                   </li>
                 )}
-                {sortedConversations?.length > 0 &&
-                  sortedConversations.map((conversation) => (
-                    <li>
-                      <a
-                        href="#"
-                        onClick={() => {
-                          setSelectedConversation(conversation);
-                          setNewMessageContext(null);
-                        }}
-                      >
-                        <div class="message-avatar">
-                          <i class="status-icon status-online"></i>
-                          <img src={userAvatarSmall3} alt="" />
-                        </div>
-
-                        <div class="message-by">
-                          <div class="message-by-headline">
-                            <h5>{conversation.conversationName}</h5>
-                            <span>4 hours ago</span>
+                {chatConversations?.length > 0 &&
+                  chatConversations.map((conversation) => {
+                    const receiver = conversation?.recepients?.find(
+                      (recepient) => recepient.id !== user?._id
+                    );
+                    return (
+                      <li>
+                        <a
+                          href="#"
+                          onClick={() => {
+                            setSelectedConversation(conversation);
+                            setNewMessageContext(null);
+                          }}
+                        >
+                          <div class="message-avatar">
+                            <i class="status-icon status-online"></i>
+                            <img
+                              src={
+                                receiver?.avatar
+                                  ? `data:${receiver?.avatar?.contentType};base64,${receiver?.avatar?.base64Image}`
+                                  : userAvatarSmall3
+                              }
+                              alt=""
+                            />
                           </div>
-                          <p>
-                            {conversation.conversationMessages?.length
-                              ? conversation.conversationMessages[
-                                  conversation.conversationMessages.length - 1
-                                ].message
-                              : ""}
-                          </p>
-                        </div>
-                      </a>
-                    </li>
-                  ))}
+
+                          <div class="message-by">
+                            <div class="message-by-headline">
+                              <h5>{receiver.name}</h5>
+                              <span>4 hours ago</span>
+                            </div>
+                            <p>
+                              {conversation.messages?.length
+                                ? conversation.messages[
+                                    conversation.messages.length - 1
+                                  ].content
+                                : ""}
+                            </p>
+                          </div>
+                        </a>
+                      </li>
+                    );
+                  })}
                 {/* <li>
                   <a href="#">
                     <div class="message-avatar">
@@ -310,7 +302,11 @@ function DashboardMessages() {
             {/* <!-- Message Content --> */}
             <div class="message-content">
               <div class="messages-headline">
-                <h4>{selectedConversation?.conversationName}</h4>
+                <h4>
+                  {selectedConversation?.recepients?.find(
+                    (recepient) => recepient.id !== user?._id
+                  )?.name || ""}
+                </h4>
                 <a href="#" class="message-action">
                   <i class="icon-feather-trash-2"></i> Delete Conversation
                 </a>
@@ -323,49 +319,54 @@ function DashboardMessages() {
                   <span>28 June, 2019</span>
                 </div>
 
-                {selectedConversation?.conversationMessages?.length > 0 &&
-                  selectedConversation?.conversationMessages?.map(
-                    (conversationMessage) => {
-                      let avatar = null;
-                      avatar =
-                        conversationMessage.sender === user.id
-                          ? conversationMessage.senderAvatar
-                          : conversationMessage.receiverAvatar;
-                      return (
-                        <div
-                          class={`message-bubble ${
-                            conversationMessage.sender === user.id ? "me" : ""
-                          }`}
-                        >
-                          <div class="message-bubble-inner">
-                            <div class="message-avatar">
-                              <img
-                                // src={
-                                //   conversationMessage.sender === user.id
-                                //     ? conversationMessage.senderAvatar
-                                //       ? conversationMessage.senderAvatar
-                                //       : userAvatarPlaceholder
-                                //     : conversationMessage.receiverAvatar
-                                //     ? conversationMessage.receiverAvatar
-                                //     : userAvatarPlaceholder
-                                // }
-                                src={
-                                  avatar && avatar.trim() !== ""
-                                    ? avatar
-                                    : userAvatarPlaceholder
-                                }
-                                alt=""
-                              />
-                            </div>
-                            <div class="message-text">
-                              <p>{conversationMessage.message}</p>
-                            </div>
+                {selectedConversation?.messages?.length > 0 &&
+                  selectedConversation?.messages?.map((conversationMessage) => {
+                    const receiver = selectedConversation?.recepients?.find(
+                      (recepient) => recepient.id !== user?._id
+                    );
+                    let avatar = null;
+                    avatar =
+                      conversationMessage.sentBy === user?._id
+                        ? user?.avatar
+                          ? user?.avatar
+                          : null
+                        : receiver?.avatar
+                        ? receiver?.avatar
+                        : null;
+                    return (
+                      <div
+                        class={`message-bubble ${
+                          conversationMessage.sentBy === user?._id ? "me" : ""
+                        }`}
+                      >
+                        <div class="message-bubble-inner">
+                          <div class="message-avatar">
+                            <img
+                              // src={
+                              //   conversationMessage.sender === user?._id
+                              //     ? conversationMessage.senderAvatar
+                              //       ? conversationMessage.senderAvatar
+                              //       : userAvatarPlaceholder
+                              //     : conversationMessage.receiverAvatar
+                              //     ? conversationMessage.receiverAvatar
+                              //     : userAvatarPlaceholder
+                              // }
+                              src={
+                                avatar?.base64Image
+                                  ? `data:${avatar?.contentType};base64,${avatar?.base64Image}`
+                                  : userAvatarPlaceholder
+                              }
+                              alt=""
+                            />
                           </div>
-                          <div class="clearfix"></div>
+                          <div class="message-text">
+                            <p>{conversationMessage.content}</p>
+                          </div>
                         </div>
-                      );
-                    }
-                  )}
+                        <div class="clearfix"></div>
+                      </div>
+                    );
+                  })}
 
                 {/* <!-- Time Sign --> */}
                 {/* <div class="message-time-sign">
