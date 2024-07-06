@@ -23,6 +23,7 @@ function DashboardManageBidders({
       setManageBiddersTaskId(null);
     }
   }, []);
+  
 
   return (
     <div class="dashboard-content-container" data-simplebar>

@@ -50,21 +50,24 @@ function FreeLancersListLayout() {
     "Sales & Marketing",
   ];
   const filteredFreelancers = freelancers.filter((freelancer) => {
-    const locationMatch = freelancer?.location?.toLowerCase().includes(locationInput?.toLowerCase());
-    const skillsMatch = freelancer?.data?.skills.toLowerCase().includes(skillsInput?.toLowerCase());
+    if(freelancer?.data?.location){
+      const locationMatch = freelancer?.data?.location?.toLowerCase().includes(locationInput?.toLowerCase());
+      return locationMatch;
+    }
+    
+    // const skillsMatch = freelancer?.data?.skills?.toLowerCase().includes(skillsInput?.toLowerCase());
 
-    // Get selected tags
-    const selectedTags = Object.keys(tags).filter((tag) => tags[tag]);
+    // // Get selected tags
+    // const selectedTags = Object.keys(tags).filter((tag) => tags[tag]);
 
-    // Check if at least one selected tag exists in freelancers tags (using freelancer title as tag name)
-    const tagMatch =
-      selectedTags.length === 0 ||
-      selectedTags.some((tag) =>
-        freelancer?.data?.skills.toLowerCase().includes(tag?.toLowerCase())
-      );
-console.log({})
-    return locationMatch && skillsMatch && tagMatch;
+    // // Check if at least one selected tag exists in freelancers tags (using freelancer title as tag name)
+    // const tagMatch =
+    //   selectedTags.length === 0 ||
+    //   selectedTags.some((tag) =>
+    //     freelancer?.data?.skills?.toLowerCase().includes(tag?.toLowerCase())
+    //   );
   });
+  console.log({filteredFreelancers})
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
