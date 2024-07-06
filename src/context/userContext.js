@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
   const [tasksList, setTasksList] = useState([]);
   const [socket, setSocket] = useState(null);
   const [chatMessages, setChatMessages] = useState(null);
+  const [chatConversations, setChatConversations] = useState([]);
   const [jobApplications, setJobApplications] = useState([]);
   const [userJobApplications, setUserJobApplications] = useState([]);
   const [newMessageContext, setNewMessageContext] = useState(null);
@@ -52,6 +53,8 @@ export const UserProvider = ({ children }) => {
         setBids,
         sortedBids,
         setSortedBids,
+        chatConversations,
+        setChatConversations,
       }}
     >
       {children}

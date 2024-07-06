@@ -115,7 +115,9 @@ function TaskDetails() {
                 <div class="right-side">
                   <div class="salary-box">
                     <div class="salary-type">Project Budget</div>
-                    <div class="salary-amount">{taskDetails?.budget}</div>
+                    <div class="salary-amount">
+                      {taskDetails?.budget + " $"}
+                    </div>
                   </div>
                 </div>
               </div>

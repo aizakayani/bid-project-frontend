@@ -291,6 +291,7 @@ function Dashboard() {
           <DashboardPostTask
             updateTaskData={updateTaskData}
             setUpdateTaskData={setUpdateTaskData}
+            setDashboardType={setDashboardType}
           />
         )}
         {/* <!-- Dashboard Content / End --> */}

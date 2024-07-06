@@ -193,7 +193,7 @@ function Checkout() {
             <a onClick={() => {
               navigate("/Order/Confirmation");
             }}
-              class="button big ripple-effect margin-top-40 margin-bottom-65"
+              class="button big ripple-effect margin-top-40 margin-bottom-65 white-text-button"
             >
               Proceed Payment
             </a>

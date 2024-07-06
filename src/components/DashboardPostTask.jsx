@@ -3,7 +3,7 @@ import { addTaskAPI, getTasksByUser, updateTaskAPI } from "../services/task";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
 import CountriesDropdown from "./CountriesDropdown";
-function DashboardPostTask({ updateTaskData }) {
+function DashboardPostTask({ updateTaskData, setDashboardType }) {
   const { setUserTasks } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("hourly");
@@ -20,7 +20,7 @@ function DashboardPostTask({ updateTaskData }) {
     if (updateTaskData) {
       setTitle(updateTaskData.title);
       setType(updateTaskData.type);
-      setLocation(updateTaskData.location);
+      setSelectedCountry(updateTaskData.location);
       setCategory(updateTaskData.category);
       setBudget(updateTaskData.budget);
       setRequiredSkills(updateTaskData.requiredSkills);
@@ -67,6 +67,7 @@ function DashboardPostTask({ updateTaskData }) {
         setDescription("");
         // fetch task
         await getTasks();
+        setDashboardType("managetasks");
       } else {
         toast.error(
           updateTaskData ? "Failed to update task" : "Failed to add task"

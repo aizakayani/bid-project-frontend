@@ -15,7 +15,7 @@ function DashboardManageBidders({
   setManageBiddersTaskId,
 }) {
   const { userTasks, sortedBids, freelancers } = useContext(UserContext);
-  const [selectedTask, setSelectedTask] = useState(userTasks[0]._id || "");
+  const [selectedTask, setSelectedTask] = useState(userTasks[0]?._id || "");
 
   useEffect(() => {
     if (manageBiddersTaskId) {

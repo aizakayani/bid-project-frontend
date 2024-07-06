@@ -3,18 +3,11 @@ import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import { useContext, useState } from "react";
 import { Dropdown } from "react-bootstrap";
+
 function TasksListLayout() {
   const navigate = useNavigate();
-  // const tasksList = [
-  //   {
-  //     title: "Food Delviery Mobile App",
-  //     description:
-  //       "Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster.",
-  //     location: "SanFrancissco",
-  //     postDate: "2 minutes ago",
-  //     tags: ["iOS", "Android", "Mobile App", "Design"],
-  //   },
-  // ];
+  const { tasksList } = useContext(UserContext);
+console.log({tasksList});
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -27,34 +20,65 @@ function TasksListLayout() {
     "Translation",
     "Sales & Marketing",
   ];
-  const { tasksList } = useContext(UserContext);
+
   const [locationInput, setLocationInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Customer Service");
-  console.log(tasksList);
+  const [selectedCategory, setSelectedCategory] = useState("All categories");
+  const [tags, setTags] = useState([]);
+
+  // Handle category selection
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
-  // Function to filter tasks based on location and title
+
+  // Add a new tag from the title input
+  const handleAddTag = () => {
+    const newTag = titleInput.trim().toLowerCase();
+    if (newTag === '') return;
+
+    const id = newTag.replace(/\s+/g, '-');
+    if (!tags.some(tag => tag.id === id)) {
+      setTags([...tags, { id, name: newTag, checked: false }]);
+      setTitleInput('');
+    }
+  };
+
+  // Toggle the checked state of a tag
+  const handleCheckboxChange = (id) => {
+    setTags(tags.map(tag =>
+      tag.id === id ? { ...tag, checked: !tag.checked } : tag
+    ));
+  };
+
+  // Filter tasks based on location, tags, and category
   const filteredTasks = tasksList.filter((task) => {
-    // Convert inputs to lowercase for case-insensitive comparison
-    const locationMatch = task.location
-      .toLowerCase()
-      .includes(locationInput.toLowerCase());
-    const titleMatch = task.title
-      .toLowerCase()
-      .includes(titleInput.toLowerCase());
-    return locationMatch && titleMatch;
+    const locationMatch = locationInput.trim() === '' ||
+      task?.location?.toLowerCase().includes(locationInput.toLowerCase());
+console.log({locationMatch});
+console.log('location', task.location.toLowerCase());
+console.log('inputlocation', locationInput.toLowerCase());
+    // const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
+    // const tagsMatch = selectedTags.length === 0 ||
+    //   selectedTags.some(tag => task?.requiredSkills
+    //     ?.toLowerCase().includes(tag));
+
+    const categoryMatch = selectedCategory.trim() === 'All categories' ||
+      task?.category
+      ?.toLowerCase().includes(selectedCategory.toLowerCase());
+console.log({categoryMatch});
+
+    return locationMatch && categoryMatch;
   });
+
   return (
-    <div class="container margin-top-90">
-      <div class="row">
-        <div class="col-xl-3 col-lg-4">
-          <div class="sidebar-container">
-            {/* <!-- Location --> */}
-            <div class="sidebar-widget">
+    <div className="container margin-top-90">
+      <div className="row">
+        <div className="col-xl-3 col-lg-4">
+          <div className="sidebar-container">
+            {/* Location */}
+            <div className="sidebar-widget">
               <h3>Location</h3>
-              <div class="input-with-icon">
+              <div className="input-with-icon">
                 <div id="autocomplete-container">
                   <input
                     placeholder="Location"
@@ -64,12 +88,12 @@ function TasksListLayout() {
                     onChange={(e) => setLocationInput(e.target.value)}
                   />
                 </div>
-                <i class="icon-material-outline-location-on"></i>
+                <i className="icon-material-outline-location-on"></i>
               </div>
             </div>
 
-            {/* <!-- Category --> */}
-            <div class="sidebar-widget">
+            {/* Category */}
+            <div className="sidebar-widget">
               <h3>Category</h3>
               <Dropdown>
                 <Dropdown.Toggle
@@ -93,109 +117,67 @@ function TasksListLayout() {
               </Dropdown>
             </div>
 
-            {/* <!-- Keywords --> */}
-            <div class="sidebar-widget">
+            {/* Keywords */}
+            <div className="sidebar-widget">
               <h3>Keywords</h3>
-              <div class="keywords-container">
-                <div class="keyword-input-container">
+              <div className="keywords-container">
+                <div className="keyword-input-container">
                   <input
                     id="intro-keywords"
                     placeholder="Task Title or Keywords"
                     type="text"
                     value={titleInput}
                     onChange={(e) => setTitleInput(e.target.value)}
+                    onKeyPress={(e) => { if (e.key === 'Enter') handleAddTag() }}
                   />
-                  <button class="keyword-input-button ripple-effect">
-                    <i class="icon-material-outline-add"></i>
+                  <button
+                    className="keyword-input-button ripple-effect"
+                    onClick={handleAddTag}
+                  >
+                    <i className="icon-material-outline-add"></i>
                   </button>
                 </div>
-                <div class="keywords-list">
-                  {/* <!-- keywords go here --> */}
+                <div class="sidebar-widget"></div>
+                <div class="tags-container" style={{marginTop: '20px'}}>
+                  {tags.map(tag => (
+                    <div key={tag.id} className="tag">
+                      <input
+                        type="checkbox"
+                        id={tag.id}
+                        checked={tag.checked}
+                        onChange={() => handleCheckboxChange(tag.id)}
+                      />
+                      <label htmlFor={tag.id}>{tag.name}</label>
+                    </div>
+                  ))}
                 </div>
-                <div class="clearfix"></div>
+                <div className="clearfix"></div>
               </div>
             </div>
-
-            {/* <!-- Tags --> */}
-            <div class="sidebar-widget">
-              <h3>Skills</h3>
-
-              <div class="tags-container">
-                <div class="tag">
-                  <input type="checkbox" id="tag1" />
-                  <label for="tag1">front-end dev</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag2" />
-                  <label for="tag2">angular</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag3" />
-                  <label for="tag3">react</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag4" />
-                  <label for="tag4">vue js</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag5" />
-                  <label for="tag5">web apps</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag6" />
-                  <label for="tag6">design</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox" id="tag7" />
-                  <label for="tag7">wordpress</label>
-                </div>
-              </div>
-              <div class="clearfix"></div>
-
-              {/* <!-- More Skills --> */}
-              <div class="keywords-container margin-top-20">
-                <div class="keyword-input-container">
-                  <input
-                    type="text"
-                    class="keyword-input"
-                    placeholder="add more skills"
-                  />
-                  <button class="keyword-input-button ripple-effect">
-                    <i class="icon-material-outline-add"></i>
-                  </button>
-                </div>
-                <div class="keywords-list">
-                  {/* <!-- keywords go here --> */}
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-            <div class="clearfix"></div>
           </div>
         </div>
-        <div class="col-xl-9 col-lg-8 content-left-offset">
-          <h3 class="page-title">Search Results</h3>
-
+        <div className="col-xl-9 col-lg-8 content-left-offset">
+          <h3 className="page-title">Search Results</h3>
           <div
-            class="notify-box margin-top-15"
+            className="notify-box margin-top-15"
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
-            <div class="switch-container">
-              <label class="switch">
+            <div className="switch-container">
+              <label className="switch">
                 <input type="checkbox" />
-                <span class="switch-button"></span>
-                <span class="switch-text">
+                <span className="switch-button"></span>
+                <span className="switch-text">
                   Turn on email alerts for this search
                 </span>
               </label>
             </div>
 
             <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
-              <div style={{ display: "flex", flexWrap: "nowrap" , alignItems: 'center'}}>
+              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center' }}>
                 Sort by:
               </div>
               <select>
@@ -207,72 +189,76 @@ function TasksListLayout() {
             </div>
           </div>
 
-          {/* <!-- Tasks Container --> */}
-          <div class="tasks-list-container compact-list margin-top-35">
-            {/* <!-- Task --> */}
-            {filteredTasks?.length > 0 &&
+          {/* Tasks Container */}
+          <div className="tasks-list-container compact-list margin-top-35">
+            {filteredTasks?.length > 0 ?
               filteredTasks?.map((task) => {
                 return (
                   <a
                     onClick={() => navigate(`/task/details/${task._id}`)}
-                    class="task-listing"
+                    className="task-listing"
                   >
-                    {/* <!-- Job Listing Details --> */}
-                    <div class="task-listing-details">
-                      {/* <!-- Details --> */}
-                      <div class="task-listing-description">
-                        <h3 class="task-listing-title">{task.title}</h3>
-                        <ul class="task-icons">
+                    {/* Task Listing Details */}
+                    <div className="task-listing-details">
+                      {/* Details */}
+                      <div className="task-listing-description">
+                        <h3 className="task-listing-title">{task.title}</h3>
+                        <ul className="task-icons">
                           <li>
-                            <i class="icon-material-outline-location-on"></i>{" "}
+                            <i className="icon-material-outline-location-on"></i>{" "}
                             {task.location}
                           </li>
                           <li>
-                            <i class="icon-material-outline-access-time"></i>{" "}
+                            <i className="icon-material-outline-access-time"></i>{" "}
                             {`${timeDifferenceFromNow(task?.createdAt)}`}
                           </li>
                         </ul>
-                        <p class="task-listing-text">{task.description}</p>
-                        <div class="task-tags">
+                        <p className="task-listing-text">{task.description}</p>
+                        <div className="task-tags">
                           {task?.tags?.split(",").length > 0 &&
                             task?.tags
                               ?.split(",")
-                              .map((tag) => (
-                                <span style={{ marginLeft: 4 }}>{tag}</span>
+                              .map((tag, index) => (
+                                <span key={index} style={{ marginLeft: 4 }}>{tag}</span>
                               ))}
                         </div>
                       </div>
                     </div>
 
-                    <div class="task-listing-bid">
-                      <div class="task-listing-bid-inner">
-                        <div class="task-offers">
+                    <div className="task-listing-bid">
+                      <div className="task-listing-bid-inner">
+                        <div className="task-offers">
                           <strong>{task.budget}</strong>
                           <span>{task.type}</span>
                         </div>
-                        <span class="button button-sliding-icon ripple-effect">
+                        <span className="button button-sliding-icon ripple-effect">
                           Bid Now{" "}
-                          <i class="icon-material-outline-arrow-right-alt"></i>
+                          <i className="icon-material-outline-arrow-right-alt"></i>
                         </span>
                       </div>
                     </div>
                   </a>
                 );
-              })}
+              }) : 
+              (
+                <p className="no-freelancer" style={{paddingTop: '3rem'}}>No Tasks found</p>
+              )
+              }
           </div>
-          {/* <!-- Tasks Container / End --> */}
+          {/* Tasks Container / End */}
 
-          {/* <!-- Pagination --> */}
-          <div class="clearfix"></div>
-          <div class="row">
-            <div class="col-md-12">
-              {/* <!-- Pagination --> */}
+          {/* Pagination */}
+          <div className="clearfix"></div>
+          <div className="row">
+            <div className="col-md-12">
+              {/* Pagination */}
               {tasksList?.length > 5 && (
-                <div class="pagination-container margin-top-60 margin-bottom-60">
-                  <nav class="pagination">
+                <div className="pagination-container margin-top-60 margin-bottom-60">
+                  <nav className="pagination">
                     <ul>
-                      <li class="pagination-arrow">
-                        <a href="#" class="ripple-effect">
+                      <li className="pagination-arrow">
+                        <a href="#" className="ripple-effect">
+
                           <i class="icon-material-outline-keyboard-arrow-left"></i>
                         </a>
                       </li>

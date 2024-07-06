@@ -5794,7 +5794,13 @@ body .button.big i {
 .modal-footer .button-primary {
 	background-color: #770737;
 }
-
+.no-freelancer {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 3rem;
+}
 /* Bookmark Button */
 span.bookmark-icon {
 	font-size: 20px;
@@ -6028,11 +6034,17 @@ button.w-101:focus-visible {
     outline: none;
     box-shadow: none;
 }
+input:-webkit-autofill:focus, input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 40px #fff inset !important;
+}
 /* ---------------------------------- */
 /* Button with sliding icon
 ------------------------------------- */
 .button-sliding-icon { text-align: center; }
 a.white-text-button {
+	color: white !important;
+}
+a.button-with-hover:hover {
 	color: white !important;
 }
 .button-sliding-icon i {

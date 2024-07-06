@@ -28,16 +28,16 @@ function Login() {
           name: decodedToken.name,
           email: decodedToken.email,
           role: decodedToken.role,
-          id: decodedToken.id,
+          _id: decodedToken.id,
         };
         setUser(userData);
         setIsLoggedIn(true);
-        toast.success('Login successfull');
-        navigate('/')
+        toast.success("Login successfull");
+        navigate("/");
         setLoading(false);
       } else {
         setLoading(false);
-        toast.error('Login failed');
+        toast.error("Login failed");
       }
     } catch (error) {
       console.log(error);
@@ -47,11 +47,11 @@ function Login() {
   const loginViaGoogle = () => {
     setLoading(true);
     try {
-      window.open("http://localhost:3000/users/auth/google", "_self")
+      window.open("http://localhost:3000/users/auth/google", "_self");
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -62,8 +62,6 @@ function Login() {
           <div class="row">
             <div class="col-md-12">
               <h2>Log In</h2>
-
-             
             </div>
           </div>
         </div>
@@ -80,9 +78,14 @@ function Login() {
                 <h3>We're glad to see you again!</h3>
                 <span>
                   Don't have an account?{" "}
-                  <a  onClick={() => {
-                    navigate("/register");
-                  }}style={{ color: '#770737', textDecoration: 'underline' }}>Sign Up!</a>
+                  <a
+                    onClick={() => {
+                      navigate("/register");
+                    }}
+                    style={{ color: "#770737", textDecoration: "underline" }}
+                  >
+                    Sign Up!
+                  </a>
                 </span>
               </div>
 
@@ -145,8 +148,11 @@ function Login() {
               <div class="social-login-separator">
                 <span>or</span>
               </div>
-              <div class="social-login-buttons"> 
-                <button class="google-login ripple-effect" onClick={loginViaGoogle}>
+              <div class="social-login-buttons">
+                <button
+                  class="google-login ripple-effect"
+                  onClick={loginViaGoogle}
+                >
                   <i class="icon-brand-google-plus-g"></i> Log In via Google+
                 </button>
               </div>

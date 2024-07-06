@@ -279,7 +279,7 @@ function JobDetails() {
           <div class="col-xl-4 col-lg-4">
             <div class="sidebar-container">
               <a
-                class="apply-now-button popup-with-zoom-anim"
+                class="apply-now-button popup-with-zoom-anim white-text-button"
                 onClick={() => setShowApplyJobPopup(true)}
                 style={
                   applied ? { pointerEvents: "none", cursor: "default" } : {}

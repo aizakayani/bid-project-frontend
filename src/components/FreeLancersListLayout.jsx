@@ -1,42 +1,15 @@
-import it from "../utils/images/flags/it.svg";
-import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
-import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
-import userAvatarBig3 from "../utils/images/user-avatar-big-03.jpg";
-import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Dropdown } from "react-bootstrap";
-import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 import { getCountryFlag } from "../utils/common";
+
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const { freelancers } = useContext(UserContext);
   console.log({freelancers});
-  // const freelancersList = [
-  //   // {
-  //   //   name: "Sebastiano Piccio",
-  //   //   avatar: userAvatarBig1,
-  //   //   title: "Laravel Dev",
-  //   //   location: "Milan",
-  //   //   rate: "$80 / hr",
-  //   //   jobSuccessRate: "89%",
-  //   // },
-  // ];
   const [locationInput, setLocationInput] = useState("");
-  const [skillsInput, setSkillsInput] = useState("");
-  const [tags, setTags] = useState({
-    frontend: false,
-    angular: false,
-    react: false,
-    vuejs: false,
-    webapp: false,
-    design: false,
-    wordpress: false,
-  });
-  const [selectedCategory, setSelectedCategory] = useState(
-    "Admin Support"
-  );
+  const [selectedCategory, setSelectedCategory] = useState("All categories");
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -49,48 +22,63 @@ function FreeLancersListLayout() {
     "Translation",
     "Sales & Marketing",
   ];
-  const filteredFreelancers = freelancers.filter((freelancer) => {
-    if(freelancer?.data?.location){
-      const locationMatch = freelancer?.data?.location?.toLowerCase().includes(locationInput?.toLowerCase());
-      return locationMatch;
+  const [tags, setTags] = useState([]);
+  const [newTag, setNewTag] = useState('');
+
+  // Function to add a new tag
+  const handleAddTag = () => {
+    if (newTag.trim() === '') return;
+
+    const id = newTag.toLowerCase().replace(/\s+/g, '-');
+    if (!tags.some(tag => tag.id === id)) {
+      setTags([...tags, { id, name: newTag, checked: false }]);
+      setNewTag('');
     }
-    
-    // const skillsMatch = freelancer?.data?.skills?.toLowerCase().includes(skillsInput?.toLowerCase());
+  };
 
-    // // Get selected tags
-    // const selectedTags = Object.keys(tags).filter((tag) => tags[tag]);
+  // Function to handle pressing the Enter key to add a tag
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleAddTag();
+    }
+  };
 
-    // // Check if at least one selected tag exists in freelancers tags (using freelancer title as tag name)
-    // const tagMatch =
-    //   selectedTags.length === 0 ||
-    //   selectedTags.some((tag) =>
-    //     freelancer?.data?.skills?.toLowerCase().includes(tag?.toLowerCase())
-    //   );
-  });
-  console.log({filteredFreelancers})
+  // Function to toggle the checked state of a tag
+  const handleCheckboxChange = (id) => {
+    setTags(tags.map(tag =>
+      tag.id === id ? { ...tag, checked: !tag.checked } : tag
+    ));
+  };
+
+  // Function to handle category selection
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
-  const handleCheckboxChange = (event) => {
-    const { id, checked } = event.target;
-    console.log({ checked });
-    console.log({ id });
-    setTags({
-      ...tags,
-      [id]: checked,
-    });
-  };
-  
-  console.log({freelancers});
+
+  // Filter freelancers based on location and selected tags
+  const filteredFreelancers = freelancers.filter((freelancer) => {
+    const locationMatch = locationInput.trim() === '' ||
+      (freelancer?.data?.location?.toLowerCase().includes(locationInput.toLowerCase()));
+    
+    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
+    const tagsMatch = selectedTags.length === 0 || 
+      selectedTags.some(tag => freelancer?.data?.skills?.toLowerCase().includes(tag));
+    //   const categoryMatch = selectedCategory.trim() === 'All categories' ||
+    // freelancer?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
+
+  // Final filter condition combining location, tags,  and category
+  return locationMatch && tagsMatch ;
+  });
+
   return (
-    <div class="container margin-top-90">
-      <div class="row">
-        <div class="col-xl-3 col-lg-4">
-          <div class="sidebar-container">
-            {/* <!-- Location --> */}
-            <div class="sidebar-widget">
+    <div className="container margin-top-90">
+      <div className="row">
+        <div className="col-xl-3 col-lg-4">
+          <div className="sidebar-container">
+            {/* Location */}
+            <div className="sidebar-widget">
               <h3>Location</h3>
-              <div class="input-with-icon">
+              <div className="input-with-icon">
                 <div id="autocomplete-container">
                   <input
                     placeholder="Location"
@@ -100,31 +88,13 @@ function FreeLancersListLayout() {
                     onChange={(e) => setLocationInput(e.target.value)}
                   />
                 </div>
-                <i class="icon-material-outline-location-on"></i>
+                <i className="icon-material-outline-location-on"></i>
               </div>
             </div>
 
-            {/* <!-- Category --> */}
-            <div class="sidebar-widget">
+            {/* Category */}
+            <div className="sidebar-widget">
               <h3>Category</h3>
-              {/* <select
-                class="selectpicker default"
-                multiple
-                data-selected-text-format="count"
-                data-size="7"
-                title="All Categories"
-              >
-                <option>Admin Support</option>
-                <option>Customer Service</option>
-                <option>Data Analytics</option>
-                <option>Design & Creative</option>
-                <option>Legal</option>
-                <option>Software Developing</option>
-                <option>IT & Networking</option>
-                <option>Writing</option>
-                <option>Translation</option>
-                <option>Sales & Marketing</option>
-              </select> */}
               <Dropdown>
                 <Dropdown.Toggle
                   variant="primary"
@@ -133,7 +103,6 @@ function FreeLancersListLayout() {
                 >
                   {selectedCategory}
                 </Dropdown.Toggle>
-
                 <Dropdown.Menu className="right-offset-menu">
                   {categories.map((category, index) => (
                     <Dropdown.Item
@@ -147,143 +116,61 @@ function FreeLancersListLayout() {
               </Dropdown>
             </div>
 
-            {/* <!-- Keywords --> */}
-            <div class="sidebar-widget">
-              <h3>Keywords</h3>
-              <div class="keywords-container">
-                <div class="keyword-input-container">
-                  <input
-                    id="intro-keywords"
-                    placeholder="Job Title"
-                    type="text"
-                    value={skillsInput}
-                    onChange={(e) => setSkillsInput(e.target.value)}
-                  />
-                  <button class="keyword-input-button ripple-effect">
-                    <i class="icon-material-outline-add"></i>
-                  </button>
-                </div>
-                <div class="keywords-list">
-                  {/* <!-- keywords go here --> */}
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-
-            {/* <!-- Tags --> */}
-            <div class="sidebar-widget">
+            {/* Skills */}
+            <div className="sidebar-widget">
               <h3>Skills</h3>
-
-              <div class="tags-container">
-                <div class="tag">
-                  <input type="checkbox"
-                    id="frontend"
-                    checked={tags.frontend}
-                    onChange={handleCheckboxChange} />
-                  <label for="tag1">front-end dev</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox"
-                    id="angular"
-                    checked={tags.angular}
-                    onChange={handleCheckboxChange} />
-                  <label for="tag2">angular</label>
-                </div>
-                <div class="tag">
-                  <input type="checkbox"
-                    id="react"
-                    checked={tags.react}
-                    onChange={handleCheckboxChange} />
-                  <label for="tag3">react</label>
-                </div>
-                <div class="tag">
-                  <input
-                    type="checkbox"
-                    id="vuejs"
-                    checked={tags.vuejs}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label for="vuejs">vue js</label>
-                </div>
-                <div class="tag">
-                  <input
-                    type="checkbox"
-                    id="webapp"
-                    checked={tags.webapp}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label for="webapp">web apps</label>
-                </div>
-                <div class="tag">
-                  <input
-                    type="checkbox"
-                    id="design"
-                    checked={tags.design}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label for="design">design</label>
-                </div>
-                <div class="tag">
-                  <input
-                    type="checkbox"
-                    id="wordpress"
-                    checked={tags.wordpress}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label for="wordpress">wordpress</label>
-                </div>
-              </div>
-              <div class="clearfix"></div>
-
-              {/* <!-- More Skills --> */}
-              <div class="keywords-container margin-top-20">
-                <div class="keyword-input-container">
+              <div className="keywords-container margin-top-20">
+                <div className="keyword-input-container">
                   <input
                     type="text"
-                    class="keyword-input"
+                    className="keyword-input"
                     placeholder="add more skills"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyPress={handleKeyPress}
                   />
-                  <button class="keyword-input-button ripple-effect">
-                    <i class="icon-material-outline-add"></i>
+                  <button
+                    className="keyword-input-button ripple-effect"
+                    onClick={handleAddTag}
+                  >
+                    <i className="icon-material-outline-add"></i>
                   </button>
                 </div>
-                <div class="keywords-list">
-                  {/* <!-- keywords go here --> */}
-                </div>
-                <div class="clearfix"></div>
+                <div className="clearfix"></div>
+              </div>
+              <div className="tags-container" style={{ marginTop: '30px' }}>
+                {tags.map(tag => (
+                  <div className="tag" key={tag.id}>
+                    <input
+                      type="checkbox"
+                      id={tag.id}
+                      checked={tag.checked}
+                      onChange={() => handleCheckboxChange(tag.id)}
+                    />
+                    <label htmlFor={tag.id}>{tag.name}</label>
+                  </div>
+                ))}
               </div>
             </div>
-            <div class="clearfix"></div>
+            <div className="clearfix"></div>
           </div>
         </div>
-        <div class="col-xl-9 col-lg-8 content-left-offset">
-          <h3 class="page-title">Search Results</h3>
-
-          <div
-            class="notify-box margin-top-15"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div class="switch-container">
-              <label class="switch">
+        <div className="col-xl-9 col-lg-8 content-left-offset">
+          <h3 className="page-title">Search Results</h3>
+          <div className="notify-box margin-top-15" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div className="switch-container">
+              <label className="switch">
                 <input type="checkbox" />
-                <span class="switch-button"></span>
-                <span class="switch-text">
-                  Turn on email alerts for this search
-                </span>
+                <span className="switch-button"></span>
+                <span className="switch-text">Turn on email alerts for this search</span>
               </label>
             </div>
             <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
-              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center'}}>
+              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center' }}>
                 Sort by:
               </div>
               <select>
-                <option value="relevance" selected>
-                  Relevance
-                </option>
+                <option value="relevance" selected>Relevance</option>
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
                 <option value="random">Random</option>
@@ -291,140 +178,118 @@ function FreeLancersListLayout() {
             </div>
           </div>
 
-          {/* <!-- Freelancers List Container --> */}
-          <div
-            class="freelancers-container freelancers-list-layout compact-list margin-top-35"
-            style={{ flexDirection: "column" }}
-          >
-            {/* <!--Freelancer --> */}
-            {filteredFreelancers?.length > 0 &&
-              filteredFreelancers.map((freelancer) => {
-                return (
-                  <div class="freelancer">
-                    {/* <!-- Overview --> */}
-                    <div class="freelancer-overview">
-                      <div class="freelancer-overview-inner">
-                        {/* <!-- Bookmark Icon --> */}
-                        <span class="bookmark-icon"></span>
-
-                        {/* <!-- Avatar --> */}
-                        <div class="freelancer-avatar">
-                          <a href="single-freelancer-profile.html">
-                            <img src={freelancer?.avatar} alt="" />
+          {/* Freelancers List Container */}
+          <div className="freelancers-container freelancers-list-layout compact-list margin-top-35" style={{ flexDirection: "column" }}>
+            {filteredFreelancers.length > 0 ? (
+              filteredFreelancers.map((freelancer) => (
+                <div className="freelancer" key={freelancer.id}>
+                  {/* Overview */}
+                  <div className="freelancer-overview">
+                    <div className="freelancer-overview-inner">
+                      {/* Bookmark Icon */}
+                      <span className="bookmark-icon"></span>
+                      {/* Avatar */}
+                      <div className="freelancer-avatar">
+                        <a href="single-freelancer-profile.html">
+                          <img src={freelancer?.avatar} alt="" />
+                        </a>
+                      </div>
+                      {/* Name */}
+                      <div className="freelancer-name">
+                        <h4>
+                          <a href="#">
+                            {freelancer?.name}{" "}
+                            <img
+                              className="flag"
+                              src={getCountryFlag(freelancer?.data?.location)}
+                              alt=""
+                              title="Country"
+                              data-tippy-placement="top"
+                            />
                           </a>
-                        </div>
-
-                        {/* <!-- Name --> */}
-                        <div class="freelancer-name">
-                          <h4>
-                            <a href="#">
-                              {freelancer?.name}{" "}
-                              <img
-                                class="flag"
-                                src={getCountryFlag(
-                                  freelancer?.data?.location
-                                )}
-                                alt=""
-                                title="Italy"
-                                data-tippy-placement="top"
-                              />
-                            </a>
-                          </h4>
-                          {/* <!-- Rating --> */}
-                          <div class="freelancer-rating">
-                            <div class="star-rating" data-rating="4.5">
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                            </div>
+                        </h4>
+                        {/* Rating */}
+                        <div className="freelancer-rating">
+                          <div className="star-rating" data-rating="4.5">
+                            <span className="star"></span>
+                            <span className="star"></span>
+                            <span className="star"></span>
+                            <span className="star"></span>
+                            <span className="star"></span>
                           </div>
                         </div>
                       </div>
                     </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="freelancer-details">
-                      <div class="freelancer-details-list">
-                        <ul>
-                          <li>
-                            Location{" "}
-                            <strong>
-                              <i class="icon-material-outline-location-on"></i>{" "}
-                              {freelancer?.data?.location}
-                            </strong>
-                          </li>
-                          <li>
-                            Rate <strong>{freelancer?.data?.hourlyRate}</strong>
-                          </li>
-                        </ul>
-                      </div>
-                      <a
-                        onClick={() => {
-                          navigate("/freelancer/details/:id");
-                        }}
-                        class="button button-sliding-icon ripple-effect white-text-button"
-                      >
-                        View Profile{" "}
-                        <i class="icon-material-outline-arrow-right-alt"></i>
-                      </a>
-                    </div>
                   </div>
-                );
-              })}
-          </div>
-          {/* <!-- Freelancers Container / End --> */}
-
-          {/* <!-- Pagination --> */}
-          <div class="clearfix"></div>
-          <div class="row">
-            <div class="col-md-12">
-              {/* <!-- Pagination --> */}
-              {filteredFreelancers?.length > 5 && (
-                <div class="pagination-container margin-top-40 margin-bottom-60">
-                  <nav class="pagination">
-                    <ul>
-                      <li class="pagination-arrow">
-                        <a href="#" class="ripple-effect">
-                          <i class="icon-material-outline-keyboard-arrow-left"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" class="ripple-effect">
-                          1
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" class="current-page ripple-effect">
-                          2
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" class="ripple-effect">
-                          3
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" class="ripple-effect">
-                          4
-                        </a>
-                      </li>
-                      <li class="pagination-arrow">
-                        <a href="#" class="ripple-effect">
-                          <i class="icon-material-outline-keyboard-arrow-right"></i>
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
+                  {/* Details */}
+                  <div className="freelancer-details">
+                    <div className="freelancer-details-list">
+                      <ul>
+                        <li>
+                          Location{" "}
+                          <strong>
+                            <i className="icon-material-outline-location-on"></i>{" "}
+                            {freelancer?.data?.location}
+                          </strong>
+                        </li>
+                        <li>
+                          Rate <strong>{freelancer?.data?.hourlyRate}</strong>
+                        </li>
+                      </ul>
+                    </div>
+                    <a
+                      onClick={() => {
+                        navigate(`/freelancer/details/${freelancer.id}`);
+                      }}
+                      className="button button-sliding-icon ripple-effect white-text-button"
+                    >
+                      View Profile{" "}
+                      <i className="icon-material-outline-arrow-right-alt"></i>
+                    </a>
+                  </div>
                 </div>
-              )}
-            </div>
+              ))
+            ) : (
+              <p className="no-freelancer">No freelancers found.</p>
+            )}
           </div>
-          {/* <!-- Pagination / End --> */}
+          
+          {/* Pagination */}
+          {filteredFreelancers.length > 5 && (
+            <div className="pagination-container margin-top-40 margin-bottom-60">
+              <nav className="pagination">
+                <ul>
+                  <li className="pagination-arrow">
+                    <a href="#" className="ripple-effect">
+                      <i className="icon-material-outline-keyboard-arrow-left"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="ripple-effect">1</a>
+                  </li>
+                  <li>
+                    <a href="#" className="current-page ripple-effect">2</a>
+                  </li>
+                  <li>
+                    <a href="#" className="ripple-effect">3</a>
+                  </li>
+                  <li>
+                    <a href="#" className="ripple-effect">4</a>
+                  </li>
+                  <li className="pagination-arrow">
+                    <a href="#" className="ripple-effect">
+                      <i className="icon-material-outline-keyboard-arrow-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
 export default FreeLancersListLayout;
+
