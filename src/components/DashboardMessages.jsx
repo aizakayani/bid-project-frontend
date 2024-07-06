@@ -4,6 +4,7 @@ import userAvatarSmall1 from "../utils/images/user-avatar-small-01.jpg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
+import { timeDifferenceFromNow } from "../utils/utils";
 
 const dummyMessages = [
   {
@@ -101,18 +102,14 @@ function DashboardMessages() {
   //   return groupedMessages;
   // };
 
-  // const sortedConversations = conversations.sort((a, b) => {
-  //   // Extract the last message's createdAt timestamp for both conversations
-  //   const lastMessageA =
-  //     a.conversationMessages[a.conversationMessages.length - 1]?.createdAt;
-  //   const lastMessageB =
-  //     b.conversationMessages[b.conversationMessages.length - 1]?.createdAt;
+  const sortedConversations = chatConversations.sort((a, b) => {
+    // Extract the last message's createdAt timestamp for both conversations
+    const lastMessageA = a.messages[a.messages.length - 1]?.createdAt;
+    const lastMessageB = b.messages[b.messages.length - 1]?.createdAt;
 
-  //   // Compare the timestamps for sorting
-  //   return lastMessageB - lastMessageA;
-  // });
-
-  const sortedConversations = [];
+    // Compare the timestamps for sorting
+    return lastMessageB - lastMessageA;
+  });
 
   const handleSendMessage = () => {
     if (!socket) return;
@@ -176,8 +173,8 @@ function DashboardMessages() {
                     </a>
                   </li>
                 )}
-                {chatConversations?.length > 0 &&
-                  chatConversations.map((conversation) => {
+                {sortedConversations?.length > 0 &&
+                  sortedConversations.map((conversation) => {
                     const receiver = conversation?.recepients?.find(
                       (recepient) => recepient.id !== user?._id
                     );
@@ -205,7 +202,18 @@ function DashboardMessages() {
                           <div class="message-by">
                             <div class="message-by-headline">
                               <h5>{receiver.name}</h5>
-                              <span>4 hours ago</span>
+                              <span>
+                                {/* {
+                                  conversation?.messages[
+                                    conversation?.messages?.length - 1
+                                  ].createdAt
+                                } */}
+                                {`${timeDifferenceFromNow(
+                                  conversation?.messages[
+                                    conversation?.messages?.length - 1
+                                  ].createdAt
+                                )}`}
+                              </span>
                             </div>
                             <p>
                               {conversation.messages?.length

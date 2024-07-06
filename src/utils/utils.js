@@ -53,41 +53,36 @@ export const addOneMonthToUnixDate = (unixTimestamp) => {
 };
 
 export const timeDifferenceFromNow = (unixTimestamp) => {
-  // Parse the input date
-  const date = new Date(unixTimestamp * 1000);
-  const now = new Date();
+  // Specific date in Unix timestamp (example: July 6, 2024 00:00:00 UTC)
+  // let specificUnixTimestamp = 1720262400000; // Unix timestamp in milliseconds
 
-  // Calculate the difference in milliseconds
-  let diff = now - date;
+  // Convert Unix timestamp to Date object
+  // Convert Unix timestamp to Date object
+  let specificDate = new Date(unixTimestamp);
 
-  // Calculate the time components
-  const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-  diff -= years * 1000 * 60 * 60 * 24 * 365;
-  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-  diff -= months * 1000 * 60 * 60 * 24 * 30;
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  diff -= days * 1000 * 60 * 60 * 24;
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  diff -= hours * 1000 * 60 * 60;
-  const minutes = Math.floor(diff / (1000 * 60));
+  // Current date and time
+  let currentDate = new Date();
 
-  // Determine the most significant time component
-  let result;
-  if (years > 0) {
-    result = `${years} year${years !== 1 ? "s" : ""} ago`;
-  } else if (months > 0) {
-    result = `${months} month${months !== 1 ? "s" : ""} ago`;
-  } else if (days > 0) {
-    result = `${days} day${days !== 1 ? "s" : ""} ago`;
-  } else if (hours > 0) {
-    result = `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  // Difference in milliseconds
+  let differenceInMs = currentDate - specificDate;
+
+  // Calculate the difference in terms of days, hours, or minutes
+  let differenceInSeconds = Math.floor(differenceInMs / 1000);
+  let differenceInMinutes = Math.floor(differenceInSeconds / 60);
+  let differenceInHours = Math.floor(differenceInMinutes / 60);
+  let differenceInDays = Math.floor(differenceInHours / 24);
+
+  // Determine the most appropriate unit of time to use
+  let timeAgo;
+  if (differenceInDays > 0) {
+    timeAgo = `${differenceInDays} days ago`;
+  } else if (differenceInHours > 0) {
+    timeAgo = `${differenceInHours} hours ago`;
+  } else if (differenceInMinutes > 0) {
+    timeAgo = `${differenceInMinutes} minutes ago`;
   } else {
-    result = `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+    timeAgo = `${differenceInSeconds} seconds ago`;
   }
 
-  return result;
+  return timeAgo;
 };
-
-// Example usage
-const inputDate = "2020-01-01T12:00:00";
-console.log(timeDifferenceFromNow(inputDate));
