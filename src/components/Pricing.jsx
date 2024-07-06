@@ -77,7 +77,7 @@ function Pricing() {
           </div>
           <a
             onClick={() => navigate('/checkout')}
-            className="button full-width margin-top-20"
+            className="button full-width margin-top-20 button-with-hover"
           >
             Buy Now
           </a>
@@ -104,7 +104,7 @@ function Pricing() {
           </div>
           <a
             onClick={() => navigate('/checkout')}
-            className="button full-width margin-top-20"
+            className="button full-width margin-top-20 white-text-button"
           >
             Buy Now
           </a>
@@ -132,7 +132,7 @@ function Pricing() {
           </div>
           <a
             onClick={() => navigate('/checkout')}
-            className="button full-width margin-top-20"
+            className="button full-width margin-top-20 button-with-hover"
           >
             Buy Now
           </a>

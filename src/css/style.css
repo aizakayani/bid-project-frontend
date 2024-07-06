@@ -6034,11 +6034,17 @@ button.w-101:focus-visible {
     outline: none;
     box-shadow: none;
 }
+input:-webkit-autofill:focus, input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 40px #fff inset !important;
+}
 /* ---------------------------------- */
 /* Button with sliding icon
 ------------------------------------- */
 .button-sliding-icon { text-align: center; }
 a.white-text-button {
+	color: white !important;
+}
+a.button-with-hover:hover {
 	color: white !important;
 }
 .button-sliding-icon i {
