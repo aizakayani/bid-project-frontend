@@ -1,7 +1,7 @@
 import logo from "../utils/images/logo.png";
 import userAvatarSmall3 from "../utils/images/user-avatar-small-03.jpg";
 import userAvatarSmall2 from "../utils/images/user-avatar-small-02.jpg";
-import userAvatarSmall1 from "../utils/images/user-avatar-small-01.jpg";
+import userAvatarSmall1 from "../utils/images/Svgs/no-avatar-image.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";

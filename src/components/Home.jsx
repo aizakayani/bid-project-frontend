@@ -1,5 +1,5 @@
-import gb from "../utils/images/flags/gb.svg";
 
+import avatar from '../utils/images/Svgs/no-avatar-image.svg'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
@@ -11,6 +11,7 @@ import { getCountryFlag } from "../utils/common";
 function Home() {
   const { jobsList, user, isLoggedIn, freelancers, tasksList, employers } =
     useContext(UserContext);
+    console.log({employers});
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -110,7 +111,7 @@ function Home() {
           )}
 
           {/* <!-- Search Bar --> */}
-          {user?.role === "freelancer" ? (
+          {user?.role !== "freelancer" ? (
             <div class="row">
               <div class="col-md-12">
                 <div class="intro-banner-search-form margin-top-95">
@@ -624,7 +625,7 @@ function Home() {
                               <div class="freelancer-avatar">
                                 <div class="verified-badge"></div>
                                 <a href="single-freelancer-profile.html">
-                                  <img src={freelancer.avatar} alt="" />
+                                  <img src={avatar} alt="" />
                                 </a>
                               </div>
 
@@ -744,13 +745,9 @@ function Home() {
                   <i class="icon-line-awesome-user"></i>
                   <div class="counter-inner">
                     <h3>
-<<<<<<< HEAD
-                      <span class="counter">{freelancers?.length + employers?.length}</span>
-=======
                       <span class="counter">
                         {freelancers?.length + employers?.length}
                       </span>
->>>>>>> d4462ee3c68bc45008d52cf054184ee2ba608a42
                     </h3>
                     <span class="counter-title">Active Members</span>
                   </div>

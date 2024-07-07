@@ -77,7 +77,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:basic')}
             className="button full-width margin-top-20"
           >
             Buy Now
@@ -104,7 +104,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:standard')}
             className="button full-width margin-top-20"
           >
             Buy Now
@@ -132,7 +132,7 @@ function Pricing() {
             </ul>
           </div>
           <a
-            onClick={() => navigate('/checkout')}
+            onClick={() => navigate('/checkout/:professional')}
             className="button full-width margin-top-20"
           >
             Buy Now

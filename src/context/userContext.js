@@ -20,11 +20,7 @@ export const UserProvider = ({ children }) => {
   const [userBids, setUserBids] = useState([]);
   const [bids, setBids] = useState([]);
   const [sortedBids, setSortedBids] = useState({});
-<<<<<<< HEAD
-  
-=======
   const [employers, setEmployers] = useState([]);
->>>>>>> d4462ee3c68bc45008d52cf054184ee2ba608a42
   return (
     <UserContext.Provider
       value={{
