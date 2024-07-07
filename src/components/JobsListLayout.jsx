@@ -333,7 +333,7 @@ function JobsListLayout() {
               filteredJobs.map((job) => (
                 <a
                   key={job._id}
-                  onClick={() => navigate(`/job/details/${job._id}`)}
+                  // onClick={() => navigate(`/job/details/${job._id}`)}
                   className="job-listing"
                 >
                   <div className="job-listing-details">
@@ -375,7 +375,7 @@ function JobsListLayout() {
 
                     {/* Bookmark */}
                     <span
-                      className="bookmark-icon"
+                      className={bookmarkedJobs ? ' bookmark-icon bookmark-icon-bookmarked' : "bookmark-icon"}
                       onClick={() => {
                         handleUpdateBookmarkedJobs(job._id);
                       }}
