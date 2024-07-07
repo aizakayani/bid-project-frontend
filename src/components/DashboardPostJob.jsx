@@ -3,7 +3,7 @@ import { addJobAPI, getJobsByUser, updateJobAPI } from "../services/job";
 import { UserContext } from "../context/userContext";
 import toast from "react-hot-toast";
 import CountriesDropdown from "./CountriesDropdown";
-function DashboardPostJob({ updateJobData }) {
+function DashboardPostJob({ updateJobData, setDashboardType }) {
   const { setUserJobs } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Full Time");
@@ -47,7 +47,6 @@ function DashboardPostJob({ updateJobData }) {
       salary,
       tags,
       description,
-      createdAt: Date.now() / 1000,
     };
 
     // fetch jobs
@@ -68,6 +67,7 @@ function DashboardPostJob({ updateJobData }) {
         setDescription("");
         // fetch jobs
         await getJobs();
+        setDashboardType("managejobs");
       } else {
         toast.error(
           updateJobData ? "Failed to update job" : "Failed to add job"

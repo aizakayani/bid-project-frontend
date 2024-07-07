@@ -45,7 +45,6 @@ function DashboardPostTask({ updateTaskData, setDashboardType }) {
       budget,
       requiredSkills,
       description,
-      createdAt: Date.now() / 1000,
     };
     // fetch task
     try {

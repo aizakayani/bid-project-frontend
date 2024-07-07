@@ -48,7 +48,6 @@ function TaskDetails() {
       const payload = {
         bidRate,
         deliveryTime: selectedDeliveryTime,
-        createdAt: Date.now() / 1000,
         taskId: id,
       };
       const response = await addBidAPI(payload);

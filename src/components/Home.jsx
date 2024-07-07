@@ -1,4 +1,3 @@
-
 import gb from "../utils/images/flags/gb.svg";
 
 import { useContext, useState } from "react";
@@ -10,7 +9,8 @@ import { Dropdown } from "react-bootstrap";
 import { getCountryFlag } from "../utils/common";
 
 function Home() {
-  const { jobsList, user, isLoggedIn, freelancers,tasksList,employers } = useContext(UserContext);
+  const { jobsList, user, isLoggedIn, freelancers, tasksList, employers } =
+    useContext(UserContext);
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -78,149 +78,163 @@ function Home() {
         <div class="container">
           {/* <div className="background-image-container"></div> */}
           {/* <!-- Intro Headline --> */}
-         {user?.role === "freelancer" ? <div class="row" style={{marginBottom: '30px'}}>
-                  <div class="col-md-12">
-                    <div class="banner-headline-alt">
-                      <h3>Don't Just Dream, Do</h3>
-                      <span>Find the best jobs in the digital industry</span>
+          {user?.role === "freelancer" ? (
+            <div class="row" style={{ marginBottom: "30px" }}>
+              <div class="col-md-12">
+                <div class="banner-headline-alt">
+                  <h3>Don't Just Dream, Do</h3>
+                  <span>Find the best jobs in the digital industry</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div class="row">
+              <div class="col-md-12">
+                <div class="banner-headline">
+                  <h3>
+                    <strong>
+                      Hire experts or be hired for any job, any time.
+                    </strong>
+                    <br />
+                    <span>
+                      Thousands of small businesses use{" "}
+                      <strong class="color">Bid Bridge</strong> to turn their
+                      ideas into reality.
+                    </span>
+                  </h3>
+                  <br />
+                  <br />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* <!-- Search Bar --> */}
+          {user?.role === "freelancer" ? (
+            <div class="row">
+              <div class="col-md-12">
+                <div class="intro-banner-search-form margin-top-95">
+                  <div class="intro-search-field with-autocomplete">
+                    <label
+                      for="autocomplete-input"
+                      class="field-title ripple-effect"
+                    >
+                      Where?
+                    </label>
+                    <div class="input-with-icon">
+                      <input
+                        id="autocomplete-input"
+                        type="text"
+                        placeholder="Online Job"
+                      />
+                      <i class="icon-material-outline-location-on"></i>
                     </div>
                   </div>
-                </div> : 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="banner-headline">
-                <h3>
-                  <strong>
-                    Hire experts or be hired for any job, any time.
-                  </strong>
-                  <br />
-                  <span>
-                    Thousands of small businesses use{" "}
-                    <strong class="color">Bid Bridge</strong> to turn their
-                    ideas into reality.
-                  </span>
-                </h3>
-                <br />
-                <br />
-                
-              </div>
-            </div>
-          </div> }
-
-          {/* <!-- Search Bar --> */}
-          {user?.role === "freelancer" ?  <div class="row">
-            <div class="col-md-12">
-              <div class="intro-banner-search-form margin-top-95">
-                <div class="intro-search-field with-autocomplete">
-                  <label
-                    for="autocomplete-input"
-                    class="field-title ripple-effect"
-                  >
-                    Where?
-                  </label>
-                  <div class="input-with-icon">
-                    <input
-                      id="autocomplete-input"
-                      type="text"
-                      placeholder="Online Job"
-                    />
-                    <i class="icon-material-outline-location-on"></i>
-                  </div>
-                </div>
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field">
-                  <label for="intro-keywords" class="field-title ripple-effect">
-                    What you need done?
-                  </label>
-                  <input
-                    id="intro-keywords"
-                    type="text"
-                    placeholder="e.g. build me a website"
-                  />
-                </div>
-
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field" style={{justifyContent: 'center'}}>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="primary"
-                      id="dropdown-basic"
-                      className="w-101"
+                  {/* <!-- Search Field --> */}
+                  <div class="intro-search-field">
+                    <label
+                      for="intro-keywords"
+                      class="field-title ripple-effect"
                     >
-                      {selectedCategory}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className="right-offset-menu">
-                      {categories.map((category, index) => (
-                        <Dropdown.Item
-                          key={index}
-                          onClick={() => handleSelect(category)}
-                        >
-                          {category}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                
-                </div>
-                {/* <!-- Button --> */}
-                <div class="intro-search-button">
-                  <button class="button ripple-effect">Search</button>
-                </div>
-              </div>
-            </div>
-          </div> : <div class="row">
-            <div class="col-md-12">
-              <div class="intro-banner-search-form margin-top-95">
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field with-autocomplete">
-                  <label
-                    for="autocomplete-input"
-                    class="field-title ripple-effect"
-                  >
-                    Where?
-                  </label>
-                  <div class="input-with-icon">
+                      What you need done?
+                    </label>
                     <input
-                      placeholder="Online Job"
-                      id="autocomplete-input"
+                      id="intro-keywords"
                       type="text"
-                      value={locationInput}
-                      onChange={(e) => setLocationInput(e.target.value)}
+                      placeholder="e.g. build me a website"
                     />
-                    <i class="icon-material-outline-location-on"></i>
+                  </div>
+
+                  {/* <!-- Search Field --> */}
+                  <div
+                    class="intro-search-field"
+                    style={{ justifyContent: "center" }}
+                  >
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="primary"
+                        id="dropdown-basic"
+                        className="w-101"
+                      >
+                        {selectedCategory}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu className="right-offset-menu">
+                        {categories.map((category, index) => (
+                          <Dropdown.Item
+                            key={index}
+                            onClick={() => handleSelect(category)}
+                          >
+                            {category}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                  {/* <!-- Button --> */}
+                  <div class="intro-search-button">
+                    <button class="button ripple-effect">Search</button>
                   </div>
                 </div>
+              </div>
+            </div>
+          ) : (
+            <div class="row">
+              <div class="col-md-12">
+                <div class="intro-banner-search-form margin-top-95">
+                  {/* <!-- Search Field --> */}
+                  <div class="intro-search-field with-autocomplete">
+                    <label
+                      for="autocomplete-input"
+                      class="field-title ripple-effect"
+                    >
+                      Where?
+                    </label>
+                    <div class="input-with-icon">
+                      <input
+                        placeholder="Online Job"
+                        id="autocomplete-input"
+                        type="text"
+                        value={locationInput}
+                        onChange={(e) => setLocationInput(e.target.value)}
+                      />
+                      <i class="icon-material-outline-location-on"></i>
+                    </div>
+                  </div>
 
-                {/* <!-- Search Field --> */}
-                <div class="intro-search-field">
-                  <label for="intro-keywords" class="field-title ripple-effect">
-                    What job you want?
-                  </label>
-                  <input
-                    id="intro-keywords"
-                    placeholder="Job Title or Keywords"
-                    type="text"
-                    value={titleInput}
-                    onChange={(e) => setTitleInput(e.target.value)}
-                  />
-                </div>
+                  {/* <!-- Search Field --> */}
+                  <div class="intro-search-field">
+                    <label
+                      for="intro-keywords"
+                      class="field-title ripple-effect"
+                    >
+                      What job you want?
+                    </label>
+                    <input
+                      id="intro-keywords"
+                      placeholder="Job Title or Keywords"
+                      type="text"
+                      value={titleInput}
+                      onChange={(e) => setTitleInput(e.target.value)}
+                    />
+                  </div>
 
-                {/* <!-- Button --> */}
-                <div class="intro-search-button">
-                  <button
-                    onClick={() => handleButtonClick()}
-                    class="button ripple-effect"
-                  >
-                    Search
-                  </button>
+                  {/* <!-- Button --> */}
+                  <div class="intro-search-button">
+                    <button
+                      onClick={() => handleButtonClick()}
+                      class="button ripple-effect"
+                    >
+                      Search
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>}
-          
+          )}
+
           {/* <!-- Search Bar --> */}
-         
+
           {/* <!-- Search Field End --> */}
 
           {/* <!-- Stats --> */}
@@ -269,8 +283,9 @@ function Home() {
                 </div>
                 <h3>Create an Account</h3>
                 <p>
-                Join our community of skilled professionals today! 
-                Start by creating your account below and unleash your freelance potential.
+                  Join our community of skilled professionals today! Start by
+                  creating your account below and unleash your freelance
+                  potential.
                 </p>
               </div>
             </div>
@@ -289,8 +304,9 @@ function Home() {
                 </div>
                 <h3>Post a Task</h3>
                 <p>
-                Get started on your project today!
-                 Describe your task below to connect with talented freelancers ready to bring your vision to life.
+                  Get started on your project today! Describe your task below to
+                  connect with talented freelancers ready to bring your vision
+                  to life.
                 </p>
               </div>
             </div>
@@ -309,9 +325,10 @@ function Home() {
                 </div>
                 <h3>Choose an Expert</h3>
                 <p>
-                Find the perfect freelancer for your project! 
-                Browse profiles, review portfolios, and connect with experts who match your needs.
-                Start collaborating today to turn your ideas into reality.
+                  Find the perfect freelancer for your project! Browse profiles,
+                  review portfolios, and connect with experts who match your
+                  needs. Start collaborating today to turn your ideas into
+                  reality.
                 </p>
               </div>
             </div>
@@ -320,121 +337,118 @@ function Home() {
       </div>
       {/* <!-- Icon Boxes / End --> */}
       {/* <!-- Category Boxes -->*/}
-      {user?.role === "freelancer" && <div class="section margin-top-65">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-12">
-              <div class="section-headline centered margin-bottom-15">
-                <h3>Popular Job Categories</h3>
-              </div>
+      {user?.role === "freelancer" && (
+        <div class="section margin-top-65">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-12">
+                <div class="section-headline centered margin-bottom-15">
+                  <h3>Popular Job Categories</h3>
+                </div>
 
-              {/*<!-- Category Boxes Container -->*/}
-              <div class="categories-container">
-                {/*<!-- Category Box -->*/}
-                <a class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-file-code-o"></i>
-                  </div>
-                  <div class="category-box-content">
-                    <h3>Web & Software Dev</h3>
-                    <p>Software Engineer, Web / Mobile Developer & More</p>
-                  </div>
-                </a>
+                {/*<!-- Category Boxes Container -->*/}
+                <div class="categories-container">
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-file-code-o"></i>
+                    </div>
+                    <div class="category-box-content">
+                      <h3>Web & Software Dev</h3>
+                      <p>Software Engineer, Web / Mobile Developer & More</p>
+                    </div>
+                  </a>
 
-                {/*<!-- Category Box -->*/}
-                <a
-                 
-                  class="category-box"
-                >
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-cloud-upload"></i>
-                  </div>
-                 
-                  <div class="category-box-content">
-                    <h3>Data Science & Analitycs</h3>
-                    <p>Data Specialist / Scientist, Data Analyst & More</p>
-                  </div>
-                </a>
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-cloud-upload"></i>
+                    </div>
 
-                {/*<!-- Category Box -->*/}
-                <a
-                  class="category-box"
-                >
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-suitcase"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Accounting & Consulting</h3>
-                    <p>Auditor, Accountant, Fnancial Analyst & More</p>
-                  </div>
-                </a>
+                    <div class="category-box-content">
+                      <h3>Data Science & Analitycs</h3>
+                      <p>Data Specialist / Scientist, Data Analyst & More</p>
+                    </div>
+                  </a>
 
-                {/*<!-- Category Box -->*/}
-                <a class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-pencil"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Writing & Translations</h3>
-                    <p>Copywriter, Creative Writer, Translator & More</p>
-                  </div>
-                </a>
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-suitcase"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Accounting & Consulting</h3>
+                      <p>Auditor, Accountant, Fnancial Analyst & More</p>
+                    </div>
+                  </a>
 
-                {/*	<!-- Category Box -->*/}
-                <a class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-pie-chart"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Sales & Marketing</h3>
-                    <p>Brand Manager, Marketing Coordinator & More</p>
-                  </div>
-                </a>
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-pencil"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Writing & Translations</h3>
+                      <p>Copywriter, Creative Writer, Translator & More</p>
+                    </div>
+                  </a>
 
-                {/*<!-- Category Box -->*/}
-                <a class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-image"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Graphics & Design</h3>
-                    <p>Creative Director, Web Designer & More</p>
-                  </div>
-                </a>
+                  {/*	<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-pie-chart"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Sales & Marketing</h3>
+                      <p>Brand Manager, Marketing Coordinator & More</p>
+                    </div>
+                  </a>
 
-                {/*<!-- Category Box -->*/}
-                <a  class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-bullhorn"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Digital Marketing</h3>
-                    <p>Darketing Analyst, Social Profile Admin & More</p>
-                  </div>
-                </a>
-                {/*<!-- Category Box -->*/}
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-image"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Graphics & Design</h3>
+                      <p>Creative Director, Web Designer & More</p>
+                    </div>
+                  </a>
 
-                <a class="category-box">
-                  <div class="category-box-icon">
-                    <i class="icon-line-awesome-graduation-cap"></i>
-                  </div>
-                  {/* <div class="category-box-counter"></div> */}
-                  <div class="category-box-content">
-                    <h3>Education & Training</h3>
-                    <p>Advisor, Coach, Education Coordinator & More</p>
-                  </div>
-                </a>
+                  {/*<!-- Category Box -->*/}
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-bullhorn"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Digital Marketing</h3>
+                      <p>Darketing Analyst, Social Profile Admin & More</p>
+                    </div>
+                  </a>
+                  {/*<!-- Category Box -->*/}
+
+                  <a class="category-box">
+                    <div class="category-box-icon">
+                      <i class="icon-line-awesome-graduation-cap"></i>
+                    </div>
+                    {/* <div class="category-box-counter"></div> */}
+                    <div class="category-box-content">
+                      <h3>Education & Training</h3>
+                      <p>Advisor, Coach, Education Coordinator & More</p>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>}
-      
+      )}
+
       {/*<!-- Category Boxes / End -->*/}
 
       {/* <!-- Features Jobs --> */}
@@ -525,31 +539,32 @@ function Home() {
         data-background-image="images/section-background.jpg"
       >
         {/* <!-- Infobox -->*/}
-        {user?.role === "freelancer" &&  <div class="text-content white-font">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-6 col-md-8 col-sm-12">
-                <h2>
-                  Hire experts or be hired. <br /> For any job, any time.
-                </h2>
-                <p>
-                  Bring to the table win-win survival strategies to ensure
-                  proactive domination. At the end of the day, going forward, a
-                  new normal that has evolved from generation is on the runway
-                  towards.
-                </p>
-                <a
-                  onClick={() => navigate("/pricing")}
-                  class="button button-sliding-icon ripple-effect big margin-top-20"
-                >
-                  Get Started{" "}
-                  <i class="icon-material-outline-arrow-right-alt"></i>
-                </a>
+        {user?.role === "freelancer" && (
+          <div class="text-content white-font">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-6 col-md-8 col-sm-12">
+                  <h2>
+                    Hire experts or be hired. <br /> For any job, any time.
+                  </h2>
+                  <p>
+                    Bring to the table win-win survival strategies to ensure
+                    proactive domination. At the end of the day, going forward,
+                    a new normal that has evolved from generation is on the
+                    runway towards.
+                  </p>
+                  <a
+                    onClick={() => navigate("/pricing")}
+                    class="button button-sliding-icon ripple-effect big margin-top-20"
+                  >
+                    Get Started{" "}
+                    <i class="icon-material-outline-arrow-right-alt"></i>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>}
-       
+        )}
 
         {/* <!-- Infobox  End-->*/}
       </div>
@@ -580,7 +595,7 @@ function Home() {
                     <img src={leftArrow} alt="" width={'25px'} height={'25px'} color={'white'}/>
                     </div> */}
                 <button
-                  class="slick-prev slick-arrow"
+                  class="slick-prev slick-arroemployersw"
                   aria-label="Previous"
                   type="button"
                   aria-disabled="false"
@@ -654,7 +669,10 @@ function Home() {
                                   </strong>
                                 </li>
                                 <li>
-                                  Rate <strong>{freelancer?.data?.hourlyRate}</strong>
+                                  Rate{" "}
+                                  <strong>
+                                    {freelancer?.data?.hourlyRate}
+                                  </strong>
                                 </li>
                               </ul>
                             </div>
@@ -726,7 +744,13 @@ function Home() {
                   <i class="icon-line-awesome-user"></i>
                   <div class="counter-inner">
                     <h3>
+<<<<<<< HEAD
                       <span class="counter">{freelancers?.length + employers?.length}</span>
+=======
+                      <span class="counter">
+                        {freelancers?.length + employers?.length}
+                      </span>
+>>>>>>> d4462ee3c68bc45008d52cf054184ee2ba608a42
                     </h3>
                     <span class="counter-title">Active Members</span>
                   </div>

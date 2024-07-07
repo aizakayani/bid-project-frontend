@@ -19,9 +19,7 @@ function DashboardManageCandidates({ setDashboardType }) {
 
     // Use FileSaver to save the file
     saveAs(blob, "downloaded.pdf");
-    
   };
-  console.log({jobApplications});
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -71,7 +69,7 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     <img
                                       class="flag"
                                       src={getCountryFlag(
-                                       jobApplication?.location
+                                        jobApplication?.location
                                       )}
                                       alt=""
                                       title="Australia"
@@ -87,10 +85,10 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     {jobApplication.applicantEmail}
                                   </a>
                                 </span>
-                                <span class="freelancer-detail-item">
+                                {/* <span class="freelancer-detail-item">
                                   <i class="icon-feather-phone"></i> (+61)
                                   123-456-789
-                                </span>
+                                </span> */}
 
                                 {/* <!-- Rating --> */}
                                 <div class="freelancer-rating">
@@ -127,14 +125,14 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     <i class="icon-feather-mail"></i> Send
                                     Message
                                   </a>
-                                  <a
+                                  {/* <a
                                     href="#"
                                     class="button gray ripple-effect ico"
                                     title="Remove Candidate"
                                     data-tippy-placement="top"
                                   >
                                     <i class="icon-feather-trash-2"></i>
-                                  </a>
+                                  </a> */}
                                 </div>
                               </div>
                             </div>
