@@ -20,6 +20,7 @@ export const UserProvider = ({ children }) => {
   const [userBids, setUserBids] = useState([]);
   const [bids, setBids] = useState([]);
   const [sortedBids, setSortedBids] = useState({});
+  const [employers, setEmployers] = useState([]);
   return (
     <UserContext.Provider
       value={{
@@ -55,6 +56,8 @@ export const UserProvider = ({ children }) => {
         setSortedBids,
         chatConversations,
         setChatConversations,
+        employers,
+        setEmployers,
       }}
     >
       {children}

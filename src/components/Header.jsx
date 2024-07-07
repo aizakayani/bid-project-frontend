@@ -12,6 +12,7 @@ import { isTokenValid } from "../utils/utils";
 import { getTasks, getTasksByUser } from "../services/task";
 import io from "socket.io-client";
 import {
+  getEmployersAPI,
   getFreelancersAPI,
   getUserDetailsAPI,
   updateUserAPI,
@@ -38,6 +39,7 @@ function Header() {
     setUserBids,
     chatConversations,
     setChatConversations,
+    setEmployers,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -153,6 +155,7 @@ function Header() {
       await getAllJobs();
       await getAllTasks();
       await getFreelancers();
+      await getEmployers();
     }
   };
 
@@ -269,6 +272,18 @@ function Header() {
       const response = await getFreelancersAPI();
       if (response?.success && response?.freelancers?.length > 0) {
         setFreelancers([...response?.freelancers]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getEmployers = async () => {
+    // fetch jobs
+    try {
+      const response = await getEmployersAPI();
+      if (response?.success && response?.freelancers?.length > 0) {
+        setEmployers([...response?.employers]);
       }
     } catch (error) {
       console.log(error);
@@ -456,7 +471,7 @@ function Header() {
                                 Job Page
                               </a>
                             </li>
-                    
+
                             <li>
                               <a
                                 onClick={() => {

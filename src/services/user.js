@@ -175,3 +175,22 @@ export const getFreelancersAPI = () => {
       });
   });
 };
+
+export const getEmployersAPI = () => {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/users/employers", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(error);
+      });
+  });
+};
