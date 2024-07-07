@@ -50,7 +50,7 @@ function Home() {
       location: locationInput,
       title: titleInput,
     }));
-    window.scrollBy(0, 600);
+    window.scrollBy(0, 1100);
   };
   console.log({employers});
   // Function to filter jobs based on location and title
