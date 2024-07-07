@@ -3,7 +3,59 @@ import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
 import de from "../utils/images/flags/de.svg";
 import BrowseCompanies3 from "../utils/images/browse-companies-03.png";
 import BrowseCompanies4 from "../utils/images/browse-companies-04.png";
+import { UserContext } from "../context/userContext";
+import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { updateUserAPI } from "../services/user";
 function FreeLancerDetails() {
+  const { id } = useParams();
+  const {
+    freelancers,
+    getfreelancerDetails,
+    user,
+    setUser,
+  } = UserContext(UserContext);
+  const [FreeLancerDetails, setFreelancerDetails] = useState(null);
+  const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
+  useEffect(() => {
+    if (user?.data?.bookmarkedFreelancers) {
+      setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
+    }
+  }, [user?.data]);
+  useEffect(() => {
+    if (id && freelancers?.length > 0) {
+      const filteredFreelancer = freelancers.find((freelancer) => freelancer?._id === id);
+      if (filteredFreelancer) {
+        console.log(filteredFreelancer);
+        setFreelancerDetails(filteredFreelancer);
+      }
+    }
+  }, [id, freelancers]);
+  const handleUpdateBookmarkedFreelancers = async (freelancerId) => {
+    const bookmarksCopy = bookmarkedFreelancers?.length > 0 ? [...bookmarkedFreelancers] : [];
+    const index = bookmarksCopy.indexOf(freelancerId);
+
+    if (index !== -1) {
+      // If freelancerId exists, remove it from the array
+      bookmarksCopy.splice(index, 1);
+    } else {
+      // If freelancerId does not exist, add it to the array
+      bookmarksCopy.push(freelancerId);
+    }
+    // send API call
+    try {
+      const data = user?.data || {};
+      data.bookmarkedFreelancers = bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
+      const updateResult = await updateUserAPI({ data });
+      if (updateResult?.success && updateResult?.user) {
+        setUser(updateResult?.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
     <>
       {/* <!-- Titlebar
@@ -54,20 +106,14 @@ function FreeLancerDetails() {
             <div class="single-page-section">
               <h3 class="margin-bottom-25">About Me</h3>
               <p>
-                Leverage agile frameworks to provide a robust synopsis for high
+                {/* Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
                 foster collaborative thinking to further the overall value
                 proposition. Organically grow the holistic world view of
-                disruptive innovation via workplace diversity and empowerment.
+                disruptive innovation via workplace diversity and empowerment. */}
               </p>
 
-              <p>
-                Capitalize on low hanging fruit to identify a ballpark value
-                added activity to beta test. Override the digital divide with
-                additional clickthroughs from DevOps. Nanotechnology immersion
-                along the information highway will close the loop on focusing
-                solely on the bottom line.
-              </p>
+              
             </div>
 
             {/* <!-- Boxed List --> */}
@@ -96,8 +142,9 @@ function FreeLancerDetails() {
                       </div>
                       <div class="item-description">
                         <p>
-                          Excellent programmer - fully carried out my project in
-                          a very professional manner.{" "}
+                          
+                          {/* Excellent programmer - fully carried out my project in
+                          a very professional manner.{" "} */}
                         </p>
                       </div>
                     </div>
@@ -223,7 +270,7 @@ function FreeLancerDetails() {
                         <div class="detail-item">
                           <a href="#">
                             <i class="icon-material-outline-business"></i>{" "}
-                            Acodia
+                            {freelancers?.location}
                           </a>
                         </div>
                         <div class="detail-item">
