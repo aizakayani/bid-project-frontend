@@ -23,7 +23,8 @@ function Dashboard() {
     setJobApplications,
     setBids,
     setSortedBids,
-    jobsList
+    jobsList,
+    userBids,
   } = useContext(UserContext);
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
@@ -213,7 +214,8 @@ function Dashboard() {
                           {user?.role === "freelancer" && (
                             <li>
                               <a onClick={() => setDashboardType("activebids")}>
-                                My Active Bids <span class="nav-tag">4</span>
+                                My Active Bids{" "}
+                                <span class="nav-tag">{userBids?.length}</span>
                               </a>
                             </li>
                           )}
