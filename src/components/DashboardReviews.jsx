@@ -124,7 +124,7 @@ function DashboardReviews() {
             </div>
 
             {/* <!-- Pagination --> */}
-            <div class="clearfix"></div>
+            {/* <div class="clearfix"></div>
             <div class="pagination-container margin-top-40 margin-bottom-0">
               <nav class="pagination">
                 <ul>
@@ -151,7 +151,7 @@ function DashboardReviews() {
                 </ul>
               </nav>
             </div>
-            <div class="clearfix"></div>
+            <div class="clearfix"></div> */}
             {/* <!-- Pagination / End --> */}
           </div>
 

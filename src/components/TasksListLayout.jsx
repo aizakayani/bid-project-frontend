@@ -260,9 +260,9 @@ function TasksListLayout() {
 
           {/* Pagination */}
           <div className="clearfix"></div>
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-12">
-              {/* Pagination */}
+              
               {tasksList?.length > 5 && (
                 <div className="pagination-container margin-top-60 margin-bottom-60">
                   <nav className="pagination">
@@ -302,7 +302,7 @@ function TasksListLayout() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           {/* <!-- Pagination / End --> */}
         </div>
       </div>

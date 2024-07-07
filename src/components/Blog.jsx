@@ -241,11 +241,11 @@ function Blog() {
               </a>
 
               {/* <!-- Pagination --> */}
-              <div class="clearfix"></div>
+              {/* <div class="clearfix"></div>
               <div class="row">
                 <div class="col-md-12">
-                  {/* <!-- Pagination --> */}
-                  <div class="pagination-container margin-top-10 margin-bottom-20">
+                 
+                  <div class="ation-container margin-top-10 margin-bottom-20">
                     <nav class="pagination">
                       <ul>
                         <li>
@@ -272,7 +272,7 @@ function Blog() {
                     </nav>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* <!-- Pagination / End --> */}
             </div>
 
