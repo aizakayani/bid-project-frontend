@@ -341,7 +341,7 @@ function JobsListLayout() {
           </div>
 
           {/* Pagination */}
-          {filteredJobs.length > 5 && (
+          {/* {filteredJobs.length > 5 && (
             <div className="pagination-container margin-top-60 margin-bottom-60">
               <nav className="pagination">
                 <ul>
@@ -372,7 +372,7 @@ function JobsListLayout() {
                 </ul>
               </nav>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

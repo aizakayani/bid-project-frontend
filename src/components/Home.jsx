@@ -744,13 +744,9 @@ function Home() {
                   <i class="icon-line-awesome-user"></i>
                   <div class="counter-inner">
                     <h3>
-<<<<<<< HEAD
-                      <span class="counter">{freelancers?.length + employers?.length}</span>
-=======
                       <span class="counter">
                         {freelancers?.length + employers?.length}
                       </span>
->>>>>>> d4462ee3c68bc45008d52cf054184ee2ba608a42
                     </h3>
                     <span class="counter-title">Active Members</span>
                   </div>

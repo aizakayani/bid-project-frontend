@@ -165,7 +165,7 @@ function FreeLancersListLayout() {
                 <span className="switch-text">Turn on email alerts for this search</span>
               </label>
             </div>
-            <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
+            {/* <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
               <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center' }}>
                 Sort by:
               </div>
@@ -175,7 +175,7 @@ function FreeLancersListLayout() {
                 <option value="oldest">Oldest</option>
                 <option value="random">Random</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Freelancers List Container */}
@@ -254,7 +254,7 @@ function FreeLancersListLayout() {
             )}
           </div>
           
-          {/* Pagination */}
+          {/* Pagination
           {filteredFreelancers.length > 5 && (
             <div className="pagination-container margin-top-40 margin-bottom-60">
               <nav className="pagination">
@@ -284,7 +284,7 @@ function FreeLancersListLayout() {
                 </ul>
               </nav>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
