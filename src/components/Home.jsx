@@ -51,6 +51,7 @@ function Home() {
     }));
     window.scrollBy(0, 600);
   };
+  console.log({employers});
   // Function to filter jobs based on location and title
   const filteredJobs = jobsList.filter((job) => {
     // Convert inputs to lowercase for case-insensitive comparison
@@ -725,7 +726,7 @@ function Home() {
                   <i class="icon-line-awesome-user"></i>
                   <div class="counter-inner">
                     <h3>
-                      <span class="counter">{freelancers.length + employers.length}</span>
+                      <span class="counter">{freelancers?.length + employers?.length}</span>
                     </h3>
                     <span class="counter-title">Active Members</span>
                   </div>
