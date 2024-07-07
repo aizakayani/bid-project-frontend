@@ -13,14 +13,17 @@ import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import { addBidAPI, getBidsByUserAPI } from "../services/bids";
 import toast from "react-hot-toast";
+import { updateUserAPI } from "../services/user";
 function TaskDetails() {
   const { id } = useParams();
-  const { tasksList, userBids, setUserBids } = useContext(UserContext);
+  const { tasksList, userBids, setUserBids, user, setUser } =
+    useContext(UserContext);
   const [taskDetails, setTaskDetails] = useState(null);
   const [bidRate, setBidRate] = useState("");
   const [selectedDeliveryTime, setSelectedDeliveryTime] =
     useState("less-three");
   const [applied, setApplied] = useState(false);
+  const [bookmarkedTasks, setBookmarkedTasks] = useState([]);
   useEffect(() => {
     console.log(userBids, id);
     if (
@@ -34,11 +37,40 @@ function TaskDetails() {
     if (id && tasksList?.length > 0) {
       const filteredTask = tasksList.find((task) => task._id === id);
       if (filteredTask) {
-        console.log(filteredTask);
         setTaskDetails(filteredTask);
       }
     }
   }, [id, tasksList]);
+  useEffect(() => {
+    if (user?.data?.bookmarkedTasks) {
+      setBookmarkedTasks([...user?.data?.bookmarkedTasks]);
+    }
+  }, [user?.data]);
+
+  const handleUpdateBookmarkedTasks = async (taskId) => {
+    const bookmarksCopy = [...bookmarkedTasks];
+    const index = bookmarksCopy.indexOf(taskId);
+
+    if (index !== -1) {
+      // If jobId exists, remove it from the array
+      bookmarksCopy.splice(index, 1);
+    } else {
+      // If jobId does not exist, add it to the array
+      bookmarksCopy.push(taskId);
+    }
+    // send API call
+    try {
+      const data = user?.data || {};
+      data.bookmarkedTasks =
+        bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
+      const updateResult = await updateUserAPI({ data });
+      if (updateResult?.success && updateResult?.user) {
+        setUser(updateResult?.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleAddBid = async () => {
     try {
       if (bidRate.trim() === "") {
@@ -441,10 +473,19 @@ function TaskDetails() {
                 <h3>Bookmark or Share</h3>
 
                 {/* <!-- Bookmark Button --> */}
-                <button class="bookmark-button margin-bottom-25">
+                <button
+                  class="bookmark-button margin-bottom-25"
+                  onClick={() => {
+                    handleUpdateBookmarkedTasks(taskDetails?._id);
+                  }}
+                >
                   <span class="bookmark-icon"></span>
-                  <span class="bookmark-text">Bookmark</span>
-                  <span class="bookmarked-text">Bookmarked</span>
+                  {!bookmarkedTasks?.includes(taskDetails?._id) && (
+                    <span class="bookmark-text">Bookmark</span>
+                  )}
+                  {!bookmarkedTasks?.includes(taskDetails?._id) && (
+                    <span class="bookmarked-text">Bookmarked</span>
+                  )}
                 </button>
 
                 {/* <!-- Copy URL --> */}

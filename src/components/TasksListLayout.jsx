@@ -6,8 +6,7 @@ import { Dropdown } from "react-bootstrap";
 
 function TasksListLayout() {
   const navigate = useNavigate();
-  const { tasksList } = useContext(UserContext);
-console.log({tasksList});
+  const { tasksList, setUser } = useContext(UserContext);
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -34,38 +33,41 @@ console.log({tasksList});
   // Add a new tag from the title input
   const handleAddTag = () => {
     const newTag = titleInput.trim().toLowerCase();
-    if (newTag === '') return;
+    if (newTag === "") return;
 
-    const id = newTag.replace(/\s+/g, '-');
-    if (!tags.some(tag => tag.id === id)) {
+    const id = newTag.replace(/\s+/g, "-");
+    if (!tags.some((tag) => tag.id === id)) {
       setTags([...tags, { id, name: newTag, checked: false }]);
-      setTitleInput('');
+      setTitleInput("");
     }
   };
 
   // Toggle the checked state of a tag
   const handleCheckboxChange = (id) => {
-    setTags(tags.map(tag =>
-      tag.id === id ? { ...tag, checked: !tag.checked } : tag
-    ));
+    setTags(
+      tags.map((tag) =>
+        tag.id === id ? { ...tag, checked: !tag.checked } : tag
+      )
+    );
   };
 
   // Filter tasks based on location, tags, and category
   const filteredTasks = tasksList.filter((task) => {
-    const locationMatch = locationInput.trim() === '' ||
+    const locationMatch =
+      locationInput.trim() === "" ||
       task?.location?.toLowerCase().includes(locationInput.toLowerCase());
-console.log({locationMatch});
-console.log('location', task.location.toLowerCase());
-console.log('inputlocation', locationInput.toLowerCase());
+    console.log({ locationMatch });
+    console.log("location", task.location.toLowerCase());
+    console.log("inputlocation", locationInput.toLowerCase());
     // const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
     // const tagsMatch = selectedTags.length === 0 ||
     //   selectedTags.some(tag => task?.requiredSkills
     //     ?.toLowerCase().includes(tag));
 
-    const categoryMatch = selectedCategory.trim() === 'All categories' ||
-      task?.category
-      ?.toLowerCase().includes(selectedCategory.toLowerCase());
-console.log({categoryMatch});
+    const categoryMatch =
+      selectedCategory.trim() === "All categories" ||
+      task?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
+    console.log({ categoryMatch });
 
     return locationMatch && categoryMatch;
   });
@@ -128,7 +130,9 @@ console.log({categoryMatch});
                     type="text"
                     value={titleInput}
                     onChange={(e) => setTitleInput(e.target.value)}
-                    onKeyPress={(e) => { if (e.key === 'Enter') handleAddTag() }}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") handleAddTag();
+                    }}
                   />
                   <button
                     className="keyword-input-button ripple-effect"
@@ -138,8 +142,8 @@ console.log({categoryMatch});
                   </button>
                 </div>
                 <div class="sidebar-widget"></div>
-                <div class="tags-container" style={{marginTop: '20px'}}>
-                  {tags.map(tag => (
+                <div class="tags-container" style={{ marginTop: "20px" }}>
+                  {tags.map((tag) => (
                     <div key={tag.id} className="tag">
                       <input
                         type="checkbox"
@@ -177,7 +181,13 @@ console.log({categoryMatch});
             </div>
 
             <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
-              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center' }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "nowrap",
+                  alignItems: "center",
+                }}
+              >
                 Sort by:
               </div>
               <select>
@@ -191,7 +201,7 @@ console.log({categoryMatch});
 
           {/* Tasks Container */}
           <div className="tasks-list-container compact-list margin-top-35">
-            {filteredTasks?.length > 0 ?
+            {filteredTasks?.length > 0 ? (
               filteredTasks?.map((task) => {
                 return (
                   <a
@@ -216,11 +226,11 @@ console.log({categoryMatch});
                         <p className="task-listing-text">{task.description}</p>
                         <div className="task-tags">
                           {task?.tags?.split(",").length > 0 &&
-                            task?.tags
-                              ?.split(",")
-                              .map((tag, index) => (
-                                <span key={index} style={{ marginLeft: 4 }}>{tag}</span>
-                              ))}
+                            task?.tags?.split(",").map((tag, index) => (
+                              <span key={index} style={{ marginLeft: 4 }}>
+                                {tag}
+                              </span>
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -239,11 +249,12 @@ console.log({categoryMatch});
                     </div>
                   </a>
                 );
-              }) : 
-              (
-                <p className="no-freelancer" style={{paddingTop: '3rem'}}>No Tasks found</p>
-              )
-              }
+              })
+            ) : (
+              <p className="no-freelancer" style={{ paddingTop: "3rem" }}>
+                No Tasks found
+              </p>
+            )}
           </div>
           {/* Tasks Container / End */}
 
@@ -258,7 +269,6 @@ console.log({categoryMatch});
                     <ul>
                       <li className="pagination-arrow">
                         <a href="#" className="ripple-effect">
-
                           <i class="icon-material-outline-keyboard-arrow-left"></i>
                         </a>
                       </li>
