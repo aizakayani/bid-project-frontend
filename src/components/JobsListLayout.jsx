@@ -1,14 +1,44 @@
 import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
 import { UserContext } from "../context/userContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { timeDifferenceFromNow } from "../utils/utils";
 import { Dropdown } from "react-bootstrap";
+import { updateUserAPI } from "../services/user";
 
 function JobsListLayout() {
   const navigate = useNavigate();
-  const { jobsList } = useContext(UserContext);
-  console.log({ jobsList });
+  const { jobsList, user, setUser } = useContext(UserContext);
+  const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
+  useEffect(() => {
+    if (user?.data?.bookmarkedJobs?.length) {
+      setBookmarkedJobs([...user?.data?.bookmarkedJobs]);
+    }
+  }, [user]);
+
+  const handleUpdateBookmarkedJobs = async (jobId) => {
+    const bookmarksCopy = [...bookmarkedJobs];
+    const index = bookmarksCopy.indexOf(jobId);
+
+    if (index !== -1) {
+      // If jobId exists, remove it from the array
+      bookmarksCopy.splice(index, 1);
+    } else {
+      // If jobId does not exist, add it to the array
+      bookmarksCopy.push(jobId);
+    }
+    // send API call
+    try {
+      const data = user?.data || {};
+      data.bookmarkedJobs = bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
+      const updateResult = await updateUserAPI({ data });
+      if (updateResult?.success && updateResult?.user) {
+        setUser(updateResult?.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [locationInput, setLocationInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
@@ -40,20 +70,22 @@ function JobsListLayout() {
   // Function to add a new tag
   const handleAddTag = () => {
     const newTag = titleInput.trim().toLowerCase();
-    if (newTag === '') return;
+    if (newTag === "") return;
 
-    const id = newTag.replace(/\s+/g, '-');
-    if (!tags.some(tag => tag.id === id)) {
+    const id = newTag.replace(/\s+/g, "-");
+    if (!tags.some((tag) => tag.id === id)) {
       setTags([...tags, { id, name: newTag, checked: false }]);
-      setTitleInput('');
+      setTitleInput("");
     }
   };
 
   // Function to toggle the checked state of a tag
   const handleCheckboxChange = (id) => {
-    setTags(tags.map(tag =>
-      tag.id === id ? { ...tag, checked: !tag.checked } : tag
-    ));
+    setTags(
+      tags.map((tag) =>
+        tag.id === id ? { ...tag, checked: !tag.checked } : tag
+      )
+    );
   };
 
   // Function to handle category selection
@@ -69,33 +101,36 @@ function JobsListLayout() {
   // Filter jobs based on location and selected tags and job type
   const filteredJobs = jobsList.filter((job) => {
     // Normalize job.type to lowercase and remove spaces
-    const normalizedJobType = job.type.toLowerCase().replace(/\s+/g, '');
+    const normalizedJobType = job.type.toLowerCase().replace(/\s+/g, "");
 
     // Match location
-    const locationMatch = locationInput.trim() === '' ||
+    const locationMatch =
+      locationInput.trim() === "" ||
       job?.location?.toLowerCase().includes(locationInput.toLowerCase());
 
     // Match tags
-    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
-    const tagsMatch = selectedTags.length === 0 ||
-      selectedTags.some(tag => job?.title?.toLowerCase().includes(tag));
+    const selectedTags = tags.filter((tag) => tag.checked).map((tag) => tag.id);
+    const tagsMatch =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) => job?.title?.toLowerCase().includes(tag));
 
     // Match job type with normalized strings
-    const anyJobTypeToggled = Object.values(jobTypes).some(value => value);
+    const anyJobTypeToggled = Object.values(jobTypes).some((value) => value);
 
     // If no job type is toggled on, consider all job types
-    const jobTypeMatch = !anyJobTypeToggled ||
-      (jobTypes.freelance && normalizedJobType === 'freelance') ||
-      (jobTypes.fulltime && normalizedJobType === 'fulltime') ||
-      (jobTypes.parttime && normalizedJobType === 'parttime') ||
-      (jobTypes.internship && normalizedJobType === 'internship') ||
-      (jobTypes.temporary && normalizedJobType === 'temporary');
-      const categoryMatch = selectedCategory.trim() === 'All categories' ||
-    job?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
+    const jobTypeMatch =
+      !anyJobTypeToggled ||
+      (jobTypes.freelance && normalizedJobType === "freelance") ||
+      (jobTypes.fulltime && normalizedJobType === "fulltime") ||
+      (jobTypes.parttime && normalizedJobType === "parttime") ||
+      (jobTypes.internship && normalizedJobType === "internship") ||
+      (jobTypes.temporary && normalizedJobType === "temporary");
+    const categoryMatch =
+      selectedCategory.trim() === "All categories" ||
+      job?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
 
-  // Final filter condition combining location, tags, job type, and category
-  return locationMatch && tagsMatch && jobTypeMatch && categoryMatch;
-  
+    // Final filter condition combining location, tags, job type, and category
+    return locationMatch && tagsMatch && jobTypeMatch && categoryMatch;
   });
 
   return (
@@ -131,7 +166,9 @@ function JobsListLayout() {
                     type="text"
                     value={titleInput}
                     onChange={(e) => setTitleInput(e.target.value)}
-                    onKeyPress={(e) => { if (e.key === 'Enter') handleAddTag() }}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") handleAddTag();
+                    }}
                   />
                   <button
                     className="keyword-input-button ripple-effect"
@@ -178,7 +215,7 @@ function JobsListLayout() {
                     <input
                       type="checkbox"
                       checked={jobTypes.freelance}
-                      onChange={() => handleJobTypeToggle('freelance')}
+                      onChange={() => handleJobTypeToggle("freelance")}
                     />
                     <span className="switch-button"></span> Freelance
                   </label>
@@ -189,7 +226,7 @@ function JobsListLayout() {
                     <input
                       type="checkbox"
                       checked={jobTypes.fulltime}
-                      onChange={() => handleJobTypeToggle('fulltime')}
+                      onChange={() => handleJobTypeToggle("fulltime")}
                     />
                     <span className="switch-button"></span> Full Time
                   </label>
@@ -200,7 +237,7 @@ function JobsListLayout() {
                     <input
                       type="checkbox"
                       checked={jobTypes.parttime}
-                      onChange={() => handleJobTypeToggle('parttime')}
+                      onChange={() => handleJobTypeToggle("parttime")}
                     />
                     <span className="switch-button"></span> Part Time
                   </label>
@@ -211,7 +248,7 @@ function JobsListLayout() {
                     <input
                       type="checkbox"
                       checked={jobTypes.internship}
-                      onChange={() => handleJobTypeToggle('internship')}
+                      onChange={() => handleJobTypeToggle("internship")}
                     />
                     <span className="switch-button"></span> Internship
                   </label>
@@ -222,7 +259,7 @@ function JobsListLayout() {
                     <input
                       type="checkbox"
                       checked={jobTypes.temporary}
-                      onChange={() => handleJobTypeToggle('temporary')}
+                      onChange={() => handleJobTypeToggle("temporary")}
                     />
                     <span className="switch-button"></span> Temporary
                   </label>
@@ -234,7 +271,7 @@ function JobsListLayout() {
             <div className="sidebar-widget">
               <h3>Tags</h3>
               <div className="tags-container">
-                {tags.map(tag => (
+                {tags.map((tag) => (
                   <div className="tag" key={tag.id}>
                     <input
                       type="checkbox"
@@ -273,7 +310,13 @@ function JobsListLayout() {
             </div>
 
             <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
-              <div style={{ display: "flex", flexWrap: "nowrap", alignItems: 'center' }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "nowrap",
+                  alignItems: "center",
+                }}
+              >
                 Sort by:
               </div>
               <select>
@@ -331,12 +374,19 @@ function JobsListLayout() {
                     </div>
 
                     {/* Bookmark */}
-                    <span className="bookmark-icon"></span>
+                    <span
+                      className="bookmark-icon"
+                      onClick={() => {
+                        handleUpdateBookmarkedJobs(job._id);
+                      }}
+                    ></span>
                   </div>
                 </a>
               ))
             ) : (
-              <p className="no-freelancer" style={{paddingTop: '3rem'}}>No jobs found</p>
+              <p className="no-freelancer" style={{ paddingTop: "3rem" }}>
+                No jobs found
+              </p>
             )}
           </div>
 
@@ -380,5 +430,3 @@ function JobsListLayout() {
 }
 
 export default JobsListLayout;
-
-

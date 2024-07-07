@@ -424,6 +424,22 @@ export const getFreelancerDetails = (id, list) => {
   return details;
 };
 
+export const getJobDetails = (id, list) => {
+  let details = null;
+  if (list?.length > 0) {
+    details = list.find((item) => item._id === id);
+  }
+  return details;
+};
+
+export const getTaskDetails = (id, list) => {
+  let details = null;
+  if (list?.length > 0) {
+    details = list.find((item) => item._id === id);
+  }
+  return details;
+};
+
 export const getDeliveryTime = (deliveryTime) => {
   switch (deliveryTime) {
     case "less-three":

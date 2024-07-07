@@ -1,5 +1,5 @@
-import gb from "../utils/images/flags/gb.svg";
 
+import avatar from '../utils/images/Svgs/no-avatar-image.svg'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import companyLogo05 from "../utils/images/company-logo-05.png";
@@ -11,6 +11,7 @@ import { getCountryFlag } from "../utils/common";
 function Home() {
   const { jobsList, user, isLoggedIn, freelancers, tasksList, employers } =
     useContext(UserContext);
+    console.log({employers});
   const categories = [
     "Admin Support",
     "Customer Service",
@@ -49,7 +50,7 @@ function Home() {
       location: locationInput,
       title: titleInput,
     }));
-    window.scrollBy(0, 600);
+    window.scrollBy(0, 1100);
   };
   console.log({employers});
   // Function to filter jobs based on location and title
@@ -110,7 +111,7 @@ function Home() {
           )}
 
           {/* <!-- Search Bar --> */}
-          {user?.role === "freelancer" ? (
+          {user?.role !== "freelancer" ? (
             <div class="row">
               <div class="col-md-12">
                 <div class="intro-banner-search-form margin-top-95">
@@ -624,7 +625,7 @@ function Home() {
                               <div class="freelancer-avatar">
                                 <div class="verified-badge"></div>
                                 <a href="single-freelancer-profile.html">
-                                  <img src={freelancer.avatar} alt="" />
+                                  <img src={avatar} alt="" />
                                 </a>
                               </div>
 

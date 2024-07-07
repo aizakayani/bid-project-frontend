@@ -13,14 +13,28 @@ import {
   getJobsApplicationsByUser,
 } from "../services/job-applications";
 import toast from "react-hot-toast";
-import { countries } from "countries-list";
+import { updateUserAPI } from "../services/user";
 function JobDetails() {
   const { id } = useParams();
-  const { jobsList, setUserJobApplications, userJobApplications } =
-    useContext(UserContext);
+  const {
+    jobsList,
+    setUserJobApplications,
+    userJobApplications,
+    user,
+    setUser,
+  } = useContext(UserContext);
+  const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
+
+  console.log(bookmarkedJobs);
+
+  useEffect(() => {
+    if (user?.data?.bookmarkedJobs) {
+      setBookmarkedJobs([...user?.data?.bookmarkedJobs]);
+    }
+  }, [user?.data]);
 
   useEffect(() => {
     console.log(userJobApplications, id);
@@ -75,6 +89,31 @@ function JobDetails() {
       toast.error("Failed to get user job applications");
     }
   };
+
+  const handleUpdateBookmarkedJobs = async (jobId) => {
+    const bookmarksCopy = bookmarkedJobs?.length > 0 ? [...bookmarkedJobs] : [];
+    const index = bookmarksCopy.indexOf(jobId);
+
+    if (index !== -1) {
+      // If jobId exists, remove it from the array
+      bookmarksCopy.splice(index, 1);
+    } else {
+      // If jobId does not exist, add it to the array
+      bookmarksCopy.push(jobId);
+    }
+    // send API call
+    try {
+      const data = user?.data || {};
+      data.bookmarkedJobs = bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
+      const updateResult = await updateUserAPI({ data });
+      if (updateResult?.success && updateResult?.user) {
+        setUser(updateResult?.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div class="single-page-header" data-background-image={singleJob}>
@@ -329,10 +368,19 @@ function JobDetails() {
                 <h3>Bookmark or Share</h3>
 
                 {/* <!-- Bookmark Button --> */}
-                <button class="bookmark-button margin-bottom-25">
+                <button
+                  class="bookmark-button margin-bottom-25"
+                  onClick={() => {
+                    handleUpdateBookmarkedJobs(JobDetails?._id);
+                  }}
+                >
                   <span class="bookmark-icon"></span>
-                  <span class="bookmark-text">Bookmark</span>
-                  <span class="bookmarked-text">Bookmarked</span>
+                  {!bookmarkedJobs?.includes(JobDetails?._id) && (
+                    <span class="bookmark-text">Bookmark</span>
+                  )}
+                  {bookmarkedJobs?.includes(JobDetails?._id) && (
+                    <span class="bookmarked-text">Bookmarked</span>
+                  )}
                 </button>
 
                 {/* <!-- Copy URL -->
