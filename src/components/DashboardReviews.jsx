@@ -1,6 +1,14 @@
+import { useState } from "react";
+import EditPopup from "./modals/EditPopup";
+import LeavePopup from "./modals/LeavePopup";
+
+
 function DashboardReviews() {
+  const [leaveReviewPopup,setLeaveReviewPopup] = useState(false);
+  const [editReviewPopup,setEditReviewPopup] = useState(false);
   return (
-    <div class="dashboard-content-container" data-simplebar>
+    <>
+     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
@@ -37,9 +45,9 @@ function DashboardReviews() {
                     <a
                       href="#small-dialog-2"
                       class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                      onClick={()=> setLeaveReviewPopup(true)}
                     >
-                      <i class="icon-material-outline-thumb-up"></i> Leave a
-                      Review
+                      <i class="icon-material-outline-thumb-up"></i> Leave a Review
                     </a>
                   </li>
                   <li>
@@ -56,6 +64,7 @@ function DashboardReviews() {
                     <a
                       href="#small-dialog-2"
                       class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                      onClick={()=> setLeaveReviewPopup(true)}
                     >
                       <i class="icon-material-outline-thumb-up"></i> Leave a
                       Review
@@ -84,8 +93,9 @@ function DashboardReviews() {
                       </div>
                     </div>
                     <a
-                      href="#small-dialog-1"
+                      
                       class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"
+                      onClick={()=> setEditReviewPopup(true)}
                     >
                       <i class="icon-feather-edit"></i> Edit Review
                     </a>
@@ -113,8 +123,9 @@ function DashboardReviews() {
                       </div>
                     </div>
                     <a
-                      href="#small-dialog-1"
+                     
                       class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"
+                      onClick={()=> setEditReviewPopup(true)}
                     >
                       <i class="icon-feather-edit"></i> Edit Review
                     </a>
@@ -206,8 +217,9 @@ function DashboardReviews() {
                       </div>
                     </div>
                     <a
-                      href="#small-dialog-1"
+                      
                       class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"
+                      onClick={()=> setEditReviewPopup(true)}
                     >
                       <i class="icon-feather-edit"></i> Edit Review
                     </a>
@@ -251,7 +263,12 @@ function DashboardReviews() {
         </div>
         {/* <!-- Footer / End --> */}
       </div>
+      
     </div>
+    {editReviewPopup && <EditPopup show={editReviewPopup} handleClose={()=> setEditReviewPopup(false)} handleSubmit={()=> setEditReviewPopup(false)}/>}
+    {leaveReviewPopup && <LeavePopup show={leaveReviewPopup} handleClose={()=> setLeaveReviewPopup(false)} handleSubmit={()=> setLeaveReviewPopup(false)}/>}
+    </>
+   
   );
 }
 export default DashboardReviews;
