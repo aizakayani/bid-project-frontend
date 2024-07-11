@@ -5,16 +5,20 @@ import de from "../utils/images/flags/de.svg";
 import pl from "../utils/images/flags/pl.svg";
 import it from "../utils/images/flags/it.svg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
+import companyLogo05 from "../utils/images/company-logo-05.png";
 import singleTask from "../utils/images/single-task.jpg";
 import browseCompanies2 from "../utils/images/browse-companies-02.png";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import { addBidAPI, getBidsByUserAPI } from "../services/bids";
 import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
+import { getCountryFlag } from "../utils/common";
+import { useNavigate } from "react-router-dom";
 function TaskDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { tasksList, userBids, setUserBids, user, setUser } =
     useContext(UserContext);
@@ -112,19 +116,14 @@ function TaskDetails() {
               <div class="single-page-header-inner">
                 <div class="left-side">
                   <div class="header-image">
-                    <a href="single-company-profile.html">
-                      <img src={browseCompanies2} alt="" />
-                    </a>
+                  <div className="job-listing-company-logo">
+                      <img src={singleTask.companyLogo || companyLogo05} alt="" />
+                    </div>
                   </div>
                   <div class="header-details">
                     <h3>{taskDetails?.title}</h3>
                     <h5>About the Employer</h5>
                     <ul>
-                      <li>
-                        <a href="single-company-profile.html">
-                          <i class="icon-material-outline-business"></i> Acue
-                        </a>
-                      </li>
                       <li>
                         <div class="star-rating" data-rating="5.0">
                           <span class="star"></span>
@@ -135,7 +134,8 @@ function TaskDetails() {
                         </div>
                       </li>
                       <li>
-                        <img class="flag" src={de} alt="" /> Germany
+                      <img class="flag" src={getCountryFlag(taskDetails?.location)}/>{" "}
+                      
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -167,7 +167,7 @@ function TaskDetails() {
             </div>
 
             {/* <!-- Atachments --> */}
-            {/* <div class="single-page-section">
+            <div class="single-page-section">
               <h3>Attachments</h3>
               <div class="attachments-container">
                 <a href="#" class="attachment-box ripple-effect">
@@ -175,7 +175,7 @@ function TaskDetails() {
                   <i>PDF</i>
                 </a>
               </div>
-            </div> */}
+            </div>
 
             {/* <!-- Skills --> */}
             <div class="single-page-section">
@@ -459,11 +459,13 @@ function TaskDetails() {
                   <div class="bidding-signup">
                     Don't have an account?{" "}
                     <a
-                      href="#sign-in-dialog"
-                      class="register-tab sign-in popup-with-zoom-anim"
-                    >
-                      Sign Up
-                    </a>
+                    onClick={() => {
+                      navigate("/register");
+                    }}
+                    style={{ color: "#770737", textDecoration: "underline" }}
+                  >
+                    Sign Up!
+                  </a>
                   </div>
                 </div>
               </div>

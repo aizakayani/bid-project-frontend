@@ -77,7 +77,6 @@ function DashboardBookmarks() {
                                   <a href="#" class="job-listing-company-logo">
                                     <img src={companyLogo2} alt="" />
                                   </a>
-
                                   {/* <!-- Details --> */}
                                   <div class="job-listing-description">
                                     <h3 class="job-listing-title">
@@ -132,7 +131,9 @@ function DashboardBookmarks() {
                 </div>
               </div>
             </div>
-          )}
+
+         
+         )}
 
           {/* <!-- Dashboard Box --> */}
           {user.role === "employer" && (

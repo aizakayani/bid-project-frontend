@@ -333,7 +333,7 @@ function JobsListLayout() {
               filteredJobs.map((job) => (
                 <a
                   key={job._id}
-                  // onClick={() => navigate(`/job/details/${job._id}`)}
+                   onClick={() => navigate(`/job/details/${job._id}`)}
                   className="job-listing"
                 >
                   <div className="job-listing-details">

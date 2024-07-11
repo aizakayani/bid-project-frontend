@@ -3,6 +3,7 @@ import companyLogo3a from "../utils/images/company-logo-03a.png";
 import gb from "../utils/images/flags/gb.svg";
 import companyLogo2 from "../utils/images/company-logo-02.png";
 import companyLogo3 from "../utils/images/company-logo-03.png";
+import companyLogo05 from "../utils/images/company-logo-05.png";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
@@ -14,6 +15,7 @@ import {
 } from "../services/job-applications";
 import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
+import { getCountryFlag } from "../utils/common";
 function JobDetails() {
   const { id } = useParams();
   const {
@@ -123,19 +125,14 @@ function JobDetails() {
               <div class="single-page-header-inner">
                 <div class="left-side">
                   <div class="header-image">
-                    <a href="single-company-profile.html">
-                      <img src={companyLogo3a} alt="" />
-                    </a>
+                    <div className="job-listing-company-logo">
+                      <img src={singleJob.companyLogo || companyLogo05} alt="" />
+                    </div>
                   </div>
                   <div class="header-details">
                     <h3>{JobDetails?.title}</h3>
                     <h5>About the Employer</h5>
                     <ul>
-                      <li>
-                        <a href="single-company-profile.html">
-                          <i class="icon-material-outline-business"></i> King
-                        </a>
-                      </li>
                       <li>
                         <div class="star-rating" data-rating="4.9">
                           <span class="star"></span>
@@ -146,8 +143,7 @@ function JobDetails() {
                         </div>
                       </li>
                       <li>
-                        <img class="flag" src={gb} alt="" />{" "}
-                        {JobDetails?.location}
+                        <img class="flag" src={getCountryFlag(JobDetails?.location)}/>
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -173,12 +169,12 @@ function JobDetails() {
           <div class="col-xl-8 col-lg-8 content-right-offset">
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
-              {/* <p>{JobDetails?.description}</p> */}
-              <p>
+              <p>{JobDetails?.description}</p> 
+              {/* <p>
                 {
                   "A Restaurant General Manager oversees daily operations to ensure efficient service and profitability. They are responsible for staff management, customer satisfaction, inventory control, and financial reporting. The role requires strong leadership, problem-solving skills, and the ability to thrive in a fast-paced environment. Success involves balancing customer experience with operational efficiency and financial targets."
                 }
-              </p>
+              </p> */}
               {/* <p>
                 Leverage agile frameworks to provide a robust synopsis for high
                 level overviews. Iterative approaches to corporate strategy
@@ -204,8 +200,29 @@ function JobDetails() {
                 solely on the bottom line.
               </p> */}
             </div>
+             {/* <!-- Atachments --> */}
+             <div class="single-page-section">
+              <h3>Attachments</h3>
+              <div class="attachments-container">
+                <a href="#" class="attachment-box ripple-effect">
+                  <span>Project Brief</span>
+                  <i>PDF</i>
+                </a>
+              </div>
+            </div>
+             {/* <!-- Skills --> */}
+             <div class="single-page-section">
+              <h3>Skills Required</h3>
+              <div class="task-tags">
+                {JobDetails?.requiredSkills?.split(",")?.length > 0 &&
+                  JobDetails?.requiredSkills?.split(",")?.map((skill) => {
+                    return <span style={{ marginRight: 4 }}>{skill}</span>;
+                  })}
+              </div>
+            </div>
+            <div class="clearfix"></div>
 
-            <div class="single-page-section">
+            {/* <div class="single-page-section">
               <h3 class="margin-bottom-30">Location</h3>
               <div id="single-job-map-container">
                 <div
@@ -218,7 +235,7 @@ function JobDetails() {
                   Street View
                 </a>
               </div>
-            </div>
+            </div> */}
 
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Similar Jobs</h3>
@@ -365,7 +382,7 @@ function JobDetails() {
 
               {/* <!-- Sidebar Widget --> */}
               <div class="sidebar-widget">
-                <h3>Bookmark or Share</h3>
+                <h3>Bookmark</h3>
 
                 {/* <!-- Bookmark Button --> */}
                 <button
@@ -383,8 +400,8 @@ function JobDetails() {
                   )}
                 </button>
 
-                {/* <!-- Copy URL -->
-                <div class="copy-url">
+                 {/* <!-- Copy URL --> */}
+                {/* <div class="copy-url">
                   <input
                     id="copy-url"
                     type="text"
@@ -399,10 +416,10 @@ function JobDetails() {
                   >
                     <i class="icon-material-outline-file-copy"></i>
                   </button>
-                </div> */}
+                </div>  */}
 
                 {/* <!-- Share Buttons --> */}
-                <div class="share-buttons margin-top-25">
+                {/* <div class="share-buttons margin-top-25">
                   <div class="share-buttons-trigger">
                     <i class="icon-feather-share-2"></i>
                   </div>
@@ -453,7 +470,7 @@ function JobDetails() {
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
