@@ -196,7 +196,13 @@ function Dashboard() {
                                 onClick={() => setDashboardType("managetasks")}
                               >
                                 Manage Tasks{" "}
-                                <span class="nav-tag">{userTasks?.length}</span>
+                                <span class="nav-tag">
+                                  {userTasks?.length
+                                    ? userTasks.filter(
+                                        (task) => task.status !== "finished"
+                                      ).length
+                                    : 0}
+                                </span>
                               </a>
                             </li>
                           )}
@@ -288,6 +294,7 @@ function Dashboard() {
           <DashboardManageBidders
             manageBiddersTaskId={manageBiddersTaskId}
             setManageBiddersTaskId={setManageBiddersTaskId}
+            setDashboardType={setDashboardType}
           />
         )}
         {dashboardType === "activebids" && <DashboardMyActiveBids />}

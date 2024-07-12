@@ -9,12 +9,22 @@ import {
   getCountryFlag,
   getDeliveryTime,
   getFreelancerDetails,
+  getTaskDetails,
 } from "../utils/common";
+import { getTasksByUser, updateTaskAPI } from "../services/task";
+import toast from "react-hot-toast";
 function DashboardManageBidders({
   manageBiddersTaskId,
   setManageBiddersTaskId,
+  setDashboardType,
 }) {
-  const { userTasks, sortedBids, freelancers } = useContext(UserContext);
+  const {
+    userTasks,
+    sortedBids,
+    freelancers,
+    setNewMessageContext,
+    setUserTasks,
+  } = useContext(UserContext);
   const [selectedTask, setSelectedTask] = useState(userTasks[0]?._id || "");
 
   useEffect(() => {
@@ -23,7 +33,36 @@ function DashboardManageBidders({
       setManageBiddersTaskId(null);
     }
   }, []);
-  
+
+  const handleAcceptOffer = async (bidId, taskId) => {
+    try {
+      const response = await updateTaskAPI(
+        { acceptedBid: bidId, status: "in-progress" },
+        taskId
+      );
+      if (response.success) {
+        toast.success("Offer accepted for bid");
+        await getTasks();
+      } else {
+        toast.error("Failed to accept offer");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to accept offer");
+    }
+  };
+
+  const getTasks = async () => {
+    // fetch tasks
+    try {
+      const tasksResult = await getTasksByUser();
+      if (tasksResult?.success && tasksResult?.tasks) {
+        setUserTasks([...tasksResult?.tasks]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div class="dashboard-content-container" data-simplebar>
@@ -43,9 +82,10 @@ function DashboardManageBidders({
                 value={selectedTask}
               >
                 {userTasks?.length > 0 &&
-                  userTasks?.map((task) => (
-                    <option value={task._id}>{task.title}</option>
-                  ))}
+                  userTasks?.map((task) => {
+                    if (task.status === "new")
+                      return <option value={task._id}>{task.title}</option>;
+                  })}
               </select>
             </span>
           )}
@@ -58,10 +98,12 @@ function DashboardManageBidders({
             <div class="dashboard-box margin-top-0">
               {/* <!-- Headline --> */}
               <div class="headline">
-                <h3>
-                  <i class="icon-material-outline-supervisor-account"></i>{" "}
-                  {sortedBids[selectedTask]?.length}
-                </h3>
+                {getTaskDetails(selectedTask, userTasks)?.status === "new" && (
+                  <h3>
+                    <i class="icon-material-outline-supervisor-account"></i>{" "}
+                    {sortedBids[selectedTask]?.length}
+                  </h3>
+                )}
                 <div class="sort-by">
                   <select class="selectpicker hide-tick">
                     <option>Highest First</option>
@@ -72,102 +114,115 @@ function DashboardManageBidders({
               </div>
 
               <div class="content">
-                {sortedBids[selectedTask]?.length && (
-                  <ul class="dashboard-box-list">
-                    {sortedBids[selectedTask]?.map((bid) => {
-                      const freelancerDetails = getFreelancerDetails(
-                        bid.userId,
-                        freelancers
-                      );
-                      return (
-                        <li>
-                          {/* <!-- Overview --> */}
-                          <div class="freelancer-overview manage-candidates">
-                            <div class="freelancer-overview-inner">
-                              {/* <!-- Avatar --> */}
-                              <div class="freelancer-avatar">
-                                {/* <div class="verified-badge"></div> */}
-                                <a href="#">
-                                  <img
-                                    src={
-                                      freelancerDetails?.avatar
-                                        ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
-                                        : userAvatarBig2
-                                    }
-                                    alt=""
-                                  />
-                                </a>
-                              </div>
-
-                              {/* <!-- Name --> */}
-                              <div class="freelancer-name">
-                                <h4>
+                {sortedBids[selectedTask]?.length &&
+                  getTaskDetails(selectedTask, userTasks)?.status === "new" && (
+                    <ul class="dashboard-box-list">
+                      {sortedBids[selectedTask]?.map((bid) => {
+                        const freelancerDetails = getFreelancerDetails(
+                          bid.userId,
+                          freelancers
+                        );
+                        return (
+                          <li>
+                            {/* <!-- Overview --> */}
+                            <div class="freelancer-overview manage-candidates">
+                              <div class="freelancer-overview-inner">
+                                {/* <!-- Avatar --> */}
+                                <div class="freelancer-avatar">
+                                  {/* <div class="verified-badge"></div> */}
                                   <a href="#">
-                                    {freelancerDetails?.name || "Bidder"}{" "}
-                                    {freelancerDetails?.data?.location && (
-                                      <img
-                                        class="flag"
-                                        src={getCountryFlag(
-                                          freelancerDetails?.data?.location
-                                        )}
-                                        alt=""
-                                        title="Germany"
-                                        data-tippy-placement="top"
-                                      />
-                                    )}
+                                    <img
+                                      src={
+                                        freelancerDetails?.avatar
+                                          ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
+                                          : userAvatarBig2
+                                      }
+                                      alt=""
+                                    />
                                   </a>
-                                </h4>
-
-                                {/* <!-- Details --> */}
-
-                                {freelancerDetails?.email && (
-                                  <span class="freelancer-detail-item">
-                                    <a href="#">
-                                      <i class="icon-feather-mail"></i>{" "}
-                                      {freelancerDetails?.email}
-                                    </a>
-                                  </span>
-                                )}
-
-                                {/* <!-- Rating --> */}
-                                <div class="freelancer-rating">
-                                  <div
-                                    class="star-rating"
-                                    data-rating="5.0"
-                                  ></div>
                                 </div>
 
-                                {/* <!-- Bid Details --> */}
-                                <ul class="dashboard-task-info bid-info">
-                                  <li>
-                                    <strong>{`${bid.bidRate}`}</strong>
-                                    <span>Fixed Price</span>
-                                  </li>
-                                  <li>
-                                    <strong>
-                                      {getDeliveryTime(bid?.deliveryTime)}
-                                    </strong>
-                                    <span>Delivery Time</span>
-                                  </li>
-                                </ul>
+                                {/* <!-- Name --> */}
+                                <div class="freelancer-name">
+                                  <h4>
+                                    <a href="#">
+                                      {freelancerDetails?.name || "Bidder"}{" "}
+                                      {freelancerDetails?.data?.location && (
+                                        <img
+                                          class="flag"
+                                          src={getCountryFlag(
+                                            freelancerDetails?.data?.location
+                                          )}
+                                          alt=""
+                                          title="Germany"
+                                          data-tippy-placement="top"
+                                        />
+                                      )}
+                                    </a>
+                                  </h4>
 
-                                {/* <!-- Buttons --> */}
-                                <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-                                  <a
-                                    href="#small-dialog-1"
-                                    class="popup-with-zoom-anim button ripple-effect"
-                                  >
-                                    <i class="icon-material-outline-check"></i>{" "}
-                                    Accept Offer
-                                  </a>
-                                  <a
-                                    href="#small-dialog-2"
-                                    class="popup-with-zoom-anim button dark ripple-effect"
-                                  >
-                                    <i class="icon-feather-mail"></i> Send
-                                    Message
-                                  </a>
-                                  {/* <a
+                                  {/* <!-- Details --> */}
+
+                                  {freelancerDetails?.email && (
+                                    <span class="freelancer-detail-item">
+                                      <a href="#">
+                                        <i class="icon-feather-mail"></i>{" "}
+                                        {freelancerDetails?.email}
+                                      </a>
+                                    </span>
+                                  )}
+
+                                  {/* <!-- Rating --> */}
+                                  <div class="freelancer-rating">
+                                    <div
+                                      class="star-rating"
+                                      data-rating="5.0"
+                                    ></div>
+                                  </div>
+
+                                  {/* <!-- Bid Details --> */}
+                                  <ul class="dashboard-task-info bid-info">
+                                    <li>
+                                      <strong>{`${bid.bidRate}`}</strong>
+                                      <span>Fixed Price</span>
+                                    </li>
+                                    <li>
+                                      <strong>
+                                        {getDeliveryTime(bid?.deliveryTime)}
+                                      </strong>
+                                      <span>Delivery Time</span>
+                                    </li>
+                                  </ul>
+
+                                  {/* <!-- Buttons --> */}
+                                  <div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
+                                    <a
+                                      href="#small-dialog-1"
+                                      class="popup-with-zoom-anim button ripple-effect"
+                                      onClick={() =>
+                                        handleAcceptOffer(bid._id, bid.taskId)
+                                      }
+                                    >
+                                      <i class="icon-material-outline-check"></i>{" "}
+                                      Accept Offer
+                                    </a>
+                                    <a
+                                      href="#small-dialog-2"
+                                      class="popup-with-zoom-anim button dark ripple-effect"
+                                      onClick={() => {
+                                        setNewMessageContext({
+                                          receiver: {
+                                            id: bid.userId,
+                                            name: freelancerDetails?.name,
+                                          },
+                                        });
+                                        setDashboardType("messages");
+                                      }}
+                                    >
+                                      <i class="icon-feather-mail"></i> Send
+                                      Message
+                                    </a>
+                                    {/* <a
                                   href="#"
                                   class="button gray ripple-effect ico"
                                   title="Remove Bid"
@@ -175,15 +230,15 @@ function DashboardManageBidders({
                                 >
                                   <i class="icon-feather-trash-2"></i>
                                 </a> */}
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
               </div>
             </div>
           </div>

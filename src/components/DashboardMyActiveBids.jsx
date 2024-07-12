@@ -96,6 +96,13 @@ function DashboardMyActiveBids() {
                                 <div class="job-listing-description">
                                   <h3 class="job-listing-title">
                                     <a href="#">{taskDetails?.title}</a>
+                                    {taskDetails?.acceptedBid === bid._id && (
+                                      <span>{" (Bid Accepted)"}</span>
+                                    )}
+                                    {taskDetails?.acceptedBid &&
+                                      taskDetails?.acceptedBid !== bid._id && (
+                                        <span>{" (Another Bid Accepted)"}</span>
+                                      )}
                                   </h3>
                                 </div>
                               </div>
@@ -116,29 +123,31 @@ function DashboardMyActiveBids() {
                             </ul>
 
                             {/* <!-- Buttons --> */}
-                            <div class="buttons-to-right always-visible">
-                              <a
-                                href="#small-dialog"
-                                class="popup-with-zoom-anim button dark ripple-effect ico"
-                                title="Edit Bid"
-                                data-tippy-placement="top"
-                                onClick={() => {
-                                  setEditBidData(bid);
-                                  setOpenEditBidModal(true);
-                                }}
-                              >
-                                <i class="icon-feather-edit"></i>
-                              </a>
-                              <a
-                                href="#"
-                                class="button red ripple-effect ico"
-                                title="Cancel Bid"
-                                data-tippy-placement="top"
-                                onClick={() => handleDeleteBid(bid._id)}
-                              >
-                                <i class="icon-feather-trash-2"></i>
-                              </a>
-                            </div>
+                            {taskDetails?.status === "new" && (
+                              <div class="buttons-to-right always-visible">
+                                <a
+                                  href="#small-dialog"
+                                  class="popup-with-zoom-anim button dark ripple-effect ico"
+                                  title="Edit Bid"
+                                  data-tippy-placement="top"
+                                  onClick={() => {
+                                    setEditBidData(bid);
+                                    setOpenEditBidModal(true);
+                                  }}
+                                >
+                                  <i class="icon-feather-edit"></i>
+                                </a>
+                                <a
+                                  href="#"
+                                  class="button red ripple-effect ico"
+                                  title="Cancel Bid"
+                                  data-tippy-placement="top"
+                                  onClick={() => handleDeleteBid(bid._id)}
+                                >
+                                  <i class="icon-feather-trash-2"></i>
+                                </a>
+                              </div>
+                            )}
                           </li>
                         );
                       })}

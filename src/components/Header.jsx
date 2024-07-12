@@ -20,6 +20,7 @@ import {
 import UserRolePopup from "./modals/UserRolePopup";
 import { getJobsApplicationsByUser } from "../services/job-applications";
 import { getBidsByUserAPI } from "../services/bids";
+import { getNotesAPI } from "../services/notes";
 function Header() {
   const {
     user,
@@ -40,6 +41,7 @@ function Header() {
     chatConversations,
     setChatConversations,
     setEmployers,
+    setNotes,
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -156,6 +158,7 @@ function Header() {
       await getAllTasks();
       await getFreelancers();
       await getEmployers();
+      await getNotes();
     }
   };
 
@@ -284,6 +287,17 @@ function Header() {
       const response = await getEmployersAPI();
       if (response?.success && response?.freelancers?.length > 0) {
         setEmployers([...response?.employers]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getNotes = async () => {
+    try {
+      const response = await getNotesAPI();
+      if (response.success) {
+        setNotes(response.notes);
       }
     } catch (error) {
       console.log(error);
