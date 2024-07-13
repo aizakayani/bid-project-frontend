@@ -18,7 +18,6 @@ export const getNotesAPI = () => {
 };
 
 export const addNoteAPI = (payload) => {
-  console.log("API CAL");
   return new Promise((resolve, reject) => {
     fetch(`http://localhost:3000/notes/add`, {
       method: "POST",
@@ -28,16 +27,11 @@ export const addNoteAPI = (payload) => {
       },
       body: JSON.stringify(payload),
     })
-      .then((res) => {
-        console.log("HMMMMM:", res);
-        res.json();
-      })
+      .then((res) => res.json())
       .then((result) => {
-        console.log("HUI:", result);
         resolve(result);
       })
       .catch((error) => {
-        console.log("ERROR", error);
         reject(error);
       });
   });

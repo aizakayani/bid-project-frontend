@@ -24,19 +24,20 @@ function DashboardMain() {
   };
 
   const addNote = async (data) => {
-    // try {
-    const response = await addNoteAPI(data);
-    console.log("LALALAL", response);
-    // if (response.success) {
-    //   await getNotes();
-    //   setOpenNotePopup(false);
-    // } else {
-    //   toast.error("Failed to add note");
-    // }
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error("Failed to add note");
-    // }
+    try {
+      const response = await addNoteAPI(data);
+      console.log("sdcsd", response);
+      if (response.success) {
+        await getNotes();
+        setOpenNotePopup(false);
+        toast.success("Note added successfully");
+      } else {
+        toast.error("Failed to add note");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add note");
+    }
   };
 
   const deleteNote = async (id) => {

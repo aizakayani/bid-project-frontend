@@ -39,10 +39,7 @@ const AddNotePopup = ({ show, handleClose, handleSubmit }) => {
             <button
               className="button full-width button-sliding-icon ripple-effect"
               style={{ marginTop: "20px" }}
-              type="submit"
-              form="add-note"
               onClick={() => {
-                console.log("huiiiii");
                 handleSubmit({
                   content,
                   priority,

@@ -285,7 +285,7 @@ function Header() {
     // fetch jobs
     try {
       const response = await getEmployersAPI();
-      if (response?.success && response?.freelancers?.length > 0) {
+      if (response?.success && response?.employers?.length > 0) {
         setEmployers([...response?.employers]);
       }
     } catch (error) {

@@ -70,25 +70,26 @@ function DashboardManageBidders({
         {/* <!-- Dashboard Headline --> */}
         <div class="dashboard-headline">
           <h3>Manage Bidders</h3>
-          {userTasks?.length > 0 && (
-            <span class="margin-top-7">
-              Bids for{" "}
-              <select
-                class="selectpicker with-border"
-                data-size="7"
-                onChange={(e) => {
-                  setSelectedTask(e.target.value);
-                }}
-                value={selectedTask}
-              >
-                {userTasks?.length > 0 &&
-                  userTasks?.map((task) => {
-                    if (task.status === "new")
-                      return <option value={task._id}>{task.title}</option>;
-                  })}
-              </select>
-            </span>
-          )}
+          {userTasks?.length > 0 &&
+            userTasks?.filter((task) => task.status === "new").length > 0 && (
+              <span class="margin-top-7">
+                Bids for{" "}
+                <select
+                  class="selectpicker with-border"
+                  data-size="7"
+                  onChange={(e) => {
+                    setSelectedTask(e.target.value);
+                  }}
+                  value={selectedTask}
+                >
+                  {userTasks?.length > 0 &&
+                    userTasks?.map((task) => {
+                      if (task.status === "new")
+                        return <option value={task._id}>{task.title}</option>;
+                    })}
+                </select>
+              </span>
+            )}
         </div>
 
         {/* <!-- Row --> */}
@@ -104,17 +105,17 @@ function DashboardManageBidders({
                     {sortedBids[selectedTask]?.length}
                   </h3>
                 )}
-                <div class="sort-by">
+                {/* <div class="sort-by">
                   <select class="selectpicker hide-tick">
                     <option>Highest First</option>
                     <option>Lowest First</option>
                     <option>Fastest First</option>
                   </select>
-                </div>
+                </div> */}
               </div>
 
               <div class="content">
-                {sortedBids[selectedTask]?.length &&
+                {sortedBids[selectedTask]?.length > 0 &&
                   getTaskDetails(selectedTask, userTasks)?.status === "new" && (
                     <ul class="dashboard-box-list">
                       {sortedBids[selectedTask]?.map((bid) => {
@@ -239,6 +240,9 @@ function DashboardManageBidders({
                       })}
                     </ul>
                   )}
+                {sortedBids[selectedTask]?.length === 0 ||
+                  (getTaskDetails(selectedTask, userTasks)?.status !==
+                    "new" && <div>No tasks</div>)}
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import DashboardMain from "./DashboardMain";
 import DashboardMessages from "./DashboardMessages";
 import DashboardBookmarks from "./DashboardBookmarks";
-import DashboardReviews from "./DashboardReviews";
+import DashboardReviews from "./DashboardFreelancerReviews";
 import DashboardSettings from "./DashboardSettings";
 import DashboardManageJobs from "./DashboardManageJobs";
 import DashboardManageCandidates from "./DashboardManageCandidates";
@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { getJobsApplicationsByJobIds } from "../services/job-applications";
 import { getBidsByTaskIds } from "../services/bids";
+import DashboardFreelancerReviews from "./DashboardFreelancerReviews";
+import DashboardEmployerReviews from "./DashboardEmployerReviews";
 function Dashboard() {
   const {
     user,
@@ -268,7 +270,12 @@ function Dashboard() {
         {dashboardType === "main" && <DashboardMain />}
         {dashboardType === "messages" && <DashboardMessages />}
         {dashboardType === "bookmarks" && <DashboardBookmarks />}
-        {dashboardType === "reviews" && <DashboardReviews />}
+        {dashboardType === "reviews" && user?.role === "employer" && (
+          <DashboardFreelancerReviews />
+        )}
+        {dashboardType === "reviews" && user?.role === "freelancer" && (
+          <DashboardEmployerReviews />
+        )}
         {dashboardType === "settings" && <DashboardSettings />}
         {dashboardType === "managejobs" && (
           <DashboardManageJobs handleUpdateJob={handleUpdateJob} />

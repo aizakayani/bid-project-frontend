@@ -424,6 +424,14 @@ export const getFreelancerDetails = (id, list) => {
   return details;
 };
 
+export const getEmployerDetails = (id, list) => {
+  let details = null;
+  if (list?.length > 0) {
+    details = list.find((item) => item._id === id);
+  }
+  return details;
+};
+
 export const getJobDetails = (id, list) => {
   let details = null;
   if (list?.length > 0) {
