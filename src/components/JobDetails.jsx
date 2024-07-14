@@ -29,6 +29,8 @@ function JobDetails() {
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false); 
+  console.log({isBookmarked});
 
   console.log(bookmarkedJobs);
 
@@ -59,6 +61,13 @@ function JobDetails() {
     }
   }, [id, jobsList]);
 
+  useEffect(() => {
+    if (bookmarkedJobs.includes(id)) {
+      setIsBookmarked(true);
+    } else {
+      setIsBookmarked(false);
+    }
+  }, [bookmarkedJobs, id]);
   const handleJobApplication = async (
     applicantCV,
     applicantName,
@@ -386,7 +395,7 @@ function JobDetails() {
 
                 {/* <!-- Bookmark Button --> */}
                 <button
-                  class="bookmark-button margin-bottom-25"
+                  class={`${isBookmarked ? 'bookmarked-button' : "bookmark-button"} margin-bottom-25`}
                   onClick={() => {
                     handleUpdateBookmarkedJobs(JobDetails?._id);
                   }}

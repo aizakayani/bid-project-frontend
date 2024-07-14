@@ -380,7 +380,7 @@ function Header() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        height: "30px",
+                        height: "32px",
                       }}
                     >
                       <a href="#">Find Work</a>
@@ -436,7 +436,7 @@ function Header() {
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      height: "30px",
+                      height: "32px",
                     }}
                   >
                     <a href="#">Find Work</a>

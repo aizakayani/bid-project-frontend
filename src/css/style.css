@@ -986,6 +986,8 @@ ul.user-menu-small-nav li a:hover i { color: #66676b; }
 	position: relative;
 	float: left;
 	margin: 0;
+	font-size: 19px;
+    font-weight: 500;
 	padding: 0
 }
 
@@ -5843,9 +5845,9 @@ span.bookmark-icon {
 	color: #fff;
 }
 
-.bookmark-icon.bookmarked {
-	background-color: #feb342;
-	color: #fff;
+.bookmark-icon-bookmarked {
+	background-color: #feb342 !important;
+	color: #fff !important;
 }
 
 .bookmark-icon.bookmarked:before {
@@ -5901,6 +5903,21 @@ span.bookmark-icon {
 	animation: none;
 }
 
+.bookmarked-button .bookmark-icon {
+	border-radius: 4px;
+	position: absolute;
+	left: 0;
+	right: auto;
+	top: auto;
+	height: 44px;
+	width: 44px;
+	border-radius: 4px 0 0 4px;
+	pointer-events: none;
+	transition: 0.4s;
+	animation: none;
+	margin-top: 2px;
+}
+
 .bookmark-button .bookmark-icon:before {
 	top: 8px;
 	color: #fff;
@@ -5908,26 +5925,34 @@ span.bookmark-icon {
 	font-size: 18px;
 }
 
-.bookmark-button.bookmarked {
+.bookmarked-button {
 	background-color: #feb342;
     color: #fff;
 	box-shadow: 0 3px 12px rgba(254,179,66,0.2);
+	display: inline-block;
+	padding: 0;
+	position: relative;
+	height: 44px;
+	line-height: 44px;
+	padding: 0 15px;
+	padding-left: 59px;
+	border-radius: 4px;
+	transition: 0.4s;
+	cursor: pointer;
 }
 
-.bookmark-button.bookmarked .bookmark-icon:before,
+.bookmarked-button .bookmark-icon:before,
 .bookmark-button:hover .bookmark-icon:before {
     color: #fff;
 }
 
-.bookmark-button.bookmarked .bookmark-icon,
-.bookmark-button.bookmarked:hover .bookmark-icon {
+.bookmarked-button .bookmark-icon,
+.bookmarked-button:hover .bookmark-icon {
 	background-color: rgba(255,255,255,0.16)
 }
-.bookmark-button.bookmarked .bookmarked-text,
+.bookmarked-button .bookmarked-text,
 .bookmark-button .bookmark-text { display: block }
 
-.bookmark-button.bookmarked .bookmark-text,
-.bookmark-button .bookmarked-text { display: none; }
 button.w-100 {
 	background-color: #eee;
     color: #777;

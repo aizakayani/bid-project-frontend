@@ -375,8 +375,13 @@ function JobsListLayout() {
 
                     {/* Bookmark */}
                     <span
-                      className={bookmarkedJobs ? ' bookmark-icon bookmark-icon-bookmarked' : "bookmark-icon"}
-                      onClick={() => {
+                      className={
+                        bookmarkedJobs.includes(job._id)
+                          ? "bookmark-icon bookmark-icon-bookmarked"
+                          : "bookmark-icon"
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
                         handleUpdateBookmarkedJobs(job._id);
                       }}
                     ></span>
