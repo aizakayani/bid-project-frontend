@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, ModalTitle } from "react-bootstrap";
 
 const AddNotePopup = ({ show, handleClose, handleSubmit }) => {
+  const [content, setContent] = useState("");
+  const [priority, setPriority] = useState("Low");
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -18,24 +20,31 @@ const AddNotePopup = ({ show, handleClose, handleSubmit }) => {
                 className="selectpicker with-border default margin-bottom-20"
                 data-size="7"
                 title="Priority"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
               >
-                <option>Low Priority</option>
-                <option>Medium Priority</option>
-                <option>High Priority</option>
+                <option value={"Low"}>Low Priority</option>
+                <option value={"Medium"}>Medium Priority</option>
+                <option value={"High"}>High Priority</option>
               </select>
 
               <textarea
                 name="textarea"
                 placeholder="Note"
                 className="with-border"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               ></textarea>
             </form>
             <button
               className="button full-width button-sliding-icon ripple-effect"
-              style={{marginTop: '20px'}}
-              type="submit"
-              form="add-note"
-              onClick={handleSubmit}
+              style={{ marginTop: "20px" }}
+              onClick={() => {
+                handleSubmit({
+                  content,
+                  priority,
+                });
+              }}
             >
               Add Note <i className="icon-material-outline-arrow-right-alt"></i>
             </button>

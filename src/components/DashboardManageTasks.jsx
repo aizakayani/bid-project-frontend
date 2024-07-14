@@ -6,7 +6,7 @@ import {
   unixToDate,
 } from "../utils/utils";
 import Popup from "./modals/Popup";
-import { deleteTaskAPI, getTasksByUser } from "../services/task";
+import { deleteTaskAPI, getTasksByUser, updateTaskAPI } from "../services/task";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 function DashboardManageTasks({
@@ -79,13 +79,29 @@ function DashboardManageTasks({
     // fetch tasks
     try {
       const tasksResult = await getTasksByUser();
-      if (tasksResult?.success && tasksResult?.tasks?.length > 0) {
+      if (tasksResult?.success && tasksResult?.tasks) {
         setUserTasks([...tasksResult?.tasks]);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleFinishTask = async (taskId) => {
+    try {
+      const response = await updateTaskAPI({ status: "finished" }, taskId);
+      if (response.success) {
+        toast.success("Task has been marked as finished");
+        await getTasks();
+      } else {
+        toast.error("Failed to mark task as finished");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to mark task as finished");
+    }
+  };
+
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -110,6 +126,7 @@ function DashboardManageTasks({
                 <ul class="dashboard-box-list">
                   {userTasks?.length > 0 &&
                     userTasks.map((task) => {
+                      if (task?.status === "finished") return <></>;
                       return (
                         <li>
                           {/* <!-- Job Listing --> */}
@@ -146,40 +163,58 @@ function DashboardManageTasks({
                           </div>
 
                           {/* <!-- Task Details --> */}
-                          <ul class="dashboard-task-info">
-                            <li>
-                              <strong>{getBidsCount(task._id)}</strong>
-                              <span>Bids</span>
-                            </li>
-                            <li>
-                              <strong>{`$${getAvgBid(task._id)}`}</strong>
-                              <span>Avg. Bid</span>
-                            </li>
-                            <li>
-                              <strong>{`$${task.budget}`}</strong>
-                              <span>
-                                {task.type === "hourly"
-                                  ? "Hourly rate"
-                                  : "Fixed price"}
-                              </span>
-                            </li>
-                          </ul>
+                          {task?.status === "new" && (
+                            <ul class="dashboard-task-info">
+                              <li>
+                                <strong>{getBidsCount(task._id)}</strong>
+                                <span>Bids</span>
+                              </li>
+                              <li>
+                                <strong>{`$${getAvgBid(task._id)}`}</strong>
+                                <span>Avg. Bid</span>
+                              </li>
+                              <li>
+                                <strong>{`$${task.budget}`}</strong>
+                                <span>
+                                  {task.type === "hourly"
+                                    ? "Hourly rate"
+                                    : "Fixed price"}
+                                </span>
+                              </li>
+                            </ul>
+                          )}
 
                           {/* <!-- Buttons --> */}
                           <div class="buttons-to-right always-visible">
-                            <a
-                              onClick={() => {
-                                setManageBiddersTaskId(task._id);
-                                setDashboardType("managebidders");
-                              }}
-                              class="button ripple-effect white-text-button"
-                            >
-                              <i class="icon-material-outline-supervisor-account"></i>{" "}
-                              Manage Bidders{" "}
-                              <span class="button-info">
-                                {getBidsCount(task._id)}
-                              </span>
-                            </a>
+                            {task?.status === "new" && (
+                              <a
+                                onClick={() => {
+                                  setManageBiddersTaskId(task._id);
+                                  setDashboardType("managebidders");
+                                }}
+                                class="button ripple-effect white-text-button"
+                              >
+                                <i class="icon-material-outline-supervisor-account"></i>{" "}
+                                Manage Bidders{" "}
+                                <span class="button-info">
+                                  {getBidsCount(task._id)}
+                                </span>
+                              </a>
+                            )}
+                            {task?.status === "in-progress" && (
+                              <a
+                                onClick={() => {
+                                  handleFinishTask(task._id);
+                                }}
+                                class="button ripple-effect white-text-button"
+                              >
+                                {/* <i class="icon-material-outline-supervisor-account"></i>{" "} */}
+                                Mark as finished{" "}
+                                {/* <span class="button-info">
+                                  {getBidsCount(task._id)}
+                                </span> */}
+                              </a>
+                            )}
                             <a
                               onClick={() => {
                                 handleUpdateTask(task);

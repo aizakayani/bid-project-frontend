@@ -69,7 +69,7 @@ function TasksListLayout() {
       task?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
     console.log({ categoryMatch });
 
-    return locationMatch && categoryMatch;
+    return locationMatch && categoryMatch && task.status === "new";
   });
 
   return (

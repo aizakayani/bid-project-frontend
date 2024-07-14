@@ -21,7 +21,7 @@ export const unixToDate = (timestamp) => {
     "November",
     "December",
   ];
-  var date = new Date(timestamp * 1000);
+  var date = new Date(timestamp);
   var day = ("0" + date.getDate()).slice(-2);
   var monthIndex = date.getMonth();
   var year = date.getFullYear();

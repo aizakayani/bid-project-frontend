@@ -1,11 +1,59 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import { useState } from "react";
 import AddNotePopup from "./modals/AddNotePopup";
+import { addNoteAPI, deleteNoteAPI, getNotesAPI } from "../services/notes";
+import toast from "react-hot-toast";
 
 function DashboardMain() {
-  const { user } = useContext(UserContext);
+  const { user, notes, setNotes } = useContext(UserContext);
   const [openNotePopup, setOpenNotePopup] = useState(false);
+
+  const getNotes = async () => {
+    try {
+      const response = await getNotesAPI();
+      if (response.success) {
+        setNotes(response.notes);
+      } else {
+        toast.error("Failed to get notes");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to get notes");
+    }
+  };
+
+  const addNote = async (data) => {
+    try {
+      const response = await addNoteAPI(data);
+      console.log("sdcsd", response);
+      if (response.success) {
+        await getNotes();
+        setOpenNotePopup(false);
+        toast.success("Note added successfully");
+      } else {
+        toast.error("Failed to add note");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add note");
+    }
+  };
+
+  const deleteNote = async (id) => {
+    try {
+      const response = await deleteNoteAPI(id);
+      if (response.success) {
+        getNotes();
+      } else {
+        toast.error("Failed to delete note");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete note");
+    }
+  };
+
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -97,22 +145,38 @@ function DashboardMain() {
 
               <div class="content with-padding">
                 {/* <!-- Note --> */}
-                <div class="dashboard-note">
-                  <p>
-                    Meeting with candidate at 3pm who applied for Bilingual
-                    Event Support Specialist
-                  </p>
-                  <div class="note-footer">
-                    <span class="note-priority high">High Priority</span>
-                    <div class="note-buttons">
-                      <a href="#" title="Remove" data-tippy-placement="top">
-                        <i class="icon-feather-trash-2"></i>
-                      </a>
+                {notes?.length > 0 &&
+                  notes?.map((note) => (
+                    <div class="dashboard-note">
+                      <p>{note.content}</p>
+
+                      <div class="note-footer">
+                        <span
+                          class={`note-priority ${
+                            note?.priority === "High"
+                              ? "high"
+                              : note?.priority === "Medium"
+                              ? "medium"
+                              : "low"
+                          }`}
+                        >
+                          {note.priority}
+                        </span>
+                        <div class="note-buttons">
+                          <a
+                            href="#"
+                            title="Remove"
+                            data-tippy-placement="top"
+                            onClick={() => deleteNote(note._id)}
+                          >
+                            <i class="icon-feather-trash-2"></i>
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  ))}
                 {/* <!-- Note --> */}
-                <div class="dashboard-note">
+                {/* <div class="dashboard-note">
                   <p>Extend premium plan for next month</p>
                   <div class="note-footer">
                     <span class="note-priority low">Low Priority</span>
@@ -124,7 +188,7 @@ function DashboardMain() {
                   </div>
                 </div>
                 {/* <!-- Note --> */}
-                <div class="dashboard-note">
+                {/* <div class="dashboard-note">
                   <p>Send payment to David Peterson</p>
                   <div class="note-footer">
                     <span class="note-priority medium">Medium Priority</span>
@@ -134,26 +198,25 @@ function DashboardMain() {
                       </a>
                     </div>
                   </div>
-                </div>
+                </div>  */}
               </div>
-              <div class="add-note-button">
-                <a
-                  href="#small-dialog"
-                  class="popup-with-zoom-anim button full-width button-sliding-icon"
-                  onClick={() => setOpenNotePopup(true)}
-                >
+              <div
+                class="add-note-button"
+                onClick={() => setOpenNotePopup(true)}
+              >
+                <a class="popup-with-zoom-anim button full-width button-sliding-icon">
                   Add Note <i class="icon-material-outline-arrow-right-alt"></i>
                 </a>
               </div>
             </div>
-            <div class="add-note-button">
+            {/* <div class="add-note-button">
               <a
                 href="#small-dialog"
                 class="popup-with-zoom-anim button full-width button-sliding-icon"
               >
                 Add Note <i class="icon-material-outline-arrow-right-alt"></i>
               </a>
-            </div>
+            </div> */}
             {/* <!-- Dashboard Box / End --> */}
           </div>
           {/* <!-- Dashboard Box / End --> */}
@@ -414,7 +477,7 @@ function DashboardMain() {
         <AddNotePopup
           show={openNotePopup}
           handleClose={() => setOpenNotePopup(false)}
-          handleSubmit={() => setOpenNotePopup(false)}
+          handleSubmit={(data) => addNote(data)}
         />
       )}
       {/* <!-- Row / End --> */}

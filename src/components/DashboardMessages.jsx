@@ -315,9 +315,9 @@ function DashboardMessages() {
                     (recepient) => recepient.id !== user?._id
                   )?.name || ""}
                 </h4>
-                <a href="#" class="message-action">
+                {/* <a href="#" class="message-action">
                   <i class="icon-feather-trash-2"></i> Delete Conversation
-                </a>
+                </a> */}
               </div>
 
               {/* <!-- Message Content Inner --> */}
