@@ -3,13 +3,13 @@ import EditPopup from "./modals/EditPopup";
 import LeavePopup from "./modals/LeavePopup";
 import { UserContext } from "../context/userContext";
 import { getFreelancerDetails } from "../utils/common";
-import { updateUserAPI } from "../services/user";
+import { getFreelancersAPI, updateUserAPI } from "../services/user";
 import { getTasksByUser, updateTaskAPI } from "../services/task";
 import toast from "react-hot-toast";
 import { unixToDate } from "../utils/utils";
 
 function DashboardFreelancerReviews() {
-  const { userTasks, freelancers, bids, setUserTasks } =
+  const { userTasks, freelancers, bids, setUserTasks, setFreelancers } =
     useContext(UserContext);
   const [freelancerReviews, setFreelancerReviews] = useState([]);
   const [leaveFreelancerReviewPopup, setLeaveFreelancerReviewPopup] =
@@ -21,7 +21,6 @@ function DashboardFreelancerReviews() {
       const finishedTasks = userTasks?.filter(
         (task) => task.status === "finished"
       );
-      console.log("filteredTasks", finishedTasks);
       if (finishedTasks?.length) {
         const reviewsCopy = [];
         finishedTasks.forEach((task) => {
@@ -57,6 +56,7 @@ function DashboardFreelancerReviews() {
       );
       if (response?.success) {
         await getTasks();
+        await getFreelancers();
         toast.success("Review added successfully");
       }
       setLeaveFreelancerReviewPopup(false);
@@ -72,6 +72,18 @@ function DashboardFreelancerReviews() {
       const tasksResult = await getTasksByUser();
       if (tasksResult?.success && tasksResult?.tasks) {
         setUserTasks([...tasksResult?.tasks]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFreelancers = async () => {
+    // fetch jobs
+    try {
+      const response = await getFreelancersAPI();
+      if (response?.success && response?.freelancers?.length > 0) {
+        setFreelancers([...response?.freelancers]);
       }
     } catch (error) {
       console.log(error);

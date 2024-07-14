@@ -5,9 +5,10 @@ import toast from "react-hot-toast";
 import { getEmployerDetails, getTaskDetails } from "../utils/common";
 import { getBidsByUserAPI, updateBidAPI } from "../services/bids";
 import { unixToDate } from "../utils/utils";
+import { getEmployersAPI } from "../services/user";
 
 function DashboardEmployerReviews() {
-  const { userBids, tasksList, employers, setUserBids } =
+  const { userBids, tasksList, employers, setUserBids, setEmployers } =
     useContext(UserContext);
   const [employerReviews, setEmployerReviews] = useState([]);
   const [leaveEmployerReviewPopup, setLeaveEmployerReviewPopup] =
@@ -15,7 +16,6 @@ function DashboardEmployerReviews() {
   const [employerReviewData, setEmployerReviewData] = useState(null);
 
   useEffect(() => {
-    console.log(userBids, employers, tasksList);
     if (
       userBids?.length > 0 &&
       employers?.length > 0 &&
@@ -24,17 +24,14 @@ function DashboardEmployerReviews() {
       const filteredTasks = tasksList?.filter(
         (task) => task.status === "finished"
       );
-      console.log("filteredTasks", filteredTasks);
       if (filteredTasks?.length) {
         const reviewsCopy = [];
         filteredTasks.forEach((task) => {
           const bidDetails = userBids.find(
             (bid) => bid._id === task.acceptedBid
           );
-          console.log("bidDetails", bidDetails);
           if (bidDetails?.userId) {
             const taskDetails = getTaskDetails(bidDetails.taskId, tasksList);
-            console.log("taskDetails", taskDetails);
             if (taskDetails) {
               const employerDetails = getEmployerDetails(
                 taskDetails?.userId,
@@ -67,6 +64,7 @@ function DashboardEmployerReviews() {
       );
       if (response?.success) {
         await getBids();
+        await getEmployers();
         toast.success("Review added successfully");
       }
       setLeaveEmployerReviewPopup(false);
@@ -82,6 +80,18 @@ function DashboardEmployerReviews() {
       const response = await getBidsByUserAPI();
       if (response?.success && response?.bids) {
         setUserBids([...response?.bids]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getEmployers = async () => {
+    // fetch jobs
+    try {
+      const response = await getEmployersAPI();
+      if (response?.success && response?.employers?.length > 0) {
+        setEmployers([...response?.employers]);
       }
     } catch (error) {
       console.log(error);
