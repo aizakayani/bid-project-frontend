@@ -64,6 +64,14 @@ function Home() {
       .includes(searchJob?.title.toLowerCase());
     return locationMatch && titleMatch;
   });
+  const ratingNumber = freelancers?.review?.rating;
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return 'filled';
+    } else {
+      return 'empty';
+    }
+  });
 
   console.log("ia loggd in...", isLoggedIn);
 
@@ -650,10 +658,11 @@ function Home() {
 
                               {/* <!-- Rating --> */}
                               <div class="freelancer-rating">
-                                <div
-                                  class="star-rating"
-                                  data-rating="5.0"
-                                ></div>
+                              <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                        {stars.map((starType, index) => (
+        <span key={index} className={`star ${starType}`}></span>
+      ))}
+                        </div>
                               </div>
                             </div>
                           </div>
@@ -661,21 +670,25 @@ function Home() {
                           {/* <!-- Details --> */}
                           <div class="freelancer-details">
                             <div class="freelancer-details-list">
-                              <ul>
-                                <li>
-                                  Location{" "}
-                                  <strong>
-                                    <i class="icon-material-outline-location-on"></i>{" "}
-                                    {freelancer?.data?.location}
-                                  </strong>
-                                </li>
-                                <li>
-                                  Rate{" "}
-                                  <strong>
-                                    {freelancer?.data?.hourlyRate}
-                                  </strong>
-                                </li>
-                              </ul>
+                              <div>
+                
+                   <ul style={{display: 'flex', justifyContent: 'center'}}>
+                 <li>
+                    Location{" "}
+                   <strong>
+                      <i className="icon-material-outline-location-on"></i>{" "}
+                      {freelancer?.data?.location ?? '-'}
+                    </strong>
+                </li>
+                     <li>
+                     Rate{" "}
+                    <strong>
+                 {freelancer?.data?.hourlyRate ?? '-'}
+               </strong>
+            </li>
+        </ul>
+       
+    </div>
                             </div>
                             <a
                               onClick={() => {

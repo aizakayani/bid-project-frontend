@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import { Dropdown } from "react-bootstrap";
 import { UserContext } from "../context/userContext";
 import { getCountryFlag } from "../utils/common";
-
+import avatar from '../utils/images/Svgs/no-avatar-image.svg'
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const { freelancers } = useContext(UserContext);
@@ -68,6 +68,14 @@ function FreeLancersListLayout() {
 
   // Final filter condition combining location, tags,  and category
   return locationMatch && tagsMatch ;
+  });
+  const ratingNumber = freelancers?.review?.rating;
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return 'filled';
+    } else {
+      return 'empty';
+    }
   });
 
   return (
@@ -191,7 +199,7 @@ function FreeLancersListLayout() {
                       {/* Avatar */}
                       <div className="freelancer-avatar">
                         <a href="single-freelancer-profile.html">
-                          <img src={freelancer?.avatar} alt="" />
+                        <img src={avatar} alt="" />
                         </a>
                       </div>
                       {/* Name */}
@@ -209,14 +217,10 @@ function FreeLancersListLayout() {
                           </a>
                         </h4>
                         {/* Rating */}
-                        <div className="freelancer-rating">
-                          <div className="star-rating" data-rating="4.5">
-                            <span className="star"></span>
-                            <span className="star"></span>
-                            <span className="star"></span>
-                            <span className="star"></span>
-                            <span className="star"></span>
-                          </div>
+                        <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                        {stars.map((starType, index) => (
+        <span key={index} className={`star ${starType}`}></span>
+      ))}
                         </div>
                       </div>
                     </div>

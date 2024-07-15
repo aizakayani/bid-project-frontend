@@ -124,6 +124,16 @@ function JobDetails() {
       console.log(error);
     }
   };
+console.log({JobDetails});
+const ratingNumber = JobDetails?.review?.rating;
+const stars = Array.from({ length: 5 }, (_, index) => {
+  if (index < ratingNumber) {
+    return 'filled';
+  } else {
+    return 'empty';
+  }
+});
+
 
   return (
     <>
@@ -143,12 +153,10 @@ function JobDetails() {
                     <h5>About the Employer</h5>
                     <ul>
                       <li>
-                        <div class="star-rating" data-rating="4.9">
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
+                        <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                        {stars.map((starType, index) => (
+        <span key={index} className={`star ${starType}`}></span>
+      ))}
                         </div>
                       </li>
                       <li>
@@ -210,7 +218,7 @@ function JobDetails() {
               </p> */}
             </div>
              {/* <!-- Atachments --> */}
-             <div class="single-page-section">
+             {/* <div class="single-page-section">
               <h3>Attachments</h3>
               <div class="attachments-container">
                 <a href="#" class="attachment-box ripple-effect">
@@ -218,7 +226,7 @@ function JobDetails() {
                   <i>PDF</i>
                 </a>
               </div>
-            </div>
+            </div> */}
              {/* <!-- Skills --> */}
              <div class="single-page-section">
               <h3>Skills Required</h3>

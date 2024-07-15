@@ -15,12 +15,12 @@ import { timeDifferenceFromNow } from "../utils/utils";
 import { addBidAPI, getBidsByUserAPI } from "../services/bids";
 import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
-import { getCountryFlag } from "../utils/common";
+import { getCountryFlag, getFreelancerDetails } from "../utils/common";
 import { useNavigate } from "react-router-dom";
 function TaskDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { tasksList, userBids, setUserBids, user, setUser } =
+  const { tasksList, userBids, setUserBids, user, setUser, freelancers } =
     useContext(UserContext);
   const [taskDetails, setTaskDetails] = useState(null);
   const [bidRate, setBidRate] = useState("");
@@ -107,6 +107,15 @@ function TaskDetails() {
       toast.error("Failed to get user bids");
     }
   };
+  console.log({taskDetails});
+  const ratingNumber = taskDetails?.review?.rating;
+const stars = Array.from({ length: 5 }, (_, index) => {
+  if (index < ratingNumber) {
+    return 'filled';
+  } else {
+    return 'empty';
+  }
+});
   return (
     <>
       <div class="single-page-header" data-background-image={singleTask}>
@@ -125,12 +134,10 @@ function TaskDetails() {
                     <h5>About the Employer</h5>
                     <ul>
                       <li>
-                        <div class="star-rating" data-rating="5.0">
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
+                        <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                        {stars.map((starType, index) => (
+                        <span key={index} className={`star ${starType}`}></span>
+                        ))}
                         </div>
                       </li>
                       <li>
@@ -167,7 +174,7 @@ function TaskDetails() {
             </div>
 
             {/* <!-- Atachments --> */}
-            <div class="single-page-section">
+            {/* <div class="single-page-section">
               <h3>Attachments</h3>
               <div class="attachments-container">
                 <a href="#" class="attachment-box ripple-effect">
@@ -175,7 +182,7 @@ function TaskDetails() {
                   <i>PDF</i>
                 </a>
               </div>
-            </div>
+            </div> */}
 
             {/* <!-- Skills --> */}
             <div class="single-page-section">
@@ -191,14 +198,16 @@ function TaskDetails() {
 
             {/* <!-- Freelancers Bidding --> */}
             <div class="boxed-list margin-bottom-60">
-              <div class="boxed-list-headline">
-                <h3>
-                  <i class="icon-material-outline-group"></i> Freelancers
-                  Bidding
-                </h3>
-              </div>
+            
               <ul class="boxed-list-ul">
-                <li>
+              {userBids?.map((bid) => {
+                        const freelancerDetails = getFreelancerDetails(
+                          bid.userId,
+                          freelancers
+                        );
+                        console.log({freelancerDetails});
+                return(
+                  <li>
                   <div class="bid">
                     {/* <!-- Avatar --> */}
                     <div class="bids-avatar">
@@ -216,7 +225,7 @@ function TaskDetails() {
                       <div class="freelancer-name">
                         <h4>
                           <a href="single-freelancer-profile.html">
-                            Tom Smith{" "}
+                          {freelancerDetails?.name}{" "}
                             <img
                               class="flag"
                               src={gb}
@@ -245,142 +254,9 @@ function TaskDetails() {
                     </div>
                   </div>
                 </li>
-                <li>
-                  <div class="bid">
-                    {/* <!-- Avatar --> */}
-                    <div class="bids-avatar">
-                      <div class="freelancer-avatar">
-                        <div class="verified-badge"></div>
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarBig2} alt="" />
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* <!-- Content --> */}
-                    <div class="bids-content">
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="single-freelancer-profile.html">
-                            David Peterson{" "}
-                            <img
-                              class="flag"
-                              src={de}
-                              alt=""
-                              title="Germany"
-                              data-tippy-placement="top"
-                            />
-                          </a>
-                        </h4>
-                        <div class="star-rating" data-rating="4.2">
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* <!-- Bid --> */}
-                    <div class="bids-bid">
-                      <div class="bid-rate">
-                        <div class="rate">$2,200</div>
-                        <span>in 14 days</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="bid">
-                    {/* <!-- Avatar --> */}
-                    <div class="bids-avatar">
-                      <div class="freelancer-avatar">
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarPlaceholder} alt="" />
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* <!-- Content --> */}
-                    <div class="bids-content">
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="single-freelancer-profile.html">
-                            Marcin Kowalski{" "}
-                            <img
-                              class="flag"
-                              src={pl}
-                              alt=""
-                              title="Poland"
-                              data-tippy-placement="top"
-                            />
-                          </a>
-                        </h4>
-                        <span class="not-rated">
-                          Minimum of 3 votes required
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* <!-- Bid --> */}
-                    <div class="bids-bid">
-                      <div class="bid-rate">
-                        <div class="rate">$3,800</div>
-                        <span>In 20 days</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="bid">
-                    {/* <!-- Avatar --> */}
-                    <div class="bids-avatar">
-                      <div class="freelancer-avatar">
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarPlaceholder} alt="" />
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* <!-- Content --> */}
-                    <div class="bids-content">
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="single-freelancer-profile.html">
-                            Sebastiano Piccio{" "}
-                            <img
-                              class="flag"
-                              src={it}
-                              alt=""
-                              title="Italy"
-                              data-tippy-placement="top"
-                            />
-                          </a>
-                        </h4>
-                        <div class="star-rating" data-rating="4.5">
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* <!-- Bid --> */}
-                    <div class="bids-bid">
-                      <div class="bid-rate">
-                        <div class="rate">$3,400</div>
-                        <span>In 10 days</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                )})};
               </ul>
+            
             </div>
           </div>
 

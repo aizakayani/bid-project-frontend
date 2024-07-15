@@ -4793,6 +4793,11 @@ span.blog-item-tag {
 	margin: 15px 0 0 0;
 	padding: 0;
 	color: #666;
+	display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-listing h3.task-listing-title a,
@@ -6823,6 +6828,63 @@ table.basic-table { margin-bottom: 0; }
 	width: 26px;
 	display: inline-block;
 	background-color: #38b653;
+}
+.star-rate { display: inline-block; }
+
+.star-rate .star {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	float: left;
+	margin-right: 0;
+	position: relative;
+}
+
+.star-rate .star.half:after,
+.star-rate .star:before {
+	font-family: "Material-Icons";
+	content: "\e988";
+	display: block;
+	color: #febe42;
+	font-size: 22px;
+}
+
+.star-rate .star.empty:before { color: #ddd; }
+
+.rating:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.star-rate .star.half:before { color: #ddd; }
+.star-rate .star.half:after {
+	color: #febe42;
+	position: absolute;
+	top: 0;
+	width: 50%;
+	display: block;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* average rating before stars */
+.star-rate:before { 
+	content: attr(data-rating);
+	float: left;
+	border-radius: 4px;
+	background-color: #febe42;
+	color: #fff;
+	font-size: 14px;
+	line-height: 15px;
+	font-weight: 700;
+	padding: 5px 7px;
+	position: relative;
+	top: 1px;
+	margin-right: 10px;
 }
 
 
