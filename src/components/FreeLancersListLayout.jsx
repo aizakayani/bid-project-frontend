@@ -3,11 +3,10 @@ import { useState, useContext } from "react";
 import { Dropdown } from "react-bootstrap";
 import { UserContext } from "../context/userContext";
 import { getCountryFlag } from "../utils/common";
-import avatar from '../utils/images/Svgs/no-avatar-image.svg'
+import avatar from "../utils/images/Svgs/no-avatar-image.svg";
 function FreeLancersListLayout() {
   const navigate = useNavigate();
   const { freelancers } = useContext(UserContext);
-  console.log({freelancers});
   const [locationInput, setLocationInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All categories");
   const categories = [
@@ -23,31 +22,33 @@ function FreeLancersListLayout() {
     "Sales & Marketing",
   ];
   const [tags, setTags] = useState([]);
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
 
   // Function to add a new tag
   const handleAddTag = () => {
-    if (newTag.trim() === '') return;
+    if (newTag.trim() === "") return;
 
-    const id = newTag.toLowerCase().replace(/\s+/g, '-');
-    if (!tags.some(tag => tag.id === id)) {
+    const id = newTag.toLowerCase().replace(/\s+/g, "-");
+    if (!tags.some((tag) => tag.id === id)) {
       setTags([...tags, { id, name: newTag, checked: false }]);
-      setNewTag('');
+      setNewTag("");
     }
   };
 
   // Function to handle pressing the Enter key to add a tag
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleAddTag();
     }
   };
 
   // Function to toggle the checked state of a tag
   const handleCheckboxChange = (id) => {
-    setTags(tags.map(tag =>
-      tag.id === id ? { ...tag, checked: !tag.checked } : tag
-    ));
+    setTags(
+      tags.map((tag) =>
+        tag.id === id ? { ...tag, checked: !tag.checked } : tag
+      )
+    );
   };
 
   // Function to handle category selection
@@ -57,24 +58,30 @@ function FreeLancersListLayout() {
 
   // Filter freelancers based on location and selected tags
   const filteredFreelancers = freelancers.filter((freelancer) => {
-    const locationMatch = locationInput.trim() === '' ||
-      (freelancer?.data?.location?.toLowerCase().includes(locationInput.toLowerCase()));
-    
-    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.id);
-    const tagsMatch = selectedTags.length === 0 || 
-      selectedTags.some(tag => freelancer?.data?.skills?.toLowerCase().includes(tag));
+    const locationMatch =
+      locationInput.trim() === "" ||
+      freelancer?.data?.location
+        ?.toLowerCase()
+        .includes(locationInput.toLowerCase());
+
+    const selectedTags = tags.filter((tag) => tag.checked).map((tag) => tag.id);
+    const tagsMatch =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) =>
+        freelancer?.data?.skills?.toLowerCase().includes(tag)
+      );
     //   const categoryMatch = selectedCategory.trim() === 'All categories' ||
     // freelancer?.category?.toLowerCase().includes(selectedCategory.toLowerCase());
 
-  // Final filter condition combining location, tags,  and category
-  return locationMatch && tagsMatch ;
+    // Final filter condition combining location, tags,  and category
+    return locationMatch && tagsMatch;
   });
   const ratingNumber = freelancers?.review?.rating;
   const stars = Array.from({ length: 5 }, (_, index) => {
     if (index < ratingNumber) {
-      return 'filled';
+      return "filled";
     } else {
-      return 'empty';
+      return "empty";
     }
   });
 
@@ -146,8 +153,8 @@ function FreeLancersListLayout() {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div className="tags-container" style={{ marginTop: '30px' }}>
-                {tags.map(tag => (
+              <div className="tags-container" style={{ marginTop: "30px" }}>
+                {tags.map((tag) => (
                   <div className="tag" key={tag.id}>
                     <input
                       type="checkbox"
@@ -165,12 +172,21 @@ function FreeLancersListLayout() {
         </div>
         <div className="col-xl-9 col-lg-8 content-left-offset">
           <h3 className="page-title">Search Results</h3>
-          <div className="notify-box margin-top-15" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            className="notify-box margin-top-15"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <div className="switch-container">
               <label className="switch">
                 <input type="checkbox" />
                 <span className="switch-button"></span>
-                <span className="switch-text">Turn on email alerts for this search</span>
+                <span className="switch-text">
+                  Turn on email alerts for this search
+                </span>
               </label>
             </div>
             {/* <div style={{ display: "flex", gap: "5px", flexWrap: "nowrap" }}>
@@ -187,7 +203,10 @@ function FreeLancersListLayout() {
           </div>
 
           {/* Freelancers List Container */}
-          <div className="freelancers-container freelancers-list-layout compact-list margin-top-35" style={{ flexDirection: "column" }}>
+          <div
+            className="freelancers-container freelancers-list-layout compact-list margin-top-35"
+            style={{ flexDirection: "column" }}
+          >
             {filteredFreelancers.length > 0 ? (
               filteredFreelancers.map((freelancer) => (
                 <div className="freelancer" key={freelancer.id}>
@@ -199,7 +218,7 @@ function FreeLancersListLayout() {
                       {/* Avatar */}
                       <div className="freelancer-avatar">
                         <a href="single-freelancer-profile.html">
-                        <img src={avatar} alt="" />
+                          <img src={avatar} alt="" />
                         </a>
                       </div>
                       {/* Name */}
@@ -218,9 +237,12 @@ function FreeLancersListLayout() {
                         </h4>
                         {/* Rating */}
                         <div class="star-rate" data-rating={ratingNumber ?? 0}>
-                        {stars.map((starType, index) => (
-        <span key={index} className={`star ${starType}`}></span>
-      ))}
+                          {stars.map((starType, index) => (
+                            <span
+                              key={index}
+                              className={`star ${starType}`}
+                            ></span>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -243,7 +265,7 @@ function FreeLancersListLayout() {
                     </div>
                     <a
                       onClick={() => {
-                        navigate(`/freelancer/details/${freelancer.id}`);
+                        navigate(`/freelancer/details/${freelancer._id}`);
                       }}
                       className="button button-sliding-icon ripple-effect white-text-button"
                     >
@@ -257,7 +279,7 @@ function FreeLancersListLayout() {
               <p className="no-freelancer">No freelancers found.</p>
             )}
           </div>
-          
+
           {/* Pagination
           {filteredFreelancers.length > 5 && (
             <div className="pagination-container margin-top-40 margin-bottom-60">
@@ -296,4 +318,3 @@ function FreeLancersListLayout() {
 }
 
 export default FreeLancersListLayout;
-

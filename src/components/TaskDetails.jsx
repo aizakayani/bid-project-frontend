@@ -12,7 +12,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
-import { addBidAPI, getBidsByUserAPI } from "../services/bids";
+import { addBidAPI, getBidsByTaskIds, getBidsByUserAPI } from "../services/bids";
 import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
 import { getCountryFlag, getFreelancerDetails } from "../utils/common";
@@ -28,8 +28,9 @@ function TaskDetails() {
     useState("less-three");
   const [applied, setApplied] = useState(false);
   const [bookmarkedTasks, setBookmarkedTasks] = useState([]);
+  const [taskBids, setTaskBids] = useState([]);
+
   useEffect(() => {
-    console.log(userBids, id);
     if (
       userBids?.length &&
       userBids.filter((bid) => bid.taskId === id)?.length
@@ -37,6 +38,7 @@ function TaskDetails() {
       setApplied(true);
     }
   }, [id, userBids?.length]);
+
   useEffect(() => {
     if (id && tasksList?.length > 0) {
       const filteredTask = tasksList.find((task) => task._id === id);
@@ -45,11 +47,28 @@ function TaskDetails() {
       }
     }
   }, [id, tasksList]);
+
+  useEffect(() => {
+    getTaskBids()
+  }, [])
+
   useEffect(() => {
     if (user?.data?.bookmarkedTasks) {
       setBookmarkedTasks([...user?.data?.bookmarkedTasks]);
     }
   }, [user?.data]);
+
+  const getTaskBids = async () => {
+    // fetch jobs
+    try {
+      const bidsResult = await getBidsByTaskIds([id]);
+      if (bidsResult?.success && bidsResult?.bids?.length > 0) {
+        setTaskBids([...bidsResult?.bids]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleUpdateBookmarkedTasks = async (taskId) => {
     const bookmarksCopy = [...bookmarkedTasks];
@@ -107,15 +126,14 @@ function TaskDetails() {
       toast.error("Failed to get user bids");
     }
   };
-  console.log({taskDetails});
   const ratingNumber = taskDetails?.review?.rating;
-const stars = Array.from({ length: 5 }, (_, index) => {
-  if (index < ratingNumber) {
-    return 'filled';
-  } else {
-    return 'empty';
-  }
-});
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return 'filled';
+    } else {
+      return 'empty';
+    }
+  });
   return (
     <>
       <div class="single-page-header" data-background-image={singleTask}>
@@ -125,7 +143,7 @@ const stars = Array.from({ length: 5 }, (_, index) => {
               <div class="single-page-header-inner">
                 <div class="left-side">
                   <div class="header-image">
-                  <div className="job-listing-company-logo">
+                    <div className="job-listing-company-logo">
                       <img src={singleTask.companyLogo || companyLogo05} alt="" />
                     </div>
                   </div>
@@ -135,14 +153,14 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                     <ul>
                       <li>
                         <div class="star-rate" data-rating={ratingNumber ?? 0}>
-                        {stars.map((starType, index) => (
-                        <span key={index} className={`star ${starType}`}></span>
-                        ))}
+                          {stars.map((starType, index) => (
+                            <span key={index} className={`star ${starType}`}></span>
+                          ))}
                         </div>
                       </li>
                       <li>
-                      <img class="flag" src={getCountryFlag(taskDetails?.location)}/>{" "}
-                      
+                        <img class="flag" src={getCountryFlag(taskDetails?.location)} />{" "}
+
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -198,65 +216,71 @@ const stars = Array.from({ length: 5 }, (_, index) => {
 
             {/* <!-- Freelancers Bidding --> */}
             <div class="boxed-list margin-bottom-60">
-            
-              <ul class="boxed-list-ul">
-              {userBids?.map((bid) => {
-                        const freelancerDetails = getFreelancerDetails(
-                          bid.userId,
-                          freelancers
-                        );
-                        console.log({freelancerDetails});
-                return(
-                  <li>
-                  <div class="bid">
-                    {/* <!-- Avatar --> */}
-                    <div class="bids-avatar">
-                      <div class="freelancer-avatar">
-                        <div class="verified-badge"></div>
-                        <a href="single-freelancer-profile.html">
-                          <img src={userAvatarBig1} alt="" />
-                        </a>
-                      </div>
-                    </div>
 
-                    {/* <!-- Content --> */}
-                    <div class="bids-content">
-                      {/* <!-- Name --> */}
-                      <div class="freelancer-name">
-                        <h4>
-                          <a href="single-freelancer-profile.html">
-                          {freelancerDetails?.name}{" "}
-                            <img
-                              class="flag"
-                              src={gb}
-                              alt=""
-                              title="United Kingdom"
-                              data-tippy-placement="top"
-                            />
-                          </a>
-                        </h4>
-                        <div class="star-rating" data-rating="4.9">
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
-                          <span class="star"></span>
+              <ul class="boxed-list-ul">
+                {taskBids?.length > 0 && taskBids?.map((bid) => {
+                  if (bid.taskId !== id || bid.userId === user?._id) return <></>;
+                  const freelancerDetails = getFreelancerDetails(
+                    bid.userId,
+                    freelancers
+                  );
+                  return (
+                    <li>
+                      <div class="bid">
+                        {/* <!-- Avatar --> */}
+                        <div class="bids-avatar">
+                          <div class="freelancer-avatar">
+                            <div class="verified-badge"></div>
+                            <a href="single-freelancer-profile.html">
+                              <img src={
+                                freelancerDetails?.avatar?.contentType &&
+                                  freelancerDetails?.avatar?.base64Image
+                                  ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
+                                  : userAvatarBig1
+                              } alt="" />
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* <!-- Content --> */}
+                        <div class="bids-content">
+                          {/* <!-- Name --> */}
+                          <div class="freelancer-name">
+                            <h4>
+                              <a href="single-freelancer-profile.html">
+                                {freelancerDetails?.name}{" "}
+                                <img
+                                  class="flag"
+                                  src={getCountryFlag(
+                                    freelancerDetails?.data?.location
+                                  )}
+                                  alt=""
+                                  data-tippy-placement="top"
+                                />
+                              </a>
+                            </h4>
+                            {freelancerDetails?.rating && <div class="star-rating" data-rating={freelancerDetails?.rating?.toString()}>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                              <span class="star"></span>
+                            </div>}
+                          </div>
+                        </div>
+
+                        {/* <!-- Bid --> */}
+                        <div class="bids-bid">
+                          <div class="bid-rate">
+                            <div class="rate">{bid?.bidRate}</div>
+                            <span>{`${timeDifferenceFromNow(bid?.createdAt)}`}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-
-                    {/* <!-- Bid --> */}
-                    <div class="bids-bid">
-                      <div class="bid-rate">
-                        <div class="rate">$4,400</div>
-                        <span>in 7 days</span>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                )})};
+                    </li>
+                  )
+                })}
               </ul>
-            
             </div>
           </div>
 
@@ -335,13 +359,13 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                   <div class="bidding-signup">
                     Don't have an account?{" "}
                     <a
-                    onClick={() => {
-                      navigate("/register");
-                    }}
-                    style={{ color: "#770737", textDecoration: "underline" }}
-                  >
-                    Sign Up!
-                  </a>
+                      onClick={() => {
+                        navigate("/register");
+                      }}
+                      style={{ color: "#770737", textDecoration: "underline" }}
+                    >
+                      Sign Up!
+                    </a>
                   </div>
                 </div>
               </div>

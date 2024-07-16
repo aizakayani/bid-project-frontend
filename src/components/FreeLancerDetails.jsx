@@ -7,32 +7,52 @@ import { UserContext } from "../context/userContext";
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
+import { unixToDate } from "../utils/utils";
 function FreeLancerDetails() {
   const { id } = useParams();
-  const {
-    freelancers,
-    getfreelancerDetails,
-    user,
-    setUser,
-  } = UserContext(UserContext);
-  const [FreeLancerDetails, setFreelancerDetails] = useState(null);
+  const { freelancers, user, setUser, tasksList, userBids, bids } =
+    useContext(UserContext);
+  const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
+  const [finishedTasks, setFinishedTasks] = useState([]);
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
     }
   }, [user?.data]);
+
   useEffect(() => {
     if (id && freelancers?.length > 0) {
-      const filteredFreelancer = freelancers.find((freelancer) => freelancer?._id === id);
+      const filteredFreelancer = freelancers.find(
+        (freelancer) => freelancer?._id === id
+      );
       if (filteredFreelancer) {
         console.log(filteredFreelancer);
         setFreelancerDetails(filteredFreelancer);
       }
     }
   }, [id, freelancers]);
+
+  useEffect(() => {
+    if (bids?.length > 0 && tasksList?.length > 0) {
+      const finishedTasksCopy = [];
+      const filteredBids = bids.filter(bid => bid.userId === id);
+      if (filteredBids?.length > 0) {
+        filteredBids.forEach(bid => {
+          const task = tasksList.find(task => task.acceptedBid === bid._id && task.status === "finished");
+          console.log("HIIII", task, tasksList, bid);
+          if (task && task?.review) {
+            finishedTasksCopy.push(task);
+          }
+        });
+        setFinishedTasks([...finishedTasksCopy])
+      }
+    }
+  }, [bids, tasksList]);
+
   const handleUpdateBookmarkedFreelancers = async (freelancerId) => {
-    const bookmarksCopy = bookmarkedFreelancers?.length > 0 ? [...bookmarkedFreelancers] : [];
+    const bookmarksCopy =
+      bookmarkedFreelancers?.length > 0 ? [...bookmarkedFreelancers] : [];
     const index = bookmarksCopy.indexOf(freelancerId);
 
     if (index !== -1) {
@@ -45,7 +65,8 @@ function FreeLancerDetails() {
     // send API call
     try {
       const data = user?.data || {};
-      data.bookmarkedFreelancers = bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
+      data.bookmarkedFreelancers =
+        bookmarksCopy?.length > 0 ? [...bookmarksCopy] : [];
       const updateResult = await updateUserAPI({ data });
       if (updateResult?.success && updateResult?.user) {
         setUser(updateResult?.user);
@@ -54,7 +75,6 @@ function FreeLancerDetails() {
       console.log(error);
     }
   };
-
 
   return (
     <>
@@ -70,20 +90,28 @@ function FreeLancerDetails() {
               <div class="single-page-header-inner">
                 <div class="left-side">
                   <div class="header-image freelancer-avatar">
-                    <img src={userAvatarBig2} alt="" />
+                    <img
+                      src={
+                        freelancerDetails?.avatar?.contentType &&
+                          freelancerDetails?.avatar?.base64Image
+                          ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
+                          : userAvatarBig2
+                      }
+                      alt=""
+                    />
                   </div>
                   <div class="header-details">
-                    <h3>
-                      David Peterson <span>iOS Expert + Node Dev</span>
-                    </h3>
+                    <h3>{freelancerDetails?.name}</h3>
                     <ul>
                       <li>
                         <div class="star-rating" data-rating="5.0"></div>
                       </li>
-                      <li>
-                        <img class="flag" src={de} alt="" />{" "}
-                        Germany
-                      </li>
+                      {freelancerDetails?.location && (
+                        <li>
+                          <img class="flag" src={de} alt="" />{" "}
+                          {freelancerDetails?.location}
+                        </li>
+                      )}
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
                       </li>
@@ -105,15 +133,7 @@ function FreeLancerDetails() {
             {/* <!-- Page Content --> */}
             <div class="single-page-section">
               <h3 class="margin-bottom-25">About Me</h3>
-              <p>
-                {/* Leverage agile frameworks to provide a robust synopsis for high
-                level overviews. Iterative approaches to corporate strategy
-                foster collaborative thinking to further the overall value
-                proposition. Organically grow the holistic world view of
-                disruptive innovation via workplace diversity and empowerment. */}
-              </p>
-
-              
+              <p>{freelancerDetails?.data?.introduction ?? ""}</p>
             </div>
 
             {/* <!-- Boxed List --> */}
@@ -125,98 +145,36 @@ function FreeLancerDetails() {
                 </h3>
               </div>
               <ul class="boxed-list-ul">
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>
-                        Web, Database and API Developer{" "}
-                        <span>Rated as Freelancer</span>
-                      </h4>
-                      <div class="item-details margin-top-10">
-                        <div class="star-rating" data-rating="5.0"></div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i>{" "}
-                          August 2019
+                {finishedTasks?.length === 0 && <div>no work history yet</div>}
+                {finishedTasks?.map(task => {
+                  return (
+                    <li>
+                      <div class="boxed-list-item">
+                        {/* <!-- Content --> */}
+                        <div class="item-content">
+                          <h4>
+                            {task.title}
+                            {/* <span>Rated as Freelancer</span> */}
+                          </h4>
+                          {task?.review && <div class="item-details margin-top-10">
+                            <div class="star-rating" data-rating={task?.review?.rating?.toString()}></div>
+                            <div class="detail-item">
+                              <i class="icon-material-outline-date-range"></i>{" "}
+                              {`${unixToDate(
+                                task?.review?.createdAt
+                              )}`}
+                            </div>
+                          </div>}
+                          {task?.review?.comment && <div class="item-description">
+                            <p>
+                              {task?.review?.comment}
+                            </p>
+                          </div>}
                         </div>
                       </div>
-                      <div class="item-description">
-                        <p>
-                          
-                          {/* Excellent programmer - fully carried out my project in
-                          a very professional manner.{" "} */}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>
-                        WordPress Theme Installation{" "}
-                        <span>Rated as Freelancer</span>
-                      </h4>
-                      <div class="item-details margin-top-10">
-                        <div class="star-rating" data-rating="5.0"></div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i> June
-                          2019
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>
-                        Fix Python Selenium Code <span>Rated as Employer</span>
-                      </h4>
-                      <div class="item-details margin-top-10">
-                        <div class="star-rating" data-rating="5.0"></div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i> May
-                          2019
-                        </div>
-                      </div>
-                      <div class="item-description">
-                        <p>
-                          I was extremely impressed with the quality of work AND
-                          how quickly he got it done. He then offered to help
-                          with another side part of the project that we didn't
-                          even think about originally.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>
-                        PHP Core Website Fixes <span>Rated as Freelancer</span>
-                      </h4>
-                      <div class="item-details margin-top-10">
-                        <div class="star-rating" data-rating="5.0"></div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i> May
-                          2019
-                        </div>
-                      </div>
-                      <div class="item-description">
-                        <p>
-                          Awesome work, definitely will rehire. Poject was
-                          completed not only with the requirements, but on time,
-                          within our small budget.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                    </li>
+                  )
+                })}
               </ul>
 
               {/* <!-- Pagination --> */}
@@ -247,81 +205,6 @@ function FreeLancerDetails() {
             </div>
             {/* <!-- Boxed List / End --> */}
 
-            {/* <!-- Boxed List --> */}
-            <div class="boxed-list margin-bottom-60">
-              <div class="boxed-list-headline">
-                <h3>
-                  <i class="icon-material-outline-business"></i> Employment
-                  History
-                </h3>
-              </div>
-              <ul class="boxed-list-ul">
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Avatar --> */}
-                    <div class="item-image">
-                      <img src={BrowseCompanies3} alt="" />
-                    </div>
-
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>Development Team Leader</h4>
-                      <div class="item-details margin-top-7">
-                        <div class="detail-item">
-                          <a href="#">
-                            <i class="icon-material-outline-business"></i>{" "}
-                            {freelancers?.location}
-                          </a>
-                        </div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i> May
-                          2019 - Present
-                        </div>
-                      </div>
-                      <div class="item-description">
-                        <p>
-                          Focus the team on the tasks at hand or the internal
-                          and external customer requirements.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="boxed-list-item">
-                    {/* <!-- Avatar --> */}
-                    <div class="item-image">
-                      <img src={BrowseCompanies4} alt="" />
-                    </div>
-
-                    {/* <!-- Content --> */}
-                    <div class="item-content">
-                      <h4>
-                        <a href="#">Lead UX/UI Designer</a>
-                      </h4>
-                      <div class="item-details margin-top-7">
-                        <div class="detail-item">
-                          <a href="#">
-                            <i class="icon-material-outline-business"></i>{" "}
-                            Acorta
-                          </a>
-                        </div>
-                        <div class="detail-item">
-                          <i class="icon-material-outline-date-range"></i> April
-                          2014 - May 2019
-                        </div>
-                      </div>
-                      <div class="item-description">
-                        <p>
-                          I designed and implemented 10+ custom web-based CRMs,
-                          workflow systems, payment solutions and mobile apps.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
             {/* <!-- Boxed List / End --> */}
           </div>
 
