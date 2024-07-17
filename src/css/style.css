@@ -7640,6 +7640,11 @@ input:checked + .switch-button:before {
 	line-height: 22px;
 }
 
+.no-job-listing {
+	display: flex;
+	justify-content: center;
+}
+
 
 /* ---------------------------------- */
 /* Intro Banner
@@ -7650,7 +7655,7 @@ input:checked + .switch-button:before {
 
 .intro-banner.big-padding {
 	padding: 130px 0;
-}
+}s
 
 .intro-banner .container {
 	z-index: 100;

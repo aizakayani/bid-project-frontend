@@ -4,8 +4,8 @@ import { useState } from "react";
 import AddNotePopup from "./modals/AddNotePopup";
 import { addNoteAPI, deleteNoteAPI, getNotesAPI } from "../services/notes";
 import toast from "react-hot-toast";
-import { getTaskDetails } from "../utils/common";
-import TaskDetails from "./TaskDetails";
+import { getFreelancerDetails, getJobDetails } from "../utils/common";
+
 function DashboardMain() {
   const { user, notes, setNotes,freelancers ,tasksList,userBids,jobsList,jobApplications } = useContext(UserContext);
   const [openNotePopup, setOpenNotePopup] = useState(false);
@@ -143,113 +143,88 @@ function DashboardMain() {
                 </button>
               </div>
               <div class="content">
-                <ul class="dashboard-box-list">
-                  <li>
-                    <span class="notification-icon">
-                      <i class="icon-material-outline-group"></i>
-                    </span>
-                    <span class="notification-text">
-                      <strong>Michael Shannah</strong> applied for a job{" "}
-                      <a href="#">Full Stack Software Engineer</a>
-                    </span>
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right">
-                      <a
-                        href="#"
-                        class="button ripple-effect ico"
-                        title="Mark as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="notification-icon">
-                      <i class=" icon-material-outline-gavel"></i>
-                    </span>
-                    <span class="notification-text">
-                      <strong>Gilber Allanis</strong> placed a bid on your{" "}
-                      <a href="#">iOS App Development</a> project
-                    </span>
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right">
-                      <a
-                        href="#"
-                        class="button ripple-effect ico"
-                        title="Mark as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="notification-icon">
-                      <i class="icon-material-outline-autorenew"></i>
-                    </span>
-                    <span class="notification-text">
-                      Your job listing{" "}
-                      <a href="#">Full Stack Software Engineer</a> is expiring
-                    </span>
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right">
-                      <a
-                        href="#"
-                        class="button ripple-effect ico"
-                        title="Mark as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="notification-icon">
-                      <i class="icon-material-outline-group"></i>
-                    </span>
-                    <span class="notification-text">
-                      <strong>Sindy Forrest</strong> applied for a job{" "}
-                      <a href="#">Full Stack Software Engineer</a>
-                    </span>
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right">
-                      <a
-                        href="#"
-                        class="button ripple-effect ico"
-                        title="Mark as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </a>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="notification-icon">
-                      <i class="icon-material-outline-rate-review"></i>
-                    </span>
-                    <span class="notification-text">
-                      <strong>David Peterson</strong> left you a{" "}
-                      <span
-                        class="star-rating no-stars"
-                        data-rating="5.0"
-                      ></span>{" "}
-                      rating after finishing <a href="#">Logo Design</a> task
-                    </span>
-                    {/* <!-- Buttons --> */}
-                    <div class="buttons-to-right">
-                      <a
-                        href="#"
-                        class="button ripple-effect ico"
-                        title="Mark as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+  <ul class="dashboard-box-list">
+    {user?.data?.notifications?.length > 0 && user?.data?.notifications.map(notification => {
+      if (notification.type === "job-application") {
+        const jobDetails = getJobDetails(notification?.jobId, jobsList);
+        const applicantDetails = getFreelancerDetails(notification?.applicantId, freelancers);
+        if (!jobDetails || !applicantDetails) return <></>;
+        return (
+          <li>
+            <span class="notification-icon">
+              <i class="icon-material-outline-group"></i>
+            </span>
+            <span class="notification-text">
+              <strong>{applicantDetails.name}</strong> applied for a job{" "}
+              <a href="#">{jobDetails.title}</a>
+            </span>
+            <div class="buttons-to-right">
+              <a
+                href="#"
+                class="button ripple-effect ico"
+                title="Mark as read"
+                data-tippy-placement="left"
+              >
+                <i class="icon-feather-check-square"></i>
+              </a>
+            </div>
+          </li>
+        );
+      } else if (notification.type === "place-bid") {
+        const taskDetails = getJobDetails(notification?.taskId, tasksList);
+        const bidderDetails = getFreelancerDetails(notification?.bidderId, freelancers);
+        if (!taskDetails || !bidderDetails) return <></>;
+        return (
+          <li>
+            <span class="notification-icon">
+              <i class=" icon-material-outline-gavel"></i>
+            </span>
+            <span class="notification-text">
+              <strong>{bidderDetails.name}</strong> placed a bid on your{" "}
+              <a href="#">{taskDetails.title}</a> project
+            </span>
+            <div class="buttons-to-right">
+              <a
+                href="#"
+                class="button ripple-effect ico"
+                title="Mark as read"
+                data-tippy-placement="left"
+              >
+                <i class="icon-feather-check-square"></i>
+              </a>
+            </div>
+          </li>
+        );
+      } else if (notification.type === "accept-bid") {
+        const taskDetails = getJobDetails(notification?.taskId, tasksList);
+        if (!taskDetails) return <></>;
+        return (
+          <li>
+            <span class="notification-icon">
+              <i class=" icon-material-outline-gavel"></i>
+            </span>
+            <span class="notification-text">
+              Your bid on Task{" "}
+              <a href="#">{taskDetails.title}</a>{" "}
+              got accepted
+            </span>
+            <div class="buttons-to-right">
+              <a
+                href="#"
+                class="button ripple-effect ico"
+                title="Mark as read"
+                data-tippy-placement="left"
+              >
+                <i class="icon-feather-check-square"></i>
+              </a>
+            </div>
+          </li>
+        );
+      }
+    })}
+  </ul>
+</div>
+
             </div>
           </div>
 
