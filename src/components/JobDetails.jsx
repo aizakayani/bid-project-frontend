@@ -29,8 +29,8 @@ function JobDetails() {
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false); 
-  console.log({isBookmarked});
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  console.log({ isBookmarked });
 
   console.log(bookmarkedJobs);
 
@@ -124,17 +124,21 @@ function JobDetails() {
       console.log(error);
     }
   };
+  console.log({ JobDetails });
+  const ratingNumber = JobDetails?.review?.rating;
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return "filled";
+    } else {
+      return "empty";
+    }
+  });
 console.log({JobDetails});
-const ratingNumber = JobDetails?.review?.rating;
-const stars = Array.from({ length: 5 }, (_, index) => {
-  if (index < ratingNumber) {
-    return 'filled';
-  } else {
-    return 'empty';
-  }
+console.log({jobsList});
+console.log('dsfsd',JobDetails?.categories);
+const similarJobs = jobsList.filter((job) => {
+  return job.category === JobDetails?.category && job._id !== JobDetails?._id;
 });
-
-
   return (
     <>
       <div class="single-page-header" data-background-image={singleJob}>
@@ -145,7 +149,10 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                 <div class="left-side">
                   <div class="header-image">
                     <div className="job-listing-company-logo">
-                      <img src={singleJob.companyLogo || companyLogo05} alt="" />
+                      <img
+                        src={singleJob.companyLogo || companyLogo05}
+                        alt=""
+                      />
                     </div>
                   </div>
                   <div class="header-details">
@@ -154,13 +161,19 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                     <ul>
                       <li>
                         <div class="star-rate" data-rating={ratingNumber ?? 0}>
-                        {stars.map((starType, index) => (
-        <span key={index} className={`star ${starType}`}></span>
-      ))}
+                          {stars.map((starType, index) => (
+                            <span
+                              key={index}
+                              className={`star ${starType}`}
+                            ></span>
+                          ))}
                         </div>
                       </li>
                       <li>
-                        <img class="flag" src={getCountryFlag(JobDetails?.location)}/>
+                        <img
+                          class="flag"
+                          src={getCountryFlag(JobDetails?.location)}
+                        />
                       </li>
                       <li>
                         <div class="verified-badge-with-title">Verified</div>
@@ -186,7 +199,7 @@ const stars = Array.from({ length: 5 }, (_, index) => {
           <div class="col-xl-8 col-lg-8 content-right-offset">
             <div class="single-page-section">
               <h3 class="margin-bottom-25">Job Description</h3>
-              <p>{JobDetails?.description}</p> 
+              <p>{JobDetails?.description}</p>
               {/* <p>
                 {
                   "A Restaurant General Manager oversees daily operations to ensure efficient service and profitability. They are responsible for staff management, customer satisfaction, inventory control, and financial reporting. The role requires strong leadership, problem-solving skills, and the ability to thrive in a fast-paced environment. Success involves balancing customer experience with operational efficiency and financial targets."
@@ -217,8 +230,8 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                 solely on the bottom line.
               </p> */}
             </div>
-             {/* <!-- Atachments --> */}
-             {/* <div class="single-page-section">
+            {/* <!-- Atachments --> */}
+            {/* <div class="single-page-section">
               <h3>Attachments</h3>
               <div class="attachments-container">
                 <a href="#" class="attachment-box ripple-effect">
@@ -227,8 +240,8 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                 </a>
               </div>
             </div> */}
-             {/* <!-- Skills --> */}
-             <div class="single-page-section">
+            {/* <!-- Skills --> */}
+            <div class="single-page-section">
               <h3>Skills Required</h3>
               <div class="task-tags">
                 {JobDetails?.requiredSkills?.split(",")?.length > 0 &&
@@ -260,89 +273,45 @@ const stars = Array.from({ length: 5 }, (_, index) => {
               {/* <!-- Listings Container --> */}
               <div class="listings-container grid-layout">
                 {/* <!-- Job Listing --> */}
-                <a href="#" class="job-listing">
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo2} alt="" />
+                {similarJobs?.length > 0 ? 
+                <div class="listings-container grid-layout">
+                  
+                {similarJobs.map((job) => (
+                  <a key={job._id} href={`/job-details/${job._id}`} class="job-listing">
+                    <div class="job-listing-details">
+                      <div class="job-listing-company-logo">
+                        <img src={companyLogo2} alt="" />
+                      </div>
+                      <div class="job-listing-description">
+                        <h4 class="job-listing-company">{job.companyName}</h4>
+                        <h3 class="job-listing-title">{job.title}</h3>
+                      </div>
                     </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h4 class="job-listing-company">Coffee</h4>
-                      <h3 class="job-listing-title">Barista and Cashier</h3>
+                    <div class="job-listing-footer">
+                      <ul>
+                        <li>
+                          <i class="icon-material-outline-location-on"></i> {job.location}
+                        </li>
+                        <li>
+                          <i class="icon-material-outline-business-center"></i> {job.type}
+                        </li>
+                        <li>
+                          <i class="icon-material-outline-account-balance-wallet"></i> {job.salary}
+                        </li>
+                        <li>
+                          <i class="icon-material-outline-access-time"></i> {timeDifferenceFromNow(job.createdAt)}
+                        </li>
+                      </ul>
                     </div>
-                  </div>
+                  </a>
+                ))}
+              </div>
+              : 
+              <div class="no-job-listing">
+              <p>{'No similar jobs found'}</p> 
+              </div>
+              }
 
-                  {/* <!-- Job Listing Footer --> */}
-                  <div class="job-listing-footer">
-                    <ul>
-                      <li>
-                        <i class="icon-material-outline-location-on"></i> San
-                        Francisco
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-business-center"></i>{" "}
-                        Full Time
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-account-balance-wallet"></i>{" "}
-                        $35000-$38000
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-access-time"></i> 2 days
-                        ago
-                      </li>
-                    </ul>
-                  </div>
-                </a>
-
-                {/* <!-- Job Listing --> */}
-                <a href="#" class="job-listing">
-                  {/* <!-- Job Listing Details --> */}
-                  <div class="job-listing-details">
-                    {/* <!-- Logo --> */}
-                    <div class="job-listing-company-logo">
-                      <img src={companyLogo3} alt="" />
-                    </div>
-
-                    {/* <!-- Details --> */}
-                    <div class="job-listing-description">
-                      <h4 class="job-listing-company">
-                        King{" "}
-                        <span
-                          class="verified-badge"
-                          title="Verified Employer"
-                          data-tippy-placement="top"
-                        ></span>
-                      </h4>
-                      <h3 class="job-listing-title">Restaurant Manager</h3>
-                    </div>
-                  </div>
-
-                  {/* <!-- Job Listing Footer --> */}
-                  <div class="job-listing-footer">
-                    <ul>
-                      <li>
-                        <i class="icon-material-outline-location-on"></i> San
-                        Francisco
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-business-center"></i>{" "}
-                        Full Time
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-account-balance-wallet"></i>{" "}
-                        $35000-$38000
-                      </li>
-                      <li>
-                        <i class="icon-material-outline-access-time"></i> 2 days
-                        ago
-                      </li>
-                    </ul>
-                  </div>
-                </a>
               </div>
               {/* <!-- Listings Container / End --> */}
             </div>
@@ -403,7 +372,9 @@ const stars = Array.from({ length: 5 }, (_, index) => {
 
                 {/* <!-- Bookmark Button --> */}
                 <button
-                  class={`${isBookmarked ? 'bookmarked-button' : "bookmark-button"} margin-bottom-25`}
+                  class={`${
+                    isBookmarked ? "bookmarked-button" : "bookmark-button"
+                  } margin-bottom-25`}
                   onClick={() => {
                     handleUpdateBookmarkedJobs(JobDetails?._id);
                   }}
@@ -417,7 +388,7 @@ const stars = Array.from({ length: 5 }, (_, index) => {
                   )}
                 </button>
 
-                 {/* <!-- Copy URL --> */}
+                {/* <!-- Copy URL --> */}
                 {/* <div class="copy-url">
                   <input
                     id="copy-url"

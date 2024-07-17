@@ -7640,6 +7640,11 @@ input:checked + .switch-button:before {
 	line-height: 22px;
 }
 
+.no-job-listing {
+	display: flex;
+	justify-content: center;
+}
+
 
 /* ---------------------------------- */
 /* Intro Banner
@@ -7689,7 +7694,7 @@ input:checked + .switch-button:before {
     left: -10.65%;
     z-index: 10;
     overflow: hidden;
-	opacity: 0.4;
+	opacity: 0.3;
 }
 
 /* Disabled Gradient */
