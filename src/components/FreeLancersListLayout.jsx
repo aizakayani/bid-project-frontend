@@ -55,7 +55,7 @@ function FreeLancersListLayout() {
   const handleSelect = (category) => {
     setSelectedCategory(category);
   };
-
+console.log({freelancers});
   // Filter freelancers based on location and selected tags
   const filteredFreelancers = freelancers.filter((freelancer) => {
     const locationMatch =
@@ -75,14 +75,6 @@ function FreeLancersListLayout() {
 
     // Final filter condition combining location, tags,  and category
     return locationMatch && tagsMatch;
-  });
-  const ratingNumber = freelancers?.review?.rating;
-  const stars = Array.from({ length: 5 }, (_, index) => {
-    if (index < ratingNumber) {
-      return "filled";
-    } else {
-      return "empty";
-    }
   });
 
   return (
@@ -236,11 +228,18 @@ function FreeLancersListLayout() {
                           </a>
                         </h4>
                         {/* Rating */}
-                        <div class="star-rate" data-rating={ratingNumber ?? 0}>
-                          {stars.map((starType, index) => (
+                        <div
+                          class="star-rate"
+                          data-rating={freelancer?.rating ?? 0}
+                        >
+                          {Array.from({ length: 5 }, (_, index) => (
                             <span
                               key={index}
-                              className={`star ${starType}`}
+                              className={`star ${
+                                index < freelancer?.rating
+                                  ? "filled"
+                                  : "empty"
+                              }`}
                             ></span>
                           ))}
                         </div>

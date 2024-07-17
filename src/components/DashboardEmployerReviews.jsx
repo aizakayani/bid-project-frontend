@@ -14,7 +14,9 @@ function DashboardEmployerReviews() {
   const [leaveEmployerReviewPopup, setLeaveEmployerReviewPopup] =
     useState(false);
   const [employerReviewData, setEmployerReviewData] = useState(null);
-
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    console.log({ index });
+  });
   useEffect(() => {
     if (
       userBids?.length > 0 &&
@@ -138,14 +140,25 @@ function DashboardEmployerReviews() {
                                 {review?.reviewDetails && (
                                   <div class="item-details margin-top-10">
                                     <div
-                                      class="star-rating"
+                                      class="star-rate"
                                       data-rating={review?.reviewDetails?.rating?.toString()}
                                     >
+                                      {Array.from({ length: 5 }, (_, index) => (
+                                        <span
+                                          key={index}
+                                          className={`star ${
+                                            index <
+                                            review?.reviewDetails?.rating
+                                              ? "filled"
+                                              : "empty"
+                                          }`}
+                                        ></span>
+                                      ))}
+                                      {/* <span class="star"></span>
                                       <span class="star"></span>
                                       <span class="star"></span>
                                       <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
+                                      <span class="star"></span> */}
                                     </div>
 
                                     <div class="detail-item">

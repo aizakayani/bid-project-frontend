@@ -20,6 +20,7 @@ function DashboardManageCandidates({ setDashboardType }) {
     // Use FileSaver to save the file
     saveAs(blob, "downloaded.pdf");
   };
+  console.log({jobApplications});
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -93,9 +94,21 @@ function DashboardManageCandidates({ setDashboardType }) {
                                 {/* <!-- Rating --> */}
                                 <div class="freelancer-rating">
                                   <div
-                                    class="star-rating"
+                                    class="star-rate"
                                     data-rating="5.0"
-                                  ></div>
+                                  >
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <span
+                                          key={index}
+                                          className={`star ${
+                                            index <
+                                            jobApplication?.rating
+                                              ? "filled"
+                                              : "empty"
+                                          }`}
+                                        ></span>
+                                      ))}
+                                  </div>
                                 </div>
 
                                 {/* <!-- Buttons --> */}

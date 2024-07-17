@@ -15,7 +15,6 @@ function DashboardFreelancerReviews() {
   const [leaveFreelancerReviewPopup, setLeaveFreelancerReviewPopup] =
     useState(false);
   const [freelancerReviewData, setFreelancerReviewData] = useState(null);
-
   useEffect(() => {
     if (userTasks?.length > 0 && freelancers?.length > 0 && bids?.length > 0) {
       const finishedTasks = userTasks?.filter(
@@ -129,14 +128,20 @@ function DashboardFreelancerReviews() {
                                 {review?.reviewDetails && (
                                   <div class="item-details margin-top-10">
                                     <div
-                                      class="star-rating"
+                                      class="star-rate"
                                       data-rating={review?.reviewDetails?.rating?.toString()}
                                     >
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
+                                      {Array.from({ length: 5 }, (_, index) => (
+                                        <span
+                                          key={index}
+                                          className={`star ${
+                                            index <
+                                            review?.reviewDetails?.rating
+                                              ? "filled"
+                                              : "empty"
+                                          }`}
+                                        ></span>
+                                      ))}
                                     </div>
 
                                     <div class="detail-item">

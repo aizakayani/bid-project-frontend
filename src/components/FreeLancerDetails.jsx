@@ -20,7 +20,7 @@ function FreeLancerDetails() {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
     }
   }, [user?.data]);
-
+console.log({freelancerDetails});
   useEffect(() => {
     if (id && freelancers?.length > 0) {
       const filteredFreelancer = freelancers.find(
@@ -36,16 +36,18 @@ function FreeLancerDetails() {
   useEffect(() => {
     if (bids?.length > 0 && tasksList?.length > 0) {
       const finishedTasksCopy = [];
-      const filteredBids = bids.filter(bid => bid.userId === id);
+      const filteredBids = bids.filter((bid) => bid.userId === id);
       if (filteredBids?.length > 0) {
-        filteredBids.forEach(bid => {
-          const task = tasksList.find(task => task.acceptedBid === bid._id && task.status === "finished");
+        filteredBids.forEach((bid) => {
+          const task = tasksList.find(
+            (task) => task.acceptedBid === bid._id && task.status === "finished"
+          );
           console.log("HIIII", task, tasksList, bid);
           if (task && task?.review) {
             finishedTasksCopy.push(task);
           }
         });
-        setFinishedTasks([...finishedTasksCopy])
+        setFinishedTasks([...finishedTasksCopy]);
       }
     }
   }, [bids, tasksList]);
@@ -93,7 +95,7 @@ function FreeLancerDetails() {
                     <img
                       src={
                         freelancerDetails?.avatar?.contentType &&
-                          freelancerDetails?.avatar?.base64Image
+                        freelancerDetails?.avatar?.base64Image
                           ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
                           : userAvatarBig2
                       }
@@ -104,7 +106,18 @@ function FreeLancerDetails() {
                     <h3>{freelancerDetails?.name}</h3>
                     <ul>
                       <li>
-                        <div class="star-rating" data-rating="5.0"></div>
+                        <div class="star-rating" data-rating={freelancerDetails?.rating}>
+                          {Array.from({ length: 5 }, (_, index) => (
+                            <span
+                              key={index}
+                              className={`star ${
+                                index < freelancerDetails?.rating
+                                  ? "filled"
+                                  : "empty"
+                              }`}
+                            ></span>
+                          ))}
+                        </div>
                       </li>
                       {freelancerDetails?.location && (
                         <li>
@@ -146,7 +159,7 @@ function FreeLancerDetails() {
               </div>
               <ul class="boxed-list-ul">
                 {finishedTasks?.length === 0 && <div>no work history yet</div>}
-                {finishedTasks?.map(task => {
+                {finishedTasks?.map((task) => {
                   return (
                     <li>
                       <div class="boxed-list-item">
@@ -156,24 +169,27 @@ function FreeLancerDetails() {
                             {task.title}
                             {/* <span>Rated as Freelancer</span> */}
                           </h4>
-                          {task?.review && <div class="item-details margin-top-10">
-                            <div class="star-rating" data-rating={task?.review?.rating?.toString()}></div>
-                            <div class="detail-item">
-                              <i class="icon-material-outline-date-range"></i>{" "}
-                              {`${unixToDate(
-                                task?.review?.createdAt
-                              )}`}
+                          {task?.review && (
+                            <div class="item-details margin-top-10">
+                              <div
+                                class="star-rating"
+                                data-rating={task?.review?.rating?.toString()}
+                              ></div>
+                              <div class="detail-item">
+                                <i class="icon-material-outline-date-range"></i>{" "}
+                                {`${unixToDate(task?.review?.createdAt)}`}
+                              </div>
                             </div>
-                          </div>}
-                          {task?.review?.comment && <div class="item-description">
-                            <p>
-                              {task?.review?.comment}
-                            </p>
-                          </div>}
+                          )}
+                          {task?.review?.comment && (
+                            <div class="item-description">
+                              <p>{task?.review?.comment}</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </li>
-                  )
+                  );
                 })}
               </ul>
 
