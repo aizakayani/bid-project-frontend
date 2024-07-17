@@ -8,6 +8,7 @@ import { UserContext } from "../context/userContext";
 import { getJobsApplicationsByJobIds } from "../services/job-applications";
 import { saveAs } from "file-saver";
 import { getCountryFlag } from "../utils/common";
+import avatar from "../utils/images/Svgs/no-avatar-image.svg";
 function DashboardManageCandidates({ setDashboardType }) {
   const { jobApplications, setNewMessageContext } = useContext(UserContext);
   const downloadPdf = (applicantCV) => {
@@ -20,6 +21,7 @@ function DashboardManageCandidates({ setDashboardType }) {
     // Use FileSaver to save the file
     saveAs(blob, "downloaded.pdf");
   };
+  
   console.log({jobApplications});
   return (
     <div class="dashboard-content-container" data-simplebar>
@@ -58,7 +60,7 @@ function DashboardManageCandidates({ setDashboardType }) {
                               <div class="freelancer-avatar">
                                 <div class="verified-badge"></div>
                                 <a href="#">
-                                  <img src={userAvatarBig3} alt="" />
+                                  <img src={avatar} alt="" />
                                 </a>
                               </div>
 
@@ -123,7 +125,6 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     Download CV
                                   </a>
                                   <a
-                                    href="#small-dialog"
                                     class="popup-with-zoom-anim button dark ripple-effect"
                                     onClick={() => {
                                       setNewMessageContext({

@@ -62,7 +62,7 @@ function DashboardReviews() {
                     </div>
 
                     <a
-                      href="#small-dialog-2"
+                    
                       class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
                       onClick={()=> setLeaveReviewPopup(true)}
                     >

@@ -1,5 +1,4 @@
-import userAvatarBig1 from "../utils/images/user-avatar-big-01.jpg";
-import userAvatarBig2 from "../utils/images/user-avatar-big-02.jpg";
+import avatar from '../utils/images/Svgs/no-avatar-image.svg'
 import gb from "../utils/images/flags/gb.svg";
 import de from "../utils/images/flags/de.svg";
 import pl from "../utils/images/flags/pl.svg";
@@ -232,12 +231,7 @@ function TaskDetails() {
                           <div class="freelancer-avatar">
                             <div class="verified-badge"></div>
                             <a href="single-freelancer-profile.html">
-                              <img src={
-                                freelancerDetails?.avatar?.contentType &&
-                                  freelancerDetails?.avatar?.base64Image
-                                  ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
-                                  : userAvatarBig1
-                              } alt="" />
+                            <img src={avatar} alt="" />
                             </a>
                           </div>
                         </div>
@@ -259,13 +253,11 @@ function TaskDetails() {
                                 />
                               </a>
                             </h4>
-                            {freelancerDetails?.rating && <div class="star-rating" data-rating={freelancerDetails?.rating?.toString()}>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                              <span class="star"></span>
-                            </div>}
+                            <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                          {stars.map((starType, index) => (
+                            <span key={index} className={`star ${starType}`}></span>
+                          ))}
+                        </div>
                           </div>
                         </div>
 
@@ -362,7 +354,7 @@ function TaskDetails() {
                       onClick={() => {
                         navigate("/register");
                       }}
-                      style={{ color: "#770737", textDecoration: "underline" }}
+                      style={{ color: "#770737", textDecoration: "underline" , cursor: "pointer" }}
                     >
                       Sign Up!
                     </a>
@@ -371,11 +363,11 @@ function TaskDetails() {
               </div>
 
               {/* <!-- Sidebar Widget --> */}
-              <div class="sidebar-widget">
-                <h3>Bookmark or Share</h3>
+              {/* <div class="sidebar-widget">
+                <h3>Bookmark or Share</h3> */}
 
                 {/* <!-- Bookmark Button --> */}
-                <button
+                {/* <button
                   class="bookmark-button margin-bottom-25"
                   onClick={() => {
                     handleUpdateBookmarkedTasks(taskDetails?._id);
@@ -388,7 +380,7 @@ function TaskDetails() {
                   {!bookmarkedTasks?.includes(taskDetails?._id) && (
                     <span class="bookmarked-text">Bookmarked</span>
                   )}
-                </button>
+                </button> */}
 
                 {/* <!-- Copy URL --> */}
                 {/* <div class="copy-url">
@@ -409,7 +401,7 @@ function TaskDetails() {
                 </div> */}
 
                 {/* <!-- Share Buttons --> */}
-                <div class="share-buttons margin-top-25">
+                {/* <div class="share-buttons margin-top-25">
                   <div class="share-buttons-trigger">
                     <i class="icon-feather-share-2"></i>
                   </div>
@@ -460,8 +452,8 @@ function TaskDetails() {
                       </li>
                     </ul>
                   </div>
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
             </div>
           </div>
         </div>

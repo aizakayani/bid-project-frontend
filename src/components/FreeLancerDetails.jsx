@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
 import { unixToDate } from "../utils/utils";
+import MakeOffer from "./modals/OfferPopup";
 function FreeLancerDetails() {
   const { id } = useParams();
   const { freelancers, user, setUser, tasksList, userBids, bids } =
@@ -15,6 +16,7 @@ function FreeLancerDetails() {
   const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
+  const [showOfferPopup,setShowOfferPopup]= useState(false);
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
@@ -77,6 +79,14 @@ console.log({freelancerDetails});
       console.log(error);
     }
   };
+  const ratingNumber = freelancerDetails?.review?.rating;
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return 'filled';
+    } else {
+      return 'empty';
+    }
+  });
 
   return (
     <>
@@ -245,8 +255,8 @@ console.log({freelancerDetails});
 
               {/* <!-- Button --> */}
               <a
-                href="#small-dialog"
-                class="apply-now-button popup-with-zoom-anim margin-bottom-50"
+                onClick={() => setShowOfferPopup(true)}
+                class="apply-now-button popup-with-zoom-anim margin-bottom-50 white-text-button"
               >
                 Make an Offer{" "}
                 <i class="icon-material-outline-arrow-right-alt"></i>
@@ -439,6 +449,7 @@ console.log({freelancerDetails});
           </div>
         </div>
       </div>
+      {showOfferPopup && <MakeOffer show = {showOfferPopup} handleClose={()=> setShowOfferPopup(false)} handleSubmit={()=> setShowOfferPopup(false) }/>}
     </>
   );
 }
