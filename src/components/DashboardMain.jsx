@@ -7,10 +7,22 @@ import toast from "react-hot-toast";
 import { getTaskDetails } from "../utils/common";
 import TaskDetails from "./TaskDetails";
 function DashboardMain() {
-  const { user, notes, setNotes,freelancers } = useContext(UserContext);
+  const { user, notes, setNotes,freelancers ,tasksList,userBids,jobsList,jobApplications } = useContext(UserContext);
   const [openNotePopup, setOpenNotePopup] = useState(false);
-
-  const getNotes = async () => {
+    const [acceptedBidsCount, setAcceptedBidsCount] = useState(0);
+    const [freelancerRating, setFreelancerRating] = useState(null);
+  useEffect(() => {
+    // Count accepted bids on mount or whenever userBids or tasksList change
+    let count = 0;
+    userBids?.forEach(bid => {
+      const taskDetails = getTaskDetails(bid?.taskId, tasksList);
+      if (taskDetails?.acceptedBid === bid._id) {
+        count++;
+      }
+    });
+    setAcceptedBidsCount(count);
+  }, [userBids, tasksList]);
+    const getNotes = async () => {
     try {
       const response = await getNotesAPI();
       if (response.success) {
@@ -54,7 +66,17 @@ function DashboardMain() {
       toast.error("Failed to delete note");
     }
   };
- console.log({freelancers});
+  useEffect(() => {
+    // Find the freelancer with the matching ID and set the rating
+    const matchingFreelancerId = user?._id; // Replace this with the actual ID you're looking for
+    const freelancer = freelancers.find(
+      (freelancer) => freelancer?._id === matchingFreelancerId
+    );
+    console.log({freelancer});
+    if (freelancer) {
+      setFreelancerRating(freelancer.rating);
+    }
+  }, [freelancers]);
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -69,159 +91,37 @@ function DashboardMain() {
           <div class="fun-fact" data-fun-fact-color="#36bd78">
             <div class="fun-fact-text">
               <span>Task Bids Won</span>
-              <h4>22</h4>
+              <h4>{acceptedBidsCount}</h4>
             </div>
-            <div class="fun-fact-icon">
-              <i class="icon-material-outline-gavel"></i>
+            <div class="fun-fact-icon" style={{background: 'rgba(54, 189, 120, 0.07)'}}>
+              <i class="icon-material-outline-gavel" style={{color: 'rgb(54, 189, 120)'}}></i>
             </div>
           </div>
           <div class="fun-fact" data-fun-fact-color="#b81b7f">
             <div class="fun-fact-text">
               <span>Jobs Applied</span>
-              <h4>4</h4>
+              <h4>{jobApplications.length}</h4>
             </div>
-            <div class="fun-fact-icon">
-              <i class="icon-material-outline-business-center"></i>
+            <div class="fun-fact-icon" style={{background: 'rgba(184, 27, 127, 0.07)'}} >
+              <i class="icon-material-outline-business-center" style={{color: 'rgb(184, 27, 127)'}}></i>
             </div>
           </div>
           <div class="fun-fact" data-fun-fact-color="#efa80f">
             <div class="fun-fact-text">
               <span>Reviews</span>
-              <h4>28</h4>
+              <h4>{freelancerRating}</h4>
             </div>
-            <div class="fun-fact-icon">
-              <i class="icon-material-outline-rate-review"></i>
+            <div class="fun-fact-icon" style={{background: 'rgba(239, 168, 15, 0.07)'}}>
+              <i class="icon-material-outline-rate-review" style={{color: 'rgb(239, 168, 15)'}}></i>
             </div>
           </div>
 
           {/* <!-- Last one has to be hidden below 1600px, sorry :( --> */}
-          <div class="fun-fact" data-fun-fact-color="#2a41e6">
-            <div class="fun-fact-text">
-              <span>This Month Views</span>
-              <h4>987</h4>
-            </div>
-            <div class="fun-fact-icon">
-              <i class="icon-feather-trending-up"></i>
-            </div>
-          </div>
+        
         </div>
 
         {/* <!-- Row --> */}
-        <div class="row">
-          <div class="col-xl-8">
-            {/* <!-- Dashboard Box --> */}
-            <div class="dashboard-box main-box-in-row">
-              <div class="headline">
-                <h3>
-                  <i class="icon-feather-bar-chart-2"></i> Your Profile Views
-                </h3>
-                <div class="sort-by">
-                  <select class="selectpicker hide-tick">
-                    <option>Last 6 Months</option>
-                    <option>This Year</option>
-                    <option>This Month</option>
-                  </select>
-                </div>
-              </div>
-              <div class="content">
-                {/* <!-- Chart --> */}
-                <div class="chart">
-                  <canvas id="chart" width="100" height="45"></canvas>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Dashboard Box / End --> */}
-          </div>
-          <div class="col-xl-4">
-            {/* <!-- Dashboard Box --> */}
-            {/* <!-- If you want adjust height of two boxes 
-						 add to the lower box 'main-box-in-row' 
-						 and 'child-box-in-row' to the higher box --> */}
-            <div class="dashboard-box child-box-in-row">
-              <div class="headline">
-                <h3>
-                  <i class="icon-material-outline-note-add"></i> Notes
-                </h3>
-              </div>
 
-              <div class="content with-padding">
-                {/* <!-- Note --> */}
-                {notes?.length > 0 &&
-                  notes?.map((note) => (
-                    <div class="dashboard-note">
-                      <p>{note.content}</p>
-
-                      <div class="note-footer">
-                        <span
-                          class={`note-priority ${
-                            note?.priority === "High"
-                              ? "high"
-                              : note?.priority === "Medium"
-                              ? "medium"
-                              : "low"
-                          }`}
-                        >
-                          {note.priority}
-                        </span>
-                        <div class="note-buttons">
-                          <a
-                            href="#"
-                            title="Remove"
-                            data-tippy-placement="top"
-                            onClick={() => deleteNote(note._id)}
-                          >
-                            <i class="icon-feather-trash-2"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                {/* <!-- Note --> */}
-                {/* <div class="dashboard-note">
-                  <p>Extend premium plan for next month</p>
-                  <div class="note-footer">
-                    <span class="note-priority low">Low Priority</span>
-                    <div class="note-buttons">
-                      <a href="#" title="Remove" data-tippy-placement="top">
-                        <i class="icon-feather-trash-2"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                {/* <!-- Note --> */}
-                {/* <div class="dashboard-note">
-                  <p>Send payment to David Peterson</p>
-                  <div class="note-footer">
-                    <span class="note-priority medium">Medium Priority</span>
-                    <div class="note-buttons">
-                      <a href="#" title="Remove" data-tippy-placement="top">
-                        <i class="icon-feather-trash-2"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>  */}
-              </div>
-              <div
-                class="add-note-button "
-                onClick={() => setOpenNotePopup(true)}
-              >
-                <a class="popup-with-zoom-anim button full-width button-sliding-icon white-text-button">
-                  Add Note <i class="icon-material-outline-arrow-right-alt"></i>
-                </a>
-              </div>
-            </div>
-            {/* <div class="add-note-button">
-              <a
-                href="#small-dialog"
-                class="popup-with-zoom-anim button full-width button-sliding-icon"
-              >
-                Add Note <i class="icon-material-outline-arrow-right-alt"></i>
-              </a>
-            </div> */}
-            {/* <!-- Dashboard Box / End --> */}
-          </div>
-          {/* <!-- Dashboard Box / End --> */}
-        </div>
         {/* <!-- Row / End --> */}
 
         {/* <!-- Row --> */}

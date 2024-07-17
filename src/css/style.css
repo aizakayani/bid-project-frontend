@@ -7655,7 +7655,7 @@ input:checked + .switch-button:before {
 .intro-banner .container {
 	z-index: 100;
 	position: relative;
-	padding: 70px 0px;
+	padding: 150px 0px 70px 0px;
 }
 
 .intro-banner:after,
@@ -7680,16 +7680,15 @@ input:checked + .switch-button:before {
 	background-image: url('../utils/images/backgroung.webp');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 100% 60%;
+    background-position: 100% -7%;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100vw;
-    left: -10.65%;
     z-index: 10;
     overflow: hidden;
-	opacity: 0.4;
+	opacity: 1;
 }
 
 /* Disabled Gradient */

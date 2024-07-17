@@ -25,14 +25,13 @@ function JobDetails() {
     user,
     setUser,
   } = useContext(UserContext);
+
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false); 
-  console.log({isBookmarked});
-
-  console.log(bookmarkedJobs);
+ 
 
   useEffect(() => {
     if (user?.data?.bookmarkedJobs) {
