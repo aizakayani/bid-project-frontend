@@ -242,7 +242,16 @@ function DashboardManageBidders({
                   )}
                 {sortedBids[selectedTask]?.length === 0 ||
                   (getTaskDetails(selectedTask, userTasks)?.status !==
-                    "new" && <div>No tasks</div>)}
+                    "new" && <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100vh',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '40px',
+                      color:'#770737',
+                    }}>No Bidders Yet</div>)}
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
 import { unixToDate } from "../utils/utils";
+import MakeOffer from "./modals/OfferPopup";
 function FreeLancerDetails() {
   const { id } = useParams();
   const { freelancers, user, setUser, tasksList, userBids, bids } =
@@ -15,6 +16,7 @@ function FreeLancerDetails() {
   const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
+  const [showOfferPopup,setShowOfferPopup]= useState(false);
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
@@ -75,6 +77,14 @@ function FreeLancerDetails() {
       console.log(error);
     }
   };
+  const ratingNumber = freelancerDetails?.review?.rating;
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    if (index < ratingNumber) {
+      return 'filled';
+    } else {
+      return 'empty';
+    }
+  });
 
   return (
     <>
@@ -104,7 +114,11 @@ function FreeLancerDetails() {
                     <h3>{freelancerDetails?.name}</h3>
                     <ul>
                       <li>
-                        <div class="star-rating" data-rating="5.0"></div>
+                      <div class="star-rate" data-rating={ratingNumber ?? 0}>
+                          {stars.map((starType, index) => (
+                            <span key={index} className={`star ${starType}`}></span>
+                          ))}
+                        </div>
                       </li>
                       {freelancerDetails?.location && (
                         <li>
@@ -145,7 +159,7 @@ function FreeLancerDetails() {
                 </h3>
               </div>
               <ul class="boxed-list-ul">
-                {finishedTasks?.length === 0 && <div>no work history yet</div>}
+                {finishedTasks?.length === 0 && <div>No Work History Yet</div>}
                 {finishedTasks?.map(task => {
                   return (
                     <li>
@@ -229,8 +243,8 @@ function FreeLancerDetails() {
 
               {/* <!-- Button --> */}
               <a
-                href="#small-dialog"
-                class="apply-now-button popup-with-zoom-anim margin-bottom-50"
+                onClick={() => setShowOfferPopup(true)}
+                class="apply-now-button popup-with-zoom-anim margin-bottom-50 white-text-button"
               >
                 Make an Offer{" "}
                 <i class="icon-material-outline-arrow-right-alt"></i>
@@ -423,6 +437,7 @@ function FreeLancerDetails() {
           </div>
         </div>
       </div>
+      {showOfferPopup && <MakeOffer show = {showOfferPopup} handleClose={()=> setShowOfferPopup(false)} handleSubmit={()=> setShowOfferPopup(false) }/>}
     </>
   );
 }

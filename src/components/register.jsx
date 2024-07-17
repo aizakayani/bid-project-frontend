@@ -80,7 +80,7 @@ function Register() {
                   Already have an account?{" "}
                   <a  onClick={() => {
                     navigate("/login");
-                  }}style={{ color: '#770737', textDecoration: 'underline' }}>Log In!</a>
+                  }}style={{ color: '#770737', textDecoration: 'underline' ,cursor: "pointer"}}>Log In!</a>
                 </span>
               </div>
 

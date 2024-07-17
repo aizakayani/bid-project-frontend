@@ -15,7 +15,7 @@ function OrderConformation() {
               </div>
               <h2 class="margin-top-30">Thank you for your order!</h2>
               <p>Your payment has been processed successfully.</p>
-              <a
+              {/* <a
                  onClick={() => {
 					navigate("/invoice");
 				  }}
@@ -23,7 +23,7 @@ function OrderConformation() {
               >
                 View Invoice{" "}
                 <i class="icon-material-outline-arrow-right-alt"></i>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { UserContext } from "../context/userContext";
 import { getJobsApplicationsByJobIds } from "../services/job-applications";
 import { saveAs } from "file-saver";
 import { getCountryFlag } from "../utils/common";
+import avatar from "../utils/images/Svgs/no-avatar-image.svg";
 function DashboardManageCandidates({ setDashboardType }) {
   const { jobApplications, setNewMessageContext } = useContext(UserContext);
   const downloadPdf = (applicantCV) => {
@@ -20,6 +21,7 @@ function DashboardManageCandidates({ setDashboardType }) {
     // Use FileSaver to save the file
     saveAs(blob, "downloaded.pdf");
   };
+  
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -57,7 +59,7 @@ function DashboardManageCandidates({ setDashboardType }) {
                               <div class="freelancer-avatar">
                                 <div class="verified-badge"></div>
                                 <a href="#">
-                                  <img src={userAvatarBig3} alt="" />
+                                  <img src={avatar} alt="" />
                                 </a>
                               </div>
 
@@ -90,14 +92,6 @@ function DashboardManageCandidates({ setDashboardType }) {
                                   123-456-789
                                 </span> */}
 
-                                {/* <!-- Rating --> */}
-                                <div class="freelancer-rating">
-                                  <div
-                                    class="star-rating"
-                                    data-rating="5.0"
-                                  ></div>
-                                </div>
-
                                 {/* <!-- Buttons --> */}
                                 <div class="buttons-to-right always-visible margin-top-25 margin-bottom-5">
                                   <a
@@ -110,7 +104,6 @@ function DashboardManageCandidates({ setDashboardType }) {
                                     Download CV
                                   </a>
                                   <a
-                                    href="#small-dialog"
                                     class="popup-with-zoom-anim button dark ripple-effect"
                                     onClick={() => {
                                       setNewMessageContext({

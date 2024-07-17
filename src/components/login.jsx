@@ -82,7 +82,7 @@ function Login() {
                     onClick={() => {
                       navigate("/register");
                     }}
-                    style={{ color: "#770737", textDecoration: "underline" }}
+                    style={{ color: "#770737", textDecoration: "underline", cursor: "pointer" }}
                   >
                     Sign Up!
                   </a>
