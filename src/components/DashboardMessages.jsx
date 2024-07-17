@@ -117,9 +117,9 @@ function DashboardMessages() {
     socket.emit("chat-message", {
       message: newMessage,
       receiverId: newMessageContext
-        ? newMessageContext.receiver.id
-        : selectedConversation.recepients?.find(
-            (recepient) => recepient.id !== user?._id
+        ? newMessageContext?.receiver?.id
+        : selectedConversation?.recepients?.find(
+            (recepient) => recepient?.id !== user?._id
           ).id,
     });
     setNewMessage("");

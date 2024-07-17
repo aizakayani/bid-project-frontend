@@ -370,6 +370,7 @@ function Header() {
   };
 
   return (
+    <>
     <header id="header-container" class="fullwidth">
       {/* <!-- Header --> */}
       <div id="header">
@@ -904,6 +905,58 @@ function Header() {
       {/* <!-- Header Container / End --> */}\{" "}
       {userRolePopup && <UserRolePopup handleSelectRole={handleSelectRole} />}
     </header>
+    <div className="navigation-small-screen" style={{display: 'none'}}>
+    <nav id="navigation">
+                <ul >
+                  <li>
+                    <a onClick={() => navigate("/")}>Home</a>
+                  </li>
+
+                  {user?.role === "freelancer" && (
+                    <li
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        height: "32px",
+                      }}
+                    >
+                      <a href="#">Find Work</a>
+                      <ul class="dropdown-nav">
+                        <li>
+                          <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
+                        </li>
+                        <li>
+                          <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
+                        </li>
+                      </ul>
+                    </li>
+                  )}
+
+                  {user?.role === "employer" && (
+                    <li>
+                      <a onClick={() => navigate("/freelancers")}>
+                        Find a Freelancer
+                      </a>
+                    </li>
+                  )}
+                  <li
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "30px",
+                    }}
+                  >
+                    <li>
+                      <a onClick={() => navigate("/blog")}>Blog</a>
+                    </li>
+                    <li>
+                      <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
+                    </li>
+                  </li>
+                </ul>
+              </nav>
+    </div>
+    </>
   );
 }
 export default Header;

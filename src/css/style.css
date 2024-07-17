@@ -2168,7 +2168,9 @@ em.mm-counter+a.mm-fullsubopen+span {
 
 /* Media Queries Menu */
 @media (max-width: 1099px) {
-
+     .navigation-small-screen {
+		display: inline-block !important;
+	 }
 	/* Header Responsive Styles */
 	#responsive { display: none; }
 	.mmenu-trigger { display: inline-block !important; }
@@ -8068,7 +8070,7 @@ input:checked + .switch-button:before {
 		padding: 0;
 		border-radius: 4px;
 		box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-		margin-top: 20px;
+		margin-top: 72px;
 	}
 
 	.intro-banner-search-form .intro-search-field.with-label {
