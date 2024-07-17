@@ -109,7 +109,7 @@ function Dashboard() {
       <div class="clearfix"></div>
       <div class="dashboard-container">
         {/* <!-- Dashboard Sidebar
-	================================================== --> */}
+	          ================================================== --> */}
         <div class="dashboard-sidebar">
           <div class="dashboard-sidebar-inner" data-simplebar>
             <div class="dashboard-nav-container">

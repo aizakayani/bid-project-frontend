@@ -17,6 +17,7 @@ function FreeLancerDetails() {
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
   const [showOfferPopup,setShowOfferPopup]= useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false); 
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
@@ -87,6 +88,13 @@ console.log({freelancerDetails});
       return 'empty';
     }
   });
+  useEffect(() => {
+    if (bookmarkedFreelancers.includes(id)) {
+      setIsBookmarked(true);
+    } else {
+      setIsBookmarked(false);
+    }
+  }, [bookmarkedFreelancers, id]);
 
   return (
     <>
@@ -168,7 +176,18 @@ console.log({freelancerDetails});
                 </h3>
               </div>
               <ul class="boxed-list-ul">
-                {finishedTasks?.length === 0 && <div>no work history yet</div>}
+                {finishedTasks?.length === 0 && <div  style={{
+        display: 'flex',
+         justifyContent:"space-evenly",
+        //  alignItems: 'center',
+        height: '100vh',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: '29px',
+        marginBottom:'100px',
+        color:'#770737',
+        marginTop:'10px',
+      }} >No Work History Yet</div>}
                 {finishedTasks?.map((task) => {
                   return (
                     <li>
@@ -348,7 +367,7 @@ console.log({freelancerDetails});
               </div>
 
               {/* <!-- Widget --> */}
-              <div class="sidebar-widget">
+              {/* <div class="sidebar-widget">
                 <h3>Attachments</h3>
                 <div class="attachments-container">
                   <a href="#" class="attachment-box ripple-effect">
@@ -360,17 +379,28 @@ console.log({freelancerDetails});
                     <i>DOCX</i>
                   </a>
                 </div>
-              </div>
+              </div> */}
 
               {/* <!-- Sidebar Widget --> */}
-              <div class="sidebar-widget">
+              {/* <div class="sidebar-widget">
                 <h3>Bookmark or Share</h3>
 
-                {/* <!-- Bookmark Button --> */}
-                <button class="bookmark-button margin-bottom-25">
+                
+                <button
+                class={`${
+                    isBookmarked ? "bookmarked-button" : "bookmark-button"
+                  } margin-bottom-25`}
+                  onClick={() => {
+                    handleUpdateBookmarkedFreelancers(FreeLancerDetails?._id);
+                  }}>
                   <span class="bookmark-icon"></span>
-                  <span class="bookmark-text">Bookmark</span>
-                  <span class="bookmarked-text">Bookmarked</span>
+                  {!bookmarkedFreelancers?.includes(FreeLancerDetails?._id) && (
+                    <span class="bookmark-text">Bookmark</span>
+                  )}
+                  
+                  {bookmarkedFreelancers?.includes(FreeLancerDetails?._id) && (
+                    <span class="bookmarked-text">Bookmarked</span>
+                  )}
                 </button>
 
                 {/* <!-- Copy URL --> */}
@@ -392,7 +422,7 @@ console.log({freelancerDetails});
                 </div> */}
 
                 {/* <!-- Share Buttons --> */}
-                <div class="share-buttons margin-top-25">
+                {/* <div class="share-buttons margin-top-25">
                   <div class="share-buttons-trigger">
                     <i class="icon-feather-share-2"></i>
                   </div>
@@ -444,7 +474,7 @@ console.log({freelancerDetails});
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div>  */}
             </div>
           </div>
         </div>

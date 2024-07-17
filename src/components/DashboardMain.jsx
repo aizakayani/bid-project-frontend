@@ -77,7 +77,9 @@ function DashboardMain() {
       setFreelancerRating(freelancer.rating);
     }
   }, [freelancers]);
+  console.log({freelancerRating});
   return (
+    <>
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
         {/* <!-- Dashboard Headline --> */}
@@ -85,40 +87,77 @@ function DashboardMain() {
           <h3>{user?.name}</h3>
           <span>We are glad to see you again!</span>
         </div>
-
+    
         {/* <!-- Fun Facts Container --> */}
-        <div class="fun-facts-container">
-          <div class="fun-fact" data-fun-fact-color="#36bd78">
-            <div class="fun-fact-text">
-              <span>Task Bids Won</span>
-              <h4>{acceptedBidsCount}</h4>
-            </div>
-            <div class="fun-fact-icon" style={{background: 'rgba(54, 189, 120, 0.07)'}}>
-              <i class="icon-material-outline-gavel" style={{color: 'rgb(54, 189, 120)'}}></i>
-            </div>
-          </div>
-          <div class="fun-fact" data-fun-fact-color="#b81b7f">
-            <div class="fun-fact-text">
-              <span>Jobs Applied</span>
-              <h4>{jobApplications.length}</h4>
-            </div>
-            <div class="fun-fact-icon" style={{background: 'rgba(184, 27, 127, 0.07)'}} >
-              <i class="icon-material-outline-business-center" style={{color: 'rgb(184, 27, 127)'}}></i>
-            </div>
-          </div>
-          <div class="fun-fact" data-fun-fact-color="#efa80f">
-            <div class="fun-fact-text">
-              <span>Reviews</span>
-              <h4>{freelancerRating}</h4>
-            </div>
-            <div class="fun-fact-icon" style={{background: 'rgba(239, 168, 15, 0.07)'}}>
-              <i class="icon-material-outline-rate-review" style={{color: 'rgb(239, 168, 15)'}}></i>
-            </div>
-          </div>
-
-          {/* <!-- Last one has to be hidden below 1600px, sorry :( --> */}
-        
-        </div>
+        {user?.role === "employer" && (
+                   <div class="fun-facts-container">
+                   <div class="fun-fact" data-fun-fact-color="#36bd78">
+                     <div class="fun-fact-text">
+                       <span>Task Posted</span>
+                       <h4>{tasksList.length}</h4>
+                     </div>
+                     <div class="fun-fact-icon" style={{background: 'rgba(54, 189, 120, 0.07)'}}>
+                       <i class="icon-material-outline-gavel" style={{color: 'rgb(54, 189, 120)'}}></i>
+                     </div>
+                   </div>
+                   <div class="fun-fact" data-fun-fact-color="#b81b7f">
+                     <div class="fun-fact-text">
+                       <span>Jobs Posted</span>
+                       <h4>{jobsList.length}</h4>
+                     </div>
+                     <div class="fun-fact-icon" style={{background: 'rgba(184, 27, 127, 0.07)'}} >
+                       <i class="icon-material-outline-business-center" style={{color: 'rgb(184, 27, 127)'}}></i>
+                     </div>
+                   </div>
+                   <div class="fun-fact" data-fun-fact-color="#efa80f">
+                     <div class="fun-fact-text">
+                       <span>Reviews</span>
+                       <h4>{freelancerRating}</h4>
+                     </div>
+                     <div class="fun-fact-icon" style={{background: 'rgba(239, 168, 15, 0.07)'}}>
+                       <i class="icon-material-outline-rate-review" style={{color: 'rgb(239, 168, 15)'}}></i>
+                     </div>
+                   </div>
+         
+                   {/* <!-- Last one has to be hidden below 1600px, sorry :( --> */}
+                 
+                 </div>   
+                    )}
+                    {user?.role === "freelancer" && (
+                       <div class="fun-facts-container">
+                       <div class="fun-fact" data-fun-fact-color="#36bd78">
+                         <div class="fun-fact-text">
+                           <span>Task Bids Won</span>
+                           <h4>{acceptedBidsCount}</h4>
+                         </div>
+                         <div class="fun-fact-icon" style={{background: 'rgba(54, 189, 120, 0.07)'}}>
+                           <i class="icon-material-outline-gavel" style={{color: 'rgb(54, 189, 120)'}}></i>
+                         </div>
+                       </div>
+                       <div class="fun-fact" data-fun-fact-color="#b81b7f">
+                         <div class="fun-fact-text">
+                           <span>Jobs Applied</span>
+                           <h4>{jobApplications.length}</h4>
+                         </div>
+                         <div class="fun-fact-icon" style={{background: 'rgba(184, 27, 127, 0.07)'}} >
+                           <i class="icon-material-outline-business-center" style={{color: 'rgb(184, 27, 127)'}}></i>
+                         </div>
+                       </div>
+                       <div class="fun-fact" data-fun-fact-color="#efa80f">
+                         <div class="fun-fact-text">
+                           <span>Reviews</span>
+                           <h4>{freelancerRating}</h4>
+                         </div>
+                         <div class="fun-fact-icon" style={{background: 'rgba(239, 168, 15, 0.07)'}}>
+                           <i class="icon-material-outline-rate-review" style={{color: 'rgb(239, 168, 15)'}}></i>
+                         </div>
+                       </div>
+             
+                       {/* <!-- Last one has to be hidden below 1600px, sorry :( --> */}
+                     
+                     </div>      
+                          )}
+       
 
         {/* <!-- Row --> */}
         <div class="row" style={{display: 'flex', justifyContent: 'center'}}>
@@ -449,6 +488,7 @@ function DashboardMain() {
       {/* <!-- Row --> */}
       
     </div>
+    </> 
   );
 }
 export default DashboardMain;

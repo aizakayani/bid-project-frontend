@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
 import { getCountryFlag } from "../utils/common";
 function JobDetails() {
-  const { id } = useParams();
+  const { id } = useParams();  
   const {
     jobsList,
     setUserJobApplications,
