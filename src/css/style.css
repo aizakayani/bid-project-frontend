@@ -7645,7 +7645,6 @@ input:checked + .switch-button:before {
 /* Intro Banner
 ------------------------------------- */
 .intro-banner {
-	padding: 105px 0;
 	position: relative;
 }
 
@@ -7656,7 +7655,7 @@ input:checked + .switch-button:before {
 .intro-banner .container {
 	z-index: 100;
 	position: relative;
-	padding: 30px 0px;
+	padding: 70px 0px;
 }
 
 .intro-banner:after,
