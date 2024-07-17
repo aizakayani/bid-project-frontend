@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { jwtDecode } from "jwt-decode";
 import { getJobs, getJobsByUser } from "../services/job";
-import { isTokenValid } from "../utils/utils";
+import { isTokenValid, timeDifferenceFromNow } from "../utils/utils";
 import { getTasks, getTasksByUser } from "../services/task";
 import io from "socket.io-client";
 import {
@@ -16,11 +16,13 @@ import {
   getFreelancersAPI,
   getUserDetailsAPI,
   updateUserAPI,
+  updateUserNotificationsStatus,
 } from "../services/user";
 import UserRolePopup from "./modals/UserRolePopup";
 import { getJobsApplicationsByUser } from "../services/job-applications";
 import { getBidsByUserAPI } from "../services/bids";
 import { getNotesAPI } from "../services/notes";
+import { getFreelancerDetails, getJobDetails } from "../utils/common";
 function Header() {
   const {
     user,
@@ -29,19 +31,21 @@ function Header() {
     isLoggedIn,
     setUserJobs,
     setUserTasks,
+    jobsList,
     setJobsList,
+    tasksList,
     setTasksList,
     socket,
     setSocket,
-    setChatMessages,
     setUserJobApplications,
     freelancers,
     setFreelancers,
     setUserBids,
-    chatConversations,
     setChatConversations,
     setEmployers,
     setNotes,
+    chatConversations,
+    setDashboardScreen
   } = useContext(UserContext);
   const navigate = useNavigate();
   const [showNotificationsDropdown, setShowNotificationsDropdown] =
@@ -50,6 +54,15 @@ function Header() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [userRolePopup, setUserRolePopup] = useState(false);
   const [initialize, setInitialize] = useState(false);
+
+  const sortedConversations = chatConversations?.length > 0 ? chatConversations?.sort((a, b) => {
+    // Extract the last message's createdAt timestamp for both conversations
+    const lastMessageA = a.messages[a.messages.length - 1]?.createdAt;
+    const lastMessageB = b.messages[b.messages.length - 1]?.createdAt;
+
+    // Compare the timestamps for sorting
+    return lastMessageB - lastMessageA;
+  }) : [];
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -114,7 +127,6 @@ function Header() {
       // console.log("HIIII", chatConversationsCopy);
       // setChatConversations([...chatConversationsCopy]);
       setChatConversations((prevChatConversations) => {
-        console.log("lalalalla", prevChatConversations);
         let chatConversationsCopy = [...prevChatConversations];
         const index = chatConversationsCopy.findIndex(
           (obj) => obj.channel === conversation.channel
@@ -127,13 +139,16 @@ function Header() {
           // Add new object
           chatConversationsCopy.push(conversation);
         }
-        console.log("HIIII", chatConversationsCopy);
         return chatConversationsCopy;
       });
     });
 
     newSocket.on("chat-history", (conversations) => {
       setChatConversations([...conversations]);
+    });
+
+    newSocket.on("fetch-notifications", () => {
+      getUserDetails();
     });
 
     // return () => newSocket.close();
@@ -369,6 +384,19 @@ function Header() {
     }
   };
 
+  const handleNotificationsStatusUpdate = async () => {
+    try {
+      if (user?.data?.notifications && user?.data?.notifications.filter(notification => notification.isRead === false).length) {
+        const response = await updateUserNotificationsStatus();
+        if (response.success) {
+          await getUserDetails();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
     <header id="header-container" class="fullwidth">
@@ -567,10 +595,13 @@ function Header() {
                         );
                         setShowMessagesDropdown(false);
                         setShowProfileDropdown(false);
+                        if (!showNotificationsDropdown) {
+                          handleNotificationsStatusUpdate();
+                        }
                       }}
                     >
                       <i class="icon-feather-bell"></i>
-                      <span>4</span>
+                      {user?.data?.notifications && <span>{user?.data?.notifications?.filter(notification => notification.isRead === false).length}</span>}
                     </a>
                   </div>
 
@@ -597,38 +628,68 @@ function Header() {
                       <div class="header-notifications-scroll" data-simplebar>
                         <ul>
                           {/* <!-- Notification --> */}
-                          <li class="notifications-not-read">
-                            <a href="dashboard-manage-candidates.html">
-                              <span class="notification-icon">
-                                <i class="icon-material-outline-group"></i>
-                              </span>
-                              <span class="notification-text">
-                                <strong>Michael Shannah</strong> applied for a
-                                job{" "}
-                                <span class="color">
-                                  Full Stack Software Engineer
-                                </span>
-                              </span>
-                            </a>
-                          </li>
+                          {user?.data?.notifications?.length > 0 && user?.data?.notifications.map(notification => {
+                            if (notification.type === "job-application") {
+                              const jobDetails = getJobDetails(notification?.jobId, jobsList);
+                              const applicantDetails = getFreelancerDetails(notification?.applicantId, freelancers);
+                              if (!jobDetails || !applicantDetails) return <></>
+                              return (
+                                <li class="notifications-not-read">
+                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managecandidates") }}>
+                                    <span class="notification-icon">
+                                      <i class="icon-material-outline-group"></i>
+                                    </span>
+                                    <span class="notification-text">
+                                      <strong>{applicantDetails.name}</strong> applied for a
+                                      job{" "}
+                                      <span class="color">
+                                        {jobDetails.title}
+                                      </span>
+                                    </span>
+                                  </a>
+                                </li>
+                              )
+                            } else if (notification.type === "place-bid") {
+                              const taskDetails = getJobDetails(notification?.taskId, tasksList);
+                              const bidderDetails = getFreelancerDetails(notification?.bidderId, freelancers);
+                              if (!taskDetails || !bidderDetails) return <></>
+                              return (
+                                <li>
+                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managebidders") }}>
+                                    <span class="notification-icon">
+                                      <i class=" icon-material-outline-gavel"></i>
+                                    </span>
+                                    <span class="notification-text">
+                                      <strong>{bidderDetails.name}</strong> placed a bid on
+                                      your{" "}
+                                      <span class="color">{taskDetails.title}</span>{" "}
+                                      project
+                                    </span>
+                                  </a>
+                                </li>
+                              )
+                            } else if (notification.type === "accept-bid") {
+                              const taskDetails = getJobDetails(notification?.taskId, tasksList);
+                              if (!taskDetails) return <></>
+                              return (
+                                <li>
+                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("activebids") }}>
+                                    <span class="notification-icon">
+                                      <i class=" icon-material-outline-gavel"></i>
+                                    </span>
+                                    <span class="notification-text">
+                                      Your bid on Task{" "}
+                                      <span class="color">{taskDetails.title}</span>{" "}
+                                      got accepted
+                                    </span>
+                                  </a>
+                                </li>
+                              )
+                            }
+                          })}
 
                           {/* <!-- Notification --> */}
-                          <li>
-                            <a href="dashboard-manage-bidders.html">
-                              <span class="notification-icon">
-                                <i class=" icon-material-outline-gavel"></i>
-                              </span>
-                              <span class="notification-text">
-                                <strong>Gilbert Allanis</strong> placed a bid on
-                                your{" "}
-                                <span class="color">iOS App Development</span>{" "}
-                                project
-                              </span>
-                            </a>
-                          </li>
-
-                          {/* <!-- Notification --> */}
-                          <li>
+                          {/* <li>
                             <a href="dashboard-manage-jobs.html">
                               <span class="notification-icon">
                                 <i class="icon-material-outline-autorenew"></i>
@@ -641,10 +702,10 @@ function Header() {
                                 is expiring.
                               </span>
                             </a>
-                          </li>
+                          </li> */}
 
                           {/* <!-- Notification --> */}
-                          <li>
+                          {/* <li>
                             <a href="dashboard-manage-candidates.html">
                               <span class="notification-icon">
                                 <i class="icon-material-outline-group"></i>
@@ -656,7 +717,7 @@ function Header() {
                                 </span>
                               </span>
                             </a>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                     </div>
@@ -678,7 +739,7 @@ function Header() {
                       }}
                     >
                       <i class="icon-feather-mail"></i>
-                      <span>3</span>
+                      {/* <span>3</span> */}
                     </a>
                   </div>
 
@@ -705,65 +766,35 @@ function Header() {
                       <div class="header-notifications-scroll" data-simplebar>
                         <ul>
                           {/* <!-- Notification --> */}
-                          <li class="notifications-not-read">
-                            <a href="dashboard-messages.html">
-                              <span class="notification-avatar status-online">
-                                <img src={userAvatarSmall3} alt="" />
-                              </span>
-                              <div class="notification-text">
-                                <strong>David Peterson</strong>
-                                <p class="notification-msg-text">
-                                  Thanks for reaching out. I'm quite busy right
-                                  now on many...
-                                </p>
-                                <span class="color">4 hours ago</span>
-                              </div>
-                            </a>
-                          </li>
-
-                          {/* <!-- Notification --> */}
-                          <li class="notifications-not-read">
-                            <a href="dashboard-messages.html">
-                              <span class="notification-avatar status-offline">
-                                <img src={userAvatarSmall2} alt="" />
-                              </span>
-                              <div class="notification-text">
-                                <strong>Sindy Forest</strong>
-                                <p class="notification-msg-text">
-                                  Hi Tom! Hate to break it to you, but I'm
-                                  actually on vacation until...
-                                </p>
-                                <span class="color">Yesterday</span>
-                              </div>
-                            </a>
-                          </li>
-
-                          {/* <!-- Notification --> */}
-                          <li class="notifications-not-read">
-                            <a
-                              onClick={() => {
-                                navigate("/dashboard/message/");
-                              }}
-                            >
-                              <span class="notification-avatar status-online">
-                                <img src={userAvatarPlaceholder} alt="" />
-                              </span>
-                              <div class="notification-text">
-                                <strong>Marcin Kowalski</strong>
-                                <p class="notification-msg-text">
-                                  I received payment. Thanks for cooperation!
-                                </p>
-                                <span class="color">Yesterday</span>
-                              </div>
-                            </a>
-                          </li>
+                          {sortedConversations?.length > 0 && sortedConversations?.map(conversation => {
+                            const lastMessage = conversation.messages[conversation.messages.length - 1];
+                            if (lastMessage?.sentBy === user._id) return <></>
+                            const receiver = conversation?.recepients.find(recepient => recepient.id !== user._id);
+                            return (<li class="notifications-not-read">
+                              <a href="dashboard-messages.html">
+                                <span class="notification-avatar status-online">
+                                  <img src={receiver?.avatar
+                                    ? `data:${receiver?.avatar?.contentType};base64,${receiver?.avatar?.base64Image}`
+                                    : userAvatarSmall3} alt="" />
+                                </span>
+                                <div class="notification-text">
+                                  <strong>{receiver.name}</strong>
+                                  <p class="notification-msg-text">
+                                    {lastMessage.content}
+                                  </p>
+                                  <span class="color">{timeDifferenceFromNow(lastMessage.createdAt)}</span>
+                                </div>
+                              </a>
+                            </li>)
+                          })}
                         </ul>
                       </div>
                     </div>
 
                     <a
                       onClick={() => {
-                        navigate("/dashboard/message/");
+                        navigate("/dashboard");
+                        setDashboardScreen("messages")
                       }}
                       class="header-notifications-button ripple-effect button-sliding-icon"
                     >
@@ -794,7 +825,7 @@ function Header() {
                         <img
                           src={
                             user?.avatar?.contentType &&
-                            user?.avatar?.base64Image
+                              user?.avatar?.base64Image
                               ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
                               : userAvatarSmall1
                           }
@@ -821,7 +852,7 @@ function Header() {
                             <img
                               src={
                                 user?.avatar?.contentType &&
-                                user?.avatar?.base64Image
+                                  user?.avatar?.base64Image
                                   ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
                                   : userAvatarSmall1
                               }
@@ -862,7 +893,8 @@ function Header() {
                         <li>
                           <a
                             onClick={() => {
-                              navigate("/dashboard/setting/");
+                              navigate("/dashboard");
+                              setDashboardScreen("settings")
                             }}
                             style={{ cursor: "pointer" }}
                           >

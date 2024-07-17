@@ -59,6 +59,26 @@ export const updateUserAPI = (payload) => {
   });
 };
 
+export const updateUserNotificationsStatus = () => {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/users//update/notifications/status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      }
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(error);
+      });
+  });
+};
+
 export const updateUserAvatarAPI = (formData) => {
   return new Promise((resolve, reject) => {
     fetch("http://localhost:3000/users/update/avatar", {
