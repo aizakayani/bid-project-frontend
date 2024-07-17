@@ -27,6 +27,8 @@ function Dashboard() {
     setSortedBids,
     jobsList,
     userBids,
+    dashboardScreen,
+    setDashboardScreen
   } = useContext(UserContext);
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
@@ -35,6 +37,12 @@ function Dashboard() {
   const [updateTaskData, setUpdateTaskData] = useState(null);
   const [manageBiddersTaskId, setManageBiddersTaskId] = useState(null);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (dashboardScreen) {
+      setDashboardType(dashboardScreen);
+      setDashboardScreen(null)
+    }
+  }, [dashboardScreen])
   useEffect(() => {
     if (userJobs?.length > 0) {
       // get JobIds
@@ -201,8 +209,8 @@ function Dashboard() {
                                 <span class="nav-tag">
                                   {userTasks?.length
                                     ? userTasks.filter(
-                                        (task) => task.status !== "finished"
-                                      ).length
+                                      (task) => task.status !== "finished"
+                                    ).length
                                     : 0}
                                 </span>
                               </a>
