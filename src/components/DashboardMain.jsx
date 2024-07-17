@@ -121,13 +121,102 @@ function DashboardMain() {
         </div>
 
         {/* <!-- Row --> */}
+        <div class="row" style={{display: 'flex', justifyContent: 'center'}}>
+          <div class="col-xl-4" style={{width: '90% !important'}}>
+            {/* <!-- Dashboard Box --> */}
+            {/* <!-- If you want adjust height of two boxes 
+						 add to the lower box 'main-box-in-row' 
+						 and 'child-box-in-row' to the higher box --> */}
+            <div class="dashboard-box child-box-in-row">
+              <div class="headline">
+                <h3>
+                  <i class="icon-material-outline-note-add"></i> Notes
+                </h3>
+              </div>
 
+              <div class="content with-padding">
+                {/* <!-- Note --> */}
+                {notes?.length > 0 &&
+                  notes?.map((note) => (
+                    <div class="dashboard-note">
+                      <p>{note.content}</p>
+
+                      <div class="note-footer">
+                        <span
+                          class={`note-priority ${
+                            note?.priority === "High"
+                              ? "high"
+                              : note?.priority === "Medium"
+                              ? "medium"
+                              : "low"
+                          }`}
+                        >
+                          {note.priority}
+                        </span>
+                        <div class="note-buttons">
+                          <a
+                            href="#"
+                            title="Remove"
+                            data-tippy-placement="top"
+                            onClick={() => deleteNote(note._id)}
+                          >
+                            <i class="icon-feather-trash-2"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {/* <!-- Note --> */}
+                {/* <div class="dashboard-note">
+                  <p>Extend premium plan for next month</p>
+                  <div class="note-footer">
+                    <span class="note-priority low">Low Priority</span>
+                    <div class="note-buttons">
+                      <a href="#" title="Remove" data-tippy-placement="top">
+                        <i class="icon-feather-trash-2"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {/* <!-- Note --> */}
+                {/* <div class="dashboard-note">
+                  <p>Send payment to David Peterson</p>
+                  <div class="note-footer">
+                    <span class="note-priority medium">Medium Priority</span>
+                    <div class="note-buttons">
+                      <a href="#" title="Remove" data-tippy-placement="top">
+                        <i class="icon-feather-trash-2"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>  */}
+              </div>
+              <div
+                class="add-note-button "
+                onClick={() => setOpenNotePopup(true)}
+              >
+                <a class="popup-with-zoom-anim button full-width button-sliding-icon white-text-button">
+                  Add Note <i class="icon-material-outline-arrow-right-alt"></i>
+                </a>
+              </div>
+            </div>
+            {/* <div class="add-note-button">
+              <a
+                href="#small-dialog"
+                class="popup-with-zoom-anim button full-width button-sliding-icon"
+              >
+                Add Note <i class="icon-material-outline-arrow-right-alt"></i>
+              </a>
+            </div> */}
+            {/* <!-- Dashboard Box / End --> */}
+          </div>
+          {/* <!-- Dashboard Box / End --> */}
+        </div>
         {/* <!-- Row / End --> */}
 
         {/* <!-- Row --> */}
-        <div class="row">
-          {/* <!-- Dashboard Box --> */}
-          <div class="col-xl-6">
+        <div class="row" style={{display: 'flex', justifyContent: 'center'}}>
+        <div class="col-xl-4" style={{width: '90% !important'}}>
             <div class="dashboard-box">
               <div class="headline">
                 <h3>
@@ -224,7 +313,6 @@ function DashboardMain() {
     })}
   </ul>
 </div>
-
             </div>
           </div>
 
