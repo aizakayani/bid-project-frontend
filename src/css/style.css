@@ -7645,7 +7645,6 @@ input:checked + .switch-button:before {
 /* Intro Banner
 ------------------------------------- */
 .intro-banner {
-	padding: 105px 0;
 	position: relative;
 }
 
@@ -7656,6 +7655,7 @@ input:checked + .switch-button:before {
 .intro-banner .container {
 	z-index: 100;
 	position: relative;
+	padding: 70px 0px;
 }
 
 .intro-banner:after,
@@ -7677,7 +7677,7 @@ input:checked + .switch-button:before {
 }
 
 .intro-banner .background-image-container {
-	/* background-image: url('../utils/images/background-image.jpg'); */
+	background-image: url('../utils/images/backgroung.webp');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 100% 60%;
@@ -7685,10 +7685,11 @@ input:checked + .switch-button:before {
     top: 0;
     left: 0;
     height: 100%;
-    width: 90%;
-    left: 10%;
+    width: 100vw;
+    left: -10.65%;
     z-index: 10;
     overflow: hidden;
+	opacity: 0.4;
 }
 
 /* Disabled Gradient */

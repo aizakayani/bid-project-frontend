@@ -22,6 +22,7 @@ function DashboardManageCandidates({ setDashboardType }) {
     saveAs(blob, "downloaded.pdf");
   };
   
+  console.log({jobApplications});
   return (
     <div class="dashboard-content-container" data-simplebar>
       <div class="dashboard-content-inner">
@@ -91,6 +92,26 @@ function DashboardManageCandidates({ setDashboardType }) {
                                   <i class="icon-feather-phone"></i> (+61)
                                   123-456-789
                                 </span> */}
+
+                                {/* <!-- Rating --> */}
+                                <div class="freelancer-rating">
+                                  <div
+                                    class="star-rate"
+                                    data-rating="5.0"
+                                  >
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <span
+                                          key={index}
+                                          className={`star ${
+                                            index <
+                                            jobApplication?.rating
+                                              ? "filled"
+                                              : "empty"
+                                          }`}
+                                        ></span>
+                                      ))}
+                                  </div>
+                                </div>
 
                                 {/* <!-- Buttons --> */}
                                 <div class="buttons-to-right always-visible margin-top-25 margin-bottom-5">

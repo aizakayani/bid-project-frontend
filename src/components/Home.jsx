@@ -82,10 +82,10 @@ function Home() {
       {/* <!-- add class "disable-gradient" to enable consistent background overlay --> */}
       <div
         class="intro-banner"
-        // data-background-image="images/section-background.jpg"
+        // data-background-image="images/backgroung-webp.jpg"
       >
         <div class="container">
-          {/* <div className="background-image-container"></div> */}
+          <div className="background-image-container"></div>
           {/* <!-- Intro Headline --> */}
           {user?.role === "freelancer" ? (
             <div class="row" style={{ marginBottom: "30px" }}>

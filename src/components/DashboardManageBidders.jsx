@@ -123,6 +123,7 @@ function DashboardManageBidders({
                           bid.userId,
                           freelancers
                         );
+                        console.log({freelancerDetails});
                         return (
                           <li>
                             {/* <!-- Overview --> */}
@@ -178,7 +179,19 @@ function DashboardManageBidders({
                                     <div
                                       class="star-rating"
                                       data-rating="5.0"
-                                    ></div>
+                                    >
+                                      {Array.from({ length: 5 }, (_, index) => (
+                                        <span
+                                          key={index}
+                                          className={`star ${
+                                            index <
+                                            freelancerDetails?.rating
+                                              ? "filled"
+                                              : "empty"
+                                          }`}
+                                        ></span>
+                                      ))}
+                                    </div>
                                   </div>
 
                                   {/* <!-- Bid Details --> */}
