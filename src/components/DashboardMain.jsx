@@ -4,7 +4,7 @@ import { useState } from "react";
 import AddNotePopup from "./modals/AddNotePopup";
 import { addNoteAPI, deleteNoteAPI, getNotesAPI } from "../services/notes";
 import toast from "react-hot-toast";
-import { getFreelancerDetails, getJobDetails } from "../utils/common";
+import { getFreelancerDetails, getJobDetails, getTaskDetails } from "../utils/common";
 
 function DashboardMain() {
   const { user, notes, setNotes,freelancers ,tasksList,userBids,jobsList,jobApplications } = useContext(UserContext);

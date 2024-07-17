@@ -85,7 +85,7 @@ function Home() {
         // data-background-image="images/backgroung-webp.jpg"
       >
           <div className="background-image-container"></div>
-        <div class="container" style={{ marginTop: '-40px'}}>
+        <div class="container" style={{marginTop: '-40px'}}>
         
           {/* <!-- Intro Headline --> */}
           {user?.role === "freelancer" ? (
