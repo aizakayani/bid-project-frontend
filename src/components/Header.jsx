@@ -185,7 +185,7 @@ function Header() {
         setUser({ ...response?.user });
       } else {
         if (!isTokenValid(response)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -202,7 +202,7 @@ function Header() {
         setUserJobs([...jobsResult?.jobs]);
       } else {
         if (!isTokenValid(jobsResult)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -219,7 +219,7 @@ function Header() {
         setUserTasks([...tasksResult?.tasks]);
       } else {
         if (!isTokenValid(tasksResult)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -235,7 +235,7 @@ function Header() {
         setUserJobApplications(response?.jobApplications);
       } else {
         if (!isTokenValid(response)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -251,7 +251,7 @@ function Header() {
         setUserBids(response?.bids);
       } else {
         if (!isTokenValid(response)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -374,7 +374,7 @@ function Header() {
         setUser(userData);
       } else {
         if (!isTokenValid(updateResult)) {
-          navigate("/login");
+          navigate("/");
           setIsLoggedIn(false);
         }
       }
@@ -399,26 +399,82 @@ function Header() {
 
   return (
     <>
-    <header id="header-container" class="fullwidth">
-      {/* <!-- Header --> */}
-      <div id="header">
-        <div class="container">
-          {/* <!-- Left Side Content --> */}
-          <div class="left-side">
-            {/* <!-- Logo --> */}
-            <div id="logo">
-              <a onClick={() => navigate("/")}>
-                <img src={logo} alt="" />
-              </a>
-            </div>
-            {isLoggedIn && (
-              <nav id="navigation">
-                <ul id="responsive">
-                  <li>
-                    <a onClick={() => navigate("/")}>Home</a>
-                  </li>
+      <header id="header-container" class="fullwidth">
+        {/* <!-- Header --> */}
+        <div id="header">
+          <div class="container">
+            {/* <!-- Left Side Content --> */}
+            <div class="left-side">
+              {/* <!-- Logo --> */}
+              <div id="logo">
+                <a onClick={() => navigate("/")}>
+                  <img src={logo} alt="" />
+                </a>
+              </div>
+              {isLoggedIn && (
+                <nav id="navigation">
+                  <ul id="responsive">
+                    <li>
+                      <a onClick={() => navigate("/")}>Home</a>
+                    </li>
 
-                  {user?.role === "freelancer" && (
+                    {user?.role === "freelancer" && (
+                      <li
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "32px",
+                        }}
+                      >
+                        <a href="#">Find Work</a>
+                        <ul class="dropdown-nav">
+                          <li>
+                            <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
+                          </li>
+                          <li>
+                            <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
+                          </li>
+                        </ul>
+                      </li>
+                    )}
+
+                    {user?.role === "employer" && (
+                      <li>
+                        <a onClick={() => navigate("/freelancers")}>
+                          Find a Freelancer
+                        </a>
+                      </li>
+                    )}
+                    <li
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        height: "30px",
+                      }}
+                    >
+                      <li>
+                        <a onClick={() => navigate("/blog")}>Blog</a>
+                      </li>
+                      <li>
+                        <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
+                      </li>
+                    </li>
+                  </ul>
+                </nav>
+              )}
+            </div>
+            {/* <!-- Left Side Content / End --> */}
+
+            {/* <!-- Right Side Content / End --> */}
+            <div class="right-side">
+              {/* <!-- Main Navigation --> */}
+              {!isLoggedIn && (
+                <nav id="navigation">
+                  <ul id="responsive">
+                    <li>
+                      <a onClick={() => navigate("/")}>Home</a>
+                    </li>
+
                     <li
                       style={{
                         display: "flex",
@@ -436,260 +492,204 @@ function Header() {
                         </li>
                       </ul>
                     </li>
-                  )}
 
-                  {user?.role === "employer" && (
                     <li>
                       <a onClick={() => navigate("/freelancers")}>
                         Find a Freelancer
                       </a>
                     </li>
-                  )}
-                  <li
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "30px",
-                    }}
-                  >
-                    <li>
-                      <a onClick={() => navigate("/blog")}>Blog</a>
-                    </li>
-                    <li>
-                      <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
-                    </li>
-                  </li>
-                </ul>
-              </nav>
-            )}
-          </div>
-          {/* <!-- Left Side Content / End --> */}
 
-          {/* <!-- Right Side Content / End --> */}
-          <div class="right-side">
-            {/* <!-- Main Navigation --> */}
-            {!isLoggedIn && (
-              <nav id="navigation">
-                <ul id="responsive">
-                  <li>
-                    <a onClick={() => navigate("/")}>Home</a>
-                  </li>
-
-                  <li
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "32px",
-                    }}
-                  >
-                    <a href="#">Find Work</a>
-                    <ul class="dropdown-nav">
+                    {isLoggedIn && (
                       <li>
-                        <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
+                        <a href="#">More</a>
+                        <ul class="dropdown-nav">
+                          <li>
+                            <ul class="dropdown-nav">
+                              <li>
+                                <a
+                                  onClick={() => {
+                                    navigate("/jobDetails");
+                                  }}
+                                >
+                                  Job Page
+                                </a>
+                              </li>
+
+                              <li>
+                                <a
+                                  onClick={() => {
+                                    navigate("/Contact");
+                                  }}
+                                >
+                                  Contact
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  onClick={() => {
+                                    navigate("/JobListLayout");
+                                  }}
+                                >
+                                  Job-List
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            <a onClick={() => navigate("/blog")}>Blog</a>
+                          </li>
+                          <li>
+                            <a onClick={() => navigate("/pricing")}>
+                              Pricing Plans
+                            </a>
+                          </li>
+                        </ul>
                       </li>
+                    )}
+
+                    {!isLoggedIn && (
                       <li>
-                        <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
+                        <a href="#">What We Are</a>
                       </li>
-                    </ul>
-                  </li>
+                    )}
+                    {!isLoggedIn && (
+                      <li>
+                        <a onClick={() => navigate("/contact")}>Contact Us</a>
+                      </li>
+                    )}
+                  </ul>
+                </nav>
+              )}
 
-                  <li>
-                    <a onClick={() => navigate("/freelancers")}>
-                      Find a Freelancer
-                    </a>
-                  </li>
-
-                  {isLoggedIn && (
-                    <li>
-                      <a href="#">More</a>
-                      <ul class="dropdown-nav">
-                        <li>
-                          <ul class="dropdown-nav">
-                            <li>
-                              <a
-                                onClick={() => {
-                                  navigate("/jobDetails");
-                                }}
-                              >
-                                Job Page
-                              </a>
-                            </li>
-
-                            <li>
-                              <a
-                                onClick={() => {
-                                  navigate("/Contact");
-                                }}
-                              >
-                                Contact
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                onClick={() => {
-                                  navigate("/JobListLayout");
-                                }}
-                              >
-                                Job-List
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a onClick={() => navigate("/blog")}>Blog</a>
-                        </li>
-                        <li>
-                          <a onClick={() => navigate("/pricing")}>
-                            Pricing Plans
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                  )}
-
-                  {!isLoggedIn && (
-                    <li>
-                      <a href="#">What We Are</a>
-                    </li>
-                  )}
-                  {!isLoggedIn && (
-                    <li>
-                      <a onClick={() => navigate("/contact")}>Contact Us</a>
-                    </li>
-                  )}
-                </ul>
-              </nav>
-            )}
-
-            {/* <!-- Main Navigation / End --> */}
-            {!isLoggedIn && (
-              <div class="login-button">
-                <button
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                  class="button ripple-effect"
-                >
-                  Login
-                </button>
-              </div>
-            )}
-            <div class="clearfix"></div>
-          </div>
-          {isLoggedIn && (
-            <div class="right-side-notifications">
-              {/* <!--  User Notifications --> */}
-              <div class="header-widget hide-on-mobile">
-                {/* <!-- Notifications --> */}
-                <div class="header-notifications" id={"notification"}>
-                  {/* <!-- Trigger --> */}
-                  <div
-                    class="header-notifications-trigger"
-                    id={"notification-icon"}
-                    style={{ cursor: "pointer" }}
+              {/* <!-- Main Navigation / End --> */}
+              {!isLoggedIn && (
+                <div class="login-button">
+                  <button
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                    class="button ripple-effect"
                   >
-                    <a
-                      onClick={() => {
-                        setShowNotificationsDropdown(
-                          !showNotificationsDropdown
-                        );
-                        setShowMessagesDropdown(false);
-                        setShowProfileDropdown(false);
-                        if (!showNotificationsDropdown) {
-                          handleNotificationsStatusUpdate();
-                        }
-                      }}
+                    Login
+                  </button>
+                </div>
+              )}
+              <div class="clearfix"></div>
+            </div>
+            {isLoggedIn && (
+              <div class="right-side-notifications">
+                {/* <!--  User Notifications --> */}
+                <div class="header-widget hide-on-mobile">
+                  {/* <!-- Notifications --> */}
+                  <div class="header-notifications" id={"notification"}>
+                    {/* <!-- Trigger --> */}
+                    <div
+                      class="header-notifications-trigger"
+                      id={"notification-icon"}
+                      style={{ cursor: "pointer" }}
                     >
-                      <i class="icon-feather-bell"></i>
-                      {user?.data?.notifications && <span>{user?.data?.notifications?.filter(notification => notification.isRead === false).length}</span>}
-                    </a>
-                  </div>
-
-                  {/* <!-- Dropdown --> */}
-                  <div
-                    class={
-                      showNotificationsDropdown
-                        ? "header-notifications-dropdown-active"
-                        : "header-notifications-dropdown"
-                    }
-                  >
-                    <div class="header-notifications-headline">
-                      <h4>Notifications</h4>
-                      <button
-                        class="mark-as-read ripple-effect-dark"
-                        title="Mark all as read"
-                        data-tippy-placement="left"
+                      <a
+                        onClick={() => {
+                          setShowNotificationsDropdown(
+                            !showNotificationsDropdown
+                          );
+                          setShowMessagesDropdown(false);
+                          setShowProfileDropdown(false);
+                          if (!showNotificationsDropdown) {
+                            handleNotificationsStatusUpdate();
+                          }
+                        }}
                       >
-                        <i class="icon-feather-check-square"></i>
-                      </button>
+                        <i class="icon-feather-bell"></i>
+                        {user?.data?.notifications && <span>{user?.data?.notifications?.filter(notification => notification.isRead === false).length}</span>}
+                      </a>
                     </div>
 
-                    <div class="header-notifications-content">
-                      <div class="header-notifications-scroll" data-simplebar>
-                        <ul>
-                          {/* <!-- Notification --> */}
-                          {user?.data?.notifications?.length > 0 && user?.data?.notifications.map(notification => {
-                            if (notification.type === "job-application") {
-                              const jobDetails = getJobDetails(notification?.jobId, jobsList);
-                              const applicantDetails = getFreelancerDetails(notification?.applicantId, freelancers);
-                              if (!jobDetails || !applicantDetails) return <></>
-                              return (
-                                <li class="notifications-not-read">
-                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managecandidates") }}>
-                                    <span class="notification-icon">
-                                      <i class="icon-material-outline-group"></i>
-                                    </span>
-                                    <span class="notification-text">
-                                      <strong>{applicantDetails.name}</strong> applied for a
-                                      job{" "}
-                                      <span class="color">
-                                        {jobDetails.title}
-                                      </span>
-                                    </span>
-                                  </a>
-                                </li>
-                              )
-                            } else if (notification.type === "place-bid") {
-                              const taskDetails = getJobDetails(notification?.taskId, tasksList);
-                              const bidderDetails = getFreelancerDetails(notification?.bidderId, freelancers);
-                              if (!taskDetails || !bidderDetails) return <></>
-                              return (
-                                <li>
-                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managebidders") }}>
-                                    <span class="notification-icon">
-                                      <i class=" icon-material-outline-gavel"></i>
-                                    </span>
-                                    <span class="notification-text">
-                                      <strong>{bidderDetails.name}</strong> placed a bid on
-                                      your{" "}
-                                      <span class="color">{taskDetails.title}</span>{" "}
-                                      project
-                                    </span>
-                                  </a>
-                                </li>
-                              )
-                            } else if (notification.type === "accept-bid") {
-                              const taskDetails = getJobDetails(notification?.taskId, tasksList);
-                              if (!taskDetails) return <></>
-                              return (
-                                <li>
-                                  <a onClick={() => { navigate("/dashboard"); setDashboardScreen("activebids") }}>
-                                    <span class="notification-icon">
-                                      <i class=" icon-material-outline-gavel"></i>
-                                    </span>
-                                    <span class="notification-text">
-                                      Your bid on Task{" "}
-                                      <span class="color">{taskDetails.title}</span>{" "}
-                                      got accepted
-                                    </span>
-                                  </a>
-                                </li>
-                              )
-                            }
-                          })}
+                    {/* <!-- Dropdown --> */}
+                    <div
+                      class={
+                        showNotificationsDropdown
+                          ? "header-notifications-dropdown-active"
+                          : "header-notifications-dropdown"
+                      }
+                    >
+                      <div class="header-notifications-headline">
+                        <h4>Notifications</h4>
+                        <button
+                          class="mark-as-read ripple-effect-dark"
+                          title="Mark all as read"
+                          data-tippy-placement="left"
+                        >
+                          <i class="icon-feather-check-square"></i>
+                        </button>
+                      </div>
 
-                          {/* <!-- Notification --> */}
-                          {/* <li>
+                      <div class="header-notifications-content">
+                        <div class="header-notifications-scroll" data-simplebar>
+                          <ul>
+                            {/* <!-- Notification --> */}
+                            {user?.data?.notifications?.length > 0 && user?.data?.notifications.map(notification => {
+                              if (notification.type === "job-application") {
+                                const jobDetails = getJobDetails(notification?.jobId, jobsList);
+                                const applicantDetails = getFreelancerDetails(notification?.applicantId, freelancers);
+                                if (!jobDetails || !applicantDetails) return <></>
+                                return (
+                                  <li class="notifications-not-read">
+                                    <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managecandidates") }}>
+                                      <span class="notification-icon">
+                                        <i class="icon-material-outline-group"></i>
+                                      </span>
+                                      <span class="notification-text">
+                                        <strong>{applicantDetails.name}</strong> applied for a
+                                        job{" "}
+                                        <span class="color">
+                                          {jobDetails.title}
+                                        </span>
+                                      </span>
+                                    </a>
+                                  </li>
+                                )
+                              } else if (notification.type === "place-bid") {
+                                const taskDetails = getJobDetails(notification?.taskId, tasksList);
+                                const bidderDetails = getFreelancerDetails(notification?.bidderId, freelancers);
+                                if (!taskDetails || !bidderDetails) return <></>
+                                return (
+                                  <li>
+                                    <a onClick={() => { navigate("/dashboard"); setDashboardScreen("managebidders") }}>
+                                      <span class="notification-icon">
+                                        <i class=" icon-material-outline-gavel"></i>
+                                      </span>
+                                      <span class="notification-text">
+                                        <strong>{bidderDetails.name}</strong> placed a bid on
+                                        your{" "}
+                                        <span class="color">{taskDetails.title}</span>{" "}
+                                        project
+                                      </span>
+                                    </a>
+                                  </li>
+                                )
+                              } else if (notification.type === "accept-bid") {
+                                const taskDetails = getJobDetails(notification?.taskId, tasksList);
+                                if (!taskDetails) return <></>
+                                return (
+                                  <li>
+                                    <a onClick={() => { navigate("/dashboard"); setDashboardScreen("activebids") }}>
+                                      <span class="notification-icon">
+                                        <i class=" icon-material-outline-gavel"></i>
+                                      </span>
+                                      <span class="notification-text">
+                                        Your bid on Task{" "}
+                                        <span class="color">{taskDetails.title}</span>{" "}
+                                        got accepted
+                                      </span>
+                                    </a>
+                                  </li>
+                                )
+                              }
+                            })}
+
+                            {/* <!-- Notification --> */}
+                            {/* <li>
                             <a href="dashboard-manage-jobs.html">
                               <span class="notification-icon">
                                 <i class="icon-material-outline-autorenew"></i>
@@ -704,8 +704,8 @@ function Header() {
                             </a>
                           </li> */}
 
-                          {/* <!-- Notification --> */}
-                          {/* <li>
+                            {/* <!-- Notification --> */}
+                            {/* <li>
                             <a href="dashboard-manage-candidates.html">
                               <span class="notification-icon">
                                 <i class="icon-material-outline-group"></i>
@@ -718,276 +718,277 @@ function Header() {
                               </span>
                             </a>
                           </li> */}
-                        </ul>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* <!-- Messages --> */}
-                <div class="header-notifications">
-                  <div
-                    class="header-notifications-trigger"
-                    id={"mail-icon"}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <a
-                      onClick={() => {
-                        setShowMessagesDropdown(!showMessagesDropdown);
-                        setShowNotificationsDropdown(false);
-                        setShowProfileDropdown(false);
-                      }}
+                  {/* <!-- Messages --> */}
+                  <div class="header-notifications">
+                    <div
+                      class="header-notifications-trigger"
+                      id={"mail-icon"}
+                      style={{ cursor: "pointer" }}
                     >
-                      <i class="icon-feather-mail"></i>
-                      {/* <span>3</span> */}
-                    </a>
-                  </div>
-
-                  {/* <!-- Dropdown --> */}
-                  <div
-                    class={
-                      showMessagesDropdown
-                        ? "header-notifications-dropdown-active"
-                        : "header-notifications-dropdown"
-                    }
-                  >
-                    <div class="header-notifications-headline">
-                      <h4>Messages</h4>
-                      <button
-                        class="mark-as-read ripple-effect-dark"
-                        title="Mark all as read"
-                        data-tippy-placement="left"
-                      >
-                        <i class="icon-feather-check-square"></i>
-                      </button>
-                    </div>
-
-                    <div class="header-notifications-content">
-                      <div class="header-notifications-scroll" data-simplebar>
-                        <ul>
-                          {/* <!-- Notification --> */}
-                          {sortedConversations?.length > 0 && sortedConversations?.map(conversation => {
-                            const lastMessage = conversation.messages[conversation.messages.length - 1];
-                            if (lastMessage?.sentBy === user._id) return <></>
-                            const receiver = conversation?.recepients.find(recepient => recepient.id !== user._id);
-                            return (<li class="notifications-not-read">
-                              <a href="dashboard-messages.html">
-                                <span class="notification-avatar status-online">
-                                  <img src={receiver?.avatar
-                                    ? `data:${receiver?.avatar?.contentType};base64,${receiver?.avatar?.base64Image}`
-                                    : userAvatarSmall3} alt="" />
-                                </span>
-                                <div class="notification-text">
-                                  <strong>{receiver.name}</strong>
-                                  <p class="notification-msg-text">
-                                    {lastMessage.content}
-                                  </p>
-                                  <span class="color">{timeDifferenceFromNow(lastMessage.createdAt)}</span>
-                                </div>
-                              </a>
-                            </li>)
-                          })}
-                        </ul>
-                      </div>
-                    </div>
-
-                    <a
-                      onClick={() => {
-                        navigate("/dashboard");
-                        setDashboardScreen("messages")
-                      }}
-                      class="header-notifications-button ripple-effect button-sliding-icon"
-                    >
-                      View All Messages
-                      <i class="icon-material-outline-arrow-right-alt"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/* <!--  User Notifications / End --> */}
-
-              {/* <!-- User Menu --> */}
-              <div class="header-widget">
-                {/* <!-- Messages --> */}
-                <div class="header-notifications user-menu">
-                  <div class="header-notifications-trigger">
-                    <a>
-                      <div
-                        class="user-avatar status-online"
-                        style={{ cursor: "pointer" }}
+                      <a
                         onClick={() => {
-                          console.log("avatar");
-                          setShowProfileDropdown(!showProfileDropdown);
-                          setShowMessagesDropdown(false);
+                          setShowMessagesDropdown(!showMessagesDropdown);
                           setShowNotificationsDropdown(false);
+                          setShowProfileDropdown(false);
                         }}
                       >
-                        <img
-                          src={
-                            user?.avatar?.contentType &&
-                              user?.avatar?.base64Image
-                              ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
-                              : userAvatarSmall1
-                          }
-                          alt=""
-                        />
-                      </div>
-                    </a>
-                  </div>
+                        <i class="icon-feather-mail"></i>
+                        {/* <span>3</span> */}
+                      </a>
+                    </div>
 
-                  {/* <!-- Dropdown --> */}
-                  {showProfileDropdown && (
+                    {/* <!-- Dropdown --> */}
                     <div
                       class={
-                        showProfileDropdown
+                        showMessagesDropdown
                           ? "header-notifications-dropdown-active"
                           : "header-notifications-dropdown"
                       }
                     >
-                      {/* <!-- User Status --> */}
-                      <div class="user-status">
-                        {/* <!-- User Name / Avatar --> */}
-                        <div class="user-details">
-                          <div class="user-avatar status-online">
-                            <img
-                              src={
-                                user?.avatar?.contentType &&
-                                  user?.avatar?.base64Image
-                                  ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
-                                  : userAvatarSmall1
-                              }
-                              alt=""
-                            />
-                          </div>
-                          <div class="user-name">
-                            {user?.name} <span>{user?.role}</span>
-                          </div>
-                        </div>
+                      <div class="header-notifications-headline">
+                        <h4>Messages</h4>
+                        <button
+                          class="mark-as-read ripple-effect-dark"
+                          title="Mark all as read"
+                          data-tippy-placement="left"
+                        >
+                          <i class="icon-feather-check-square"></i>
+                        </button>
+                      </div>
 
-                        {/* <!-- User Status Switcher --> */}
-                        {/* <div class="status-switch" id="snackbar-user-status"> */}
-                        {/* <label class="user-online current-status">
+                      <div class="header-notifications-content">
+                        <div class="header-notifications-scroll" data-simplebar>
+                          <ul>
+                            {/* <!-- Notification --> */}
+                            {sortedConversations?.length > 0 && sortedConversations?.map(conversation => {
+                              const lastMessage = conversation.messages[conversation.messages.length - 1];
+                              if (lastMessage?.sentBy === user._id) return <></>
+                              const receiver = conversation?.recepients.find(recepient => recepient.id !== user._id);
+                              return (<li class="notifications-not-read">
+                                <a href="dashboard-messages.html">
+                                  <span class="notification-avatar status-online">
+                                    <img src={receiver?.avatar
+                                      ? `data:${receiver?.avatar?.contentType};base64,${receiver?.avatar?.base64Image}`
+                                      : userAvatarSmall3} alt="" />
+                                  </span>
+                                  <div class="notification-text">
+                                    <strong>{receiver.name}</strong>
+                                    <p class="notification-msg-text">
+                                      {lastMessage.content}
+                                    </p>
+                                    <span class="color">{timeDifferenceFromNow(lastMessage.createdAt)}</span>
+                                  </div>
+                                </a>
+                              </li>)
+                            })}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <a
+                        onClick={() => {
+                          navigate("/dashboard");
+                          setDashboardScreen("messages")
+                        }}
+                        class="header-notifications-button ripple-effect button-sliding-icon"
+                      >
+                        View All Messages
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {/* <!--  User Notifications / End --> */}
+
+                {/* <!-- User Menu --> */}
+                <div class="header-widget">
+                  {/* <!-- Messages --> */}
+                  <div class="header-notifications user-menu">
+                    <div class="header-notifications-trigger">
+                      <a>
+                        <div
+                          class="user-avatar status-online"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            console.log("avatar");
+                            setShowProfileDropdown(!showProfileDropdown);
+                            setShowMessagesDropdown(false);
+                            setShowNotificationsDropdown(false);
+                          }}
+                        >
+                          <img
+                            src={
+                              user?.avatar?.contentType &&
+                                user?.avatar?.base64Image
+                                ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
+                                : userAvatarSmall1
+                            }
+                            alt=""
+                          />
+                        </div>
+                      </a>
+                    </div>
+
+                    {/* <!-- Dropdown --> */}
+                    {showProfileDropdown && (
+                      <div
+                        class={
+                          showProfileDropdown
+                            ? "header-notifications-dropdown-active"
+                            : "header-notifications-dropdown"
+                        }
+                      >
+                        {/* <!-- User Status --> */}
+                        <div class="user-status">
+                          {/* <!-- User Name / Avatar --> */}
+                          <div class="user-details">
+                            <div class="user-avatar status-online">
+                              <img
+                                src={
+                                  user?.avatar?.contentType &&
+                                    user?.avatar?.base64Image
+                                    ? `data:${user?.avatar?.contentType};base64,${user?.avatar?.base64Image}`
+                                    : userAvatarSmall1
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div class="user-name">
+                              {user?.name} <span>{user?.role}</span>
+                            </div>
+                          </div>
+
+                          {/* <!-- User Status Switcher --> */}
+                          {/* <div class="status-switch" id="snackbar-user-status"> */}
+                          {/* <label class="user-online current-status">
                             Online
                           </label>
                           <label class="user-invisible">Invisible</label> */}
-                        {/* <!-- Status Indicator --> */}
-                        {/* <span
+                          {/* <!-- Status Indicator --> */}
+                          {/* <span
                             class="status-indicator"
                             aria-hidden="true"
                           ></span> */}
-                        {/* </div> */}
-                      </div>
+                          {/* </div> */}
+                        </div>
 
-                      <ul class="user-menu-small-nav">
-                        <li>
-                          <a
-                            onClick={() => {
-                              navigate("/dashboard");
-                            }}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <i class="icon-material-outline-dashboard"></i>{" "}
-                            Dashboard
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={() => {
-                              navigate("/dashboard");
-                              setDashboardScreen("settings")
-                            }}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <i class="icon-material-outline-settings"></i>{" "}
-                            Settings
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={() => {
-                              localStorage.removeItem("token");
-                              navigate("/login");
-                            }}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <i class="icon-material-outline-power-settings-new"></i>{" "}
-                            Logout
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                        <ul class="user-menu-small-nav">
+                          <li>
+                            <a
+                              onClick={() => {
+                                navigate("/dashboard");
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <i class="icon-material-outline-dashboard"></i>{" "}
+                              Dashboard
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              onClick={() => {
+                                navigate("/dashboard");
+                                setDashboardScreen("settings")
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <i class="icon-material-outline-settings"></i>{" "}
+                              Settings
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              onClick={() => {
+                                localStorage.removeItem("token");
+                                navigate("/login");
+                                setIsLoggedIn(false)
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <i class="icon-material-outline-power-settings-new"></i>{" "}
+                              Logout
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              {/* <!-- User Menu / End -->
+                {/* <!-- User Menu / End -->
 
 <!-- Mobile Navigation Button --> */}
-              {/* <span class="mmenu-trigger">
+                {/* <span class="mmenu-trigger">
                 <button class="hamburger hamburger--collapse" type="button">
                   <span class="hamburger-box">
                     <span class="hamburger-inner"></span>
                   </span>
                 </button>
               </span> */}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* <div class="clearfix"></div> */}
-      {/* <!-- Header Container / End --> */}\{" "}
-      {userRolePopup && <UserRolePopup handleSelectRole={handleSelectRole} />}
-    </header>
-    <div className="navigation-small-screen" style={{display: 'none'}}>
-    <nav id="navigation">
-                <ul >
+        {/* <div class="clearfix"></div> */}
+        {/* <!-- Header Container / End --> */}\{" "}
+        {userRolePopup && <UserRolePopup handleSelectRole={handleSelectRole} />}
+      </header>
+      <div className="navigation-small-screen" style={{ display: 'none' }}>
+        <nav id="navigation">
+          <ul >
+            <li>
+              <a onClick={() => navigate("/")}>Home</a>
+            </li>
+
+            {user?.role === "freelancer" && (
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "32px",
+                }}
+              >
+                <a href="#">Find Work</a>
+                <ul class="dropdown-nav">
                   <li>
-                    <a onClick={() => navigate("/")}>Home</a>
+                    <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
                   </li>
-
-                  {user?.role === "freelancer" && (
-                    <li
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        height: "32px",
-                      }}
-                    >
-                      <a href="#">Find Work</a>
-                      <ul class="dropdown-nav">
-                        <li>
-                          <a onClick={() => navigate("/jobs")}>Browse Jobs</a>
-                        </li>
-                        <li>
-                          <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
-                        </li>
-                      </ul>
-                    </li>
-                  )}
-
-                  {user?.role === "employer" && (
-                    <li>
-                      <a onClick={() => navigate("/freelancers")}>
-                        Find a Freelancer
-                      </a>
-                    </li>
-                  )}
-                  <li
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "30px",
-                    }}
-                  >
-                    <li>
-                      <a onClick={() => navigate("/blog")}>Blog</a>
-                    </li>
-                    <li>
-                      <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
-                    </li>
+                  <li>
+                    <a onClick={() => navigate("/tasks")}>Browse Tasks</a>
                   </li>
                 </ul>
-              </nav>
-    </div>
+              </li>
+            )}
+
+            {user?.role === "employer" && (
+              <li>
+                <a onClick={() => navigate("/freelancers")}>
+                  Find a Freelancer
+                </a>
+              </li>
+            )}
+            <li
+              style={{
+                display: "flex",
+                alignItems: "center",
+                height: "30px",
+              }}
+            >
+              <li>
+                <a onClick={() => navigate("/blog")}>Blog</a>
+              </li>
+              <li>
+                <a onClick={() => navigate("/pricing")}>Pricing Plans</a>
+              </li>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 }
