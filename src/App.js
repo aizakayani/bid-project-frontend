@@ -29,6 +29,7 @@ import DashboardBookmarks from "./components/DashboardBookmarks";
 import DashboardPostTask from "./components/DashboardPostTask";
 import DashboardPostJob from "./components/DashboardPostJob";
 import OrderConformation from "./components/OrderConfirmation";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -216,6 +217,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/invoice" element={<Invoice />} />
+          <Route path="/reset/password" element={<ResetPassword/>} />
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
         <Toaster position="top-right" reverseOrder={false} />

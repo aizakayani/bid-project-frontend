@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ForgetPassword from "./modals/ForgetPassword";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [ShowForgetPassword,setShowForgetPasswordPopup]= useState(false);
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -122,8 +123,12 @@ function Login() {
                     }}
                   />
                 </div>
-                <a href="#" class="forgot-password">
+                <a  onClick={() => {
+                      navigate("/reset/password");
+                    }}
+                href="#" class="forgot-password">
                   Forgot Password?
+                  
                 </a>
               </form>
               {/* <!-- Button --> */}
@@ -160,6 +165,7 @@ function Login() {
           </div>
         </div>
       </div>
+      {ShowForgetPassword && <ForgetPassword show = {ShowForgetPassword} handleClose={()=> setShowForgetPasswordPopup(false)} handleSubmit={()=> setShowForgetPasswordPopup(false) }/>}
     </>
   );
 }

@@ -4165,6 +4165,26 @@ span.blog-item-tag {
 	40% { transform: translateX(14px); } 
 	60% { transform: translateX(7px); }
 }
+.animated-text {
+	font-size: 2rem;
+	font-weight: bold;
+	color: #333;
+	text-align: center;
+	margin-bottom: 20px;
+  }
+  
+  .animated-description {
+	font-size: 1.2rem;
+	line-height: 1.6;
+	color: #666;
+	text-align: justify;
+	max-width: 600px;
+	margin: 0 auto 30px;
+  }
+  
+  .get-started-button {
+	/* Style your button */
+  }
 
 
 /* Hover & Active States */
@@ -16657,6 +16677,23 @@ padding-left: 15px;
 		vertical-align: middle;
 		padding-left: 55px;
 	}
+	.animated-text-container {
+		text-align: center;
+		margin-top: 50px; /* Adjust as needed */
+	  }
+	  
+	  .animated-text {
+		font-size: 2.5rem;
+		font-weight: bold;
+		color: #333; /* Adjust color as needed */
+		animation: fadeInUp 1s ease-out; /* Example animation */
+	  }
+	  
+	  .animated-description {
+		font-size: 1.2rem;
+		color: #555; /* Adjust color as needed */
+		animation: fadeInUp 1.5s ease-out; /* Example animation */
+	  }
 
 
 	/* ---------------------------------- */

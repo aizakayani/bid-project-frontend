@@ -1,15 +1,49 @@
 // import GoogleMapReact from "google-map-react";
+import React, { useState } from 'react';
+import { useSpring, animated } from 'react-spring';
 function Contact() {
-  const mapOptions = {
-    center: {
-      lat: 37.777842, // Latitude of the location
-      lng: -122.391805, // Longitude of the location
-    },
-    zoom: 16,
+  const AnimatedText = ({ text }) => {
+    const [isVisible, setIsVisible] = useState(false);
+  
+    const fadeIn = useSpring({
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? 'translateY(0px)' : 'translateY(20px)',
+      config: { duration: 800 }
+    });
+  
+    // Trigger animation when component mounts
+    React.useEffect(() => {
+      setIsVisible(true);
+    }, []);
+  
+    return (
+      <animated.div style={fadeIn}>
+        {text}
+      </animated.div>
+    );
+  };
+  
+  const AnimatedHeading = () => {
+    return (
+      <h1 className="animated-text">
+        <AnimatedText text="Your Bridge to" />
+        <AnimatedText text="Freelance Talent" />
+      </h1>
+    );
+  };
+  
+  const AnimatedDescription = () => {
+    return (
+      <p className="animated-description">
+        <strong>Enhance productivity</strong> with our platform designed for <strong>job posting</strong>, <strong>bidding</strong>, and <strong>freelance task management</strong>. Connect with a diverse pool of freelancers ready to take on your projects. Whether you need short-term tasks completed or long-term projects managed, our intuitive interface ensures <strong>seamless collaboration</strong> and <strong>efficiency</strong>. Join today to experience simplified hiring and project management like never before.
+      </p>
+    );
   };
   const Marker = ({ text }) => <div>{text}</div>;
   return (
     <>
+    
+
       <div id="titlebar" class="gradient">
         <div class="container">
           <div class="row">
@@ -22,9 +56,17 @@ function Contact() {
       {/* // <!-- Container --> */}
       <div class="container">
         <div class="row">
+        <div className="animated-text-container">
+      <div className="animated-text-content">
+        <AnimatedHeading />
+        <AnimatedDescription />
+        <button className="get-started-button">Get Started</button>
+      </div>
+    </div>
           <div class="col-xl-12">
             <div class="contact-location-info margin-bottom-50">
-              <div class="contact-address">
+              
+              {/* <div class="contact-address">
                 <ul>
                   <li class="contact-address-headline">Our Office</li>
                   <li>425 Berry Street, CA 93584</li>
@@ -71,29 +113,8 @@ function Contact() {
                     </div>
                   </li>
                 </ul>
-              </div>
-              <div id="single-job-map-container">
-                {/* <div
-                  id="singleListingMap"
-                  data-latitude="37.777842"
-                  data-longitude="-122.391805"
-                  data-map-icon="im im-icon-Hamburger"
-                ></div>
-                <a href="#" id="streetView">
-                  Street View
-                </a> */}
-                {/* <GoogleMapReact
-                  bootstrapURLKeys={{ key: "hopeful-breaker-422614-k8" }} // Replace with your actual API key
-                  defaultCenter={mapOptions.center}
-                  defaultZoom={mapOptions.zoom}
-                >
-                  <Marker
-                    lat={mapOptions.center.lat}
-                    lng={mapOptions.center.lng}
-                    text="Marker"
-                  />
-                </GoogleMapReact> */}
-              </div>
+              </div> */}
+            
             </div>
           </div>
 

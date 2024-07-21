@@ -56,7 +56,7 @@ function DashboardMyActiveBids() {
       toast.error("Failed to place bid");
     }
   };
-
+console.log({handleEditBid});
   return (
     <>
       <div class="dashboard-content-container" data-simplebar>
