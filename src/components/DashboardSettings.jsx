@@ -29,6 +29,7 @@ function DashboardSettings() {
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [description, setDescription] = useState("");
+  
   const fileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const resumeInputRef = useRef(null);
@@ -375,6 +376,7 @@ function DashboardSettings() {
                           </div>
                         </div>
                       </div>
+                
                       <div class="col-xl-6">
                         <div class="submit-field">
                           <h5>Location</h5>
@@ -531,7 +533,40 @@ function DashboardSettings() {
                             </div>
                           </div>
                         </div>
-
+                        <div class="col-xl-4">
+                    <div class="submit-field">
+                      <h5>Category</h5>
+                      <select
+                        class="selectpicker with-border"
+                        data-size="7"
+                        title="Select Category"
+                        // onChange={(e) => {
+                        //   setCategory(e.target.value);
+                        // }}
+                      >
+                        <option value={"Admin Support"}>Admin Support</option>
+                        <option value={"Customer Service"}>
+                          Customer Service
+                        </option>
+                        <option value={"Data Analytics"}>Data Analytics</option>
+                        <option value={"Design & Creative"}>
+                          Design & Creative
+                        </option>
+                        <option value={"Legal"}>Legal</option>
+                        <option value={"Software Developing"}>
+                          Software Developing
+                        </option>
+                        <option value={"IT & Networking"}>
+                          IT & Networking
+                        </option>
+                        <option value={"Writing"}>Writing</option>
+                        <option value={"Translation"}>Translation</option>
+                        <option value={"Sales & Marketing"}>
+                          Sales & Marketing
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                         <div class="col-xl-4">
                           <div class="submit-field">
                             <h5>
