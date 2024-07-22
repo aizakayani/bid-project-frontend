@@ -13,7 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [ShowForgetPassword,setShowForgetPasswordPopup]= useState(false);
+  const [ShowForgetPassword, setShowForgetPasswordPopup] = useState(false);
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -123,12 +123,12 @@ function Login() {
                     }}
                   />
                 </div>
-                <a  onClick={() => {
-                      navigate("/reset/password");
-                    }}
-                href="#" class="forgot-password">
+                <a onClick={() => {
+                  navigate("/reset-password");
+                }}
+                  class="forgot-password">
                   Forgot Password?
-                  
+
                 </a>
               </form>
               {/* <!-- Button --> */}
@@ -140,13 +140,13 @@ function Login() {
                 onClick={handleLogin}
                 disabled={loading}
               >
-                {loading ?( <>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Loading...
-            </>
-          ) : (
-            'Login'
-          )}
+                {loading ? (<>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </>
+                ) : (
+                  'Login'
+                )}
               </button>
 
               {/* <!-- Social Login --> */}
@@ -165,7 +165,7 @@ function Login() {
           </div>
         </div>
       </div>
-      {ShowForgetPassword && <ForgetPassword show = {ShowForgetPassword} handleClose={()=> setShowForgetPasswordPopup(false)} handleSubmit={()=> setShowForgetPasswordPopup(false) }/>}
+      {ShowForgetPassword && <ForgetPassword show={ShowForgetPassword} handleClose={() => setShowForgetPasswordPopup(false)} handleSubmit={() => setShowForgetPasswordPopup(false)} />}
     </>
   );
 }

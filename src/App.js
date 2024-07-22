@@ -217,7 +217,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/invoice" element={<Invoice />} />
-          <Route path="/reset/password" element={<ResetPassword/>} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
         <Toaster position="top-right" reverseOrder={false} />
