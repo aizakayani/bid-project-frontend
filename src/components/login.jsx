@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { loginUserAPI } from "../services/user";
+import React, { useState, useContext, useEffect } from "react";
+import { loginUserAPI, verifyAccountAPI } from "../services/user";
 import { UserContext } from "../context/userContext";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
@@ -14,6 +14,29 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ShowForgetPassword, setShowForgetPasswordPopup] = useState(false);
+  const [verificationLinkSentAgain, setVerificationLinkSentAgain] = useState(false);
+  const [verificationSuccessfull, setVerificationSuccessfull] = useState(false);
+  const [verificationApplied, setVerificationApplied] = useState(false);
+  useEffect(() => {
+    // check if verification is required
+    const queryParameters = new URLSearchParams(window.location.search);
+    let verification = queryParameters.get("verification");
+    let userId = queryParameters.get("id");
+    if (verification == 1 && !verificationApplied) {
+      setVerificationApplied(true);
+      verifyAccount(userId);
+    }
+  }, []);
+  const verifyAccount = async (userId) => {
+    try {
+      const response = await verifyAccountAPI(userId);
+      if (response?.success) {
+        setVerificationSuccessfull(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const handleLogin = async () => {
     setLoading(true);
     try {
@@ -35,6 +58,10 @@ function Login() {
         setIsLoggedIn(true);
         toast.success("Login successfull");
         navigate("/");
+        setLoading(false);
+      } else if (response?.errorCode === 3000) {
+        setVerificationLinkSentAgain(true);
+        toast.error("Login failed");
         setLoading(false);
       } else {
         setLoading(false);
@@ -77,6 +104,8 @@ function Login() {
               {/* <!-- Welcome Text --> */}
               <div class="welcome-text">
                 <h3>We're glad to see you again!</h3>
+                {verificationLinkSentAgain && <p style={{ color: 'red' }}>Account has not been verified yet. Verification link has been sent to your email. please follow that email to continue.</p>}
+                {verificationSuccessfull && <p>Account verified successfully. Please login to continue</p>}
                 <span>
                   Don't have an account?{" "}
                   <a

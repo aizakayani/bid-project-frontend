@@ -10,41 +10,42 @@ function Register() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [role, setRole] = useState("freelancer");
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false)
 
   const handleButtonClick = async () => {
-   
+
     setLoading(true);
     // setError(null);
     try {
-      const response = await fetch('http://localhost:3000/users/register',{
+      const response = await fetch('http://localhost:3000/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            name,
-            email,
-            password,
-            role
+          name,
+          email,
+          password,
+          role
         }),
       });
-     
+
       const data = await response.json();
-      console.log("EHEHHE", data)
-    if (data.success) {
-      toast.success("Registered successfully");
-      setName("");
-      setEmail("");
-      setPassword("");
-      setRepeatPassword("");
-    } else {
-      toast.error(data.message);
-    }
+      if (data.success) {
+        toast.success("Registered successfully");
+        setName("");
+        setEmail("");
+        setPassword("");
+        setRepeatPassword("");
+        setVerificationEmailSent(true)
+      } else {
+        toast.error(data.message);
+      }
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
-    
+
   };
   const loginViaGoogle = () => {
     setLoading(true);
@@ -56,7 +57,7 @@ function Register() {
   }
   return (
     <>
-      <div id="titlebar" class="gradient">
+      {!verificationEmailSent && <div id="titlebar" class="gradient">
         <div class="container">
           <div class="row">
             <div class="col-md-12">
@@ -65,22 +66,34 @@ function Register() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* <!-- Page Content
 ================================================== --> */}
       <div class="container">
         <div class="row">
           <div class="col-xl-5 offset-xl-3">
-            <div class="login-register-page">
+            {verificationEmailSent && <>
+              <p style={{
+                marginBottom: '20px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '25px',
+                color: '#770737',
+              }}>To verify your account we have sent you verification link on email. Please follow that link to continue.</p>
+            </>}
+            {!verificationEmailSent && <div class="login-register-page">
               {/* <!-- Welcome Text --> */}
               <div class="welcome-text">
                 <h3 style={{ fontSize: "26px" }}>Let's create your account!</h3>
                 <span>
                   Already have an account?{" "}
-                  <a  onClick={() => {
+                  <a onClick={() => {
                     navigate("/login");
-                  }}style={{ color: '#770737', textDecoration: 'underline' ,cursor: "pointer"}}>Log In!</a>
+                  }} style={{ color: '#770737', textDecoration: 'underline', cursor: "pointer" }}>Log In!</a>
                 </span>
               </div>
 
@@ -217,7 +230,7 @@ function Register() {
                   <i class="icon-brand-google-plus-g"></i> Register via Google+
                 </button>
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
