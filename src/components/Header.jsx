@@ -796,7 +796,7 @@ function Header() {
                           navigate("/dashboard");
                           setDashboardScreen("messages")
                         }}
-                        class="header-notifications-button ripple-effect button-sliding-icon"
+                        class="header-notifications-button ripple-effect button-sliding-icon white-text-button"
                       >
                         View All Messages
                         <i class="icon-material-outline-arrow-right-alt"></i>

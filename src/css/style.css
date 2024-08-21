@@ -7697,18 +7697,19 @@ input:checked + .switch-button:before {
 }
 
 .intro-banner .background-image-container {
-	background-image: url('../utils/images/backgroung.webp');
-    background-size: cover;
+	background-image: url('../utils/images/backgroung.jpg');
+    background-size: contain;
     background-repeat: no-repeat;
-    background-position: 100% -7%;
+    background-position: 117% 43%;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100vw;
-    z-index: 10;
+    z-index: 14;
     overflow: hidden;
 	opacity: 1;
+	background-color: #333;
 }
 
 /* Disabled Gradient */
@@ -7971,7 +7972,7 @@ input:checked + .switch-button:before {
 .intro-stats li strong {
 	font-weight: 600;
 	color: #333;
-	font-size: 28px;
+	font-size: 20px;
 	margin-bottom: 2px;
 }
 
@@ -9251,7 +9252,8 @@ transform: translateY(-18px);
 ------------------------------------- */
 .photo-section {
 	background-size: cover;
-	background-position: 50%;
+	background-image: url('../utils/images/section-background.jpg');
+	background-position: center;
 	display: block;
 	position: relative;
 }

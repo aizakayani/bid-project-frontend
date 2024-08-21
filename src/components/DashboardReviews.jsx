@@ -43,11 +43,10 @@ function DashboardReviews() {
                     </div>
 
                     <a
-                      href="#small-dialog-2"
-                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10 white-text-button"
                       onClick={()=> setLeaveReviewPopup(true)}
                     >
-                      <i class="icon-material-outline-thumb-up"></i> Leave a Review
+                      <i class="icon-material-outline-thumb-up white-text-button"></i> Leave a Review
                     </a>
                   </li>
                   <li>
@@ -63,10 +62,10 @@ function DashboardReviews() {
 
                     <a
                     
-                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10 white-text-button"
                       onClick={()=> setLeaveReviewPopup(true)}
                     >
-                      <i class="icon-material-outline-thumb-up"></i> Leave a
+                      <i class="icon-material-outline-thumb-up white-text-button"></i> Leave a
                       Review
                     </a>
                   </li>
@@ -94,7 +93,7 @@ function DashboardReviews() {
                     </div>
                     <a
                       
-                      class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"
+                      class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10 "
                       onClick={()=> setEditReviewPopup(true)}
                     >
                       <i class="icon-feather-edit"></i> Edit Review
@@ -190,8 +189,8 @@ function DashboardReviews() {
                     </div>
 
                     <a
-                      href="#small-dialog-2"
-                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                     
+                      class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10 white-text-button"
                     >
                       <i class="icon-material-outline-thumb-up"></i> Leave a
                       Review

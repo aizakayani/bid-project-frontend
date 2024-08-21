@@ -166,7 +166,7 @@ function DashboardFreelancerReviews() {
 
                             {!review?.reviewDetails && (
                               <a
-                                class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"
+                                class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10 white-text-button"
                                 onClick={() => {
                                   setLeaveFreelancerReviewPopup(true);
                                   setFreelancerReviewData(review);

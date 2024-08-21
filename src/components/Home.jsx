@@ -84,7 +84,7 @@ function Home() {
         class="intro-banner"
         // data-background-image="images/backgroung-webp.jpg"
       >
-          <div className="background-image-container"></div>
+          <div class=" background-image-container"></div>
         <div class="container" style={{marginTop: '-40px'}}>
         
           {/* <!-- Intro Headline --> */}
@@ -101,7 +101,7 @@ function Home() {
             <div class="row">
               <div class="col-md-12">
                 <div class="banner-headline">
-                  <h3>
+                  <h3 >
                     <strong>
                       Hire experts or be hired for any job, any time.
                     </strong>
@@ -346,8 +346,42 @@ function Home() {
         </div>
       </div>
       {/* <!-- Icon Boxes / End --> */}
+      <div
+        class="photo-section"
+        data-background-image="images/section-background.jpg"
+      >
+        {/* <!-- Infobox -->*/}
+        {(isLoggedIn == false || user?.role === "freelancer") && (
+          <div class="text-content white-font">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-6 col-md-8 col-sm-12">
+                  <h2>
+                    Hire experts or be hired. <br /> For any job, any time.
+                  </h2>
+                  <p>
+                    Bring to the table win-win survival strategies to ensure
+                    proactive domination. At the end of the day, going forward,
+                    a new normal that has evolved from generation is on the
+                    runway towards.
+                  </p>
+                  <a
+                    onClick={() => navigate("/pricing")}
+                    class="button button-sliding-icon ripple-effect big margin-top-20"
+                  >
+                    Get Started{" "}
+                    <i class="icon-material-outline-arrow-right-alt"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* <!-- Infobox  End-->*/}
+      </div>
       {/* <!-- Category Boxes -->*/}
-      {user?.role === "freelancer" && (
+      {(isLoggedIn == false || user?.role === "freelancer") && (
         <div class="section margin-top-65">
           <div class="container">
             <div class="row">
@@ -544,40 +578,7 @@ function Home() {
         </div>
       )}
       {/* <!-- Featured Jobs / End --> */}
-      <div
-        class="photo-section"
-        data-background-image="images/section-background.jpg"
-      >
-        {/* <!-- Infobox -->*/}
-        {user?.role === "freelancer" && (
-          <div class="text-content white-font">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-6 col-md-8 col-sm-12">
-                  <h2>
-                    Hire experts or be hired. <br /> For any job, any time.
-                  </h2>
-                  <p>
-                    Bring to the table win-win survival strategies to ensure
-                    proactive domination. At the end of the day, going forward,
-                    a new normal that has evolved from generation is on the
-                    runway towards.
-                  </p>
-                  <a
-                    onClick={() => navigate("/pricing")}
-                    class="button button-sliding-icon ripple-effect big margin-top-20"
-                  >
-                    Get Started{" "}
-                    <i class="icon-material-outline-arrow-right-alt"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* <!-- Infobox  End-->*/}
-      </div>
+     
       {/* <!-- Highest Rated Freelancers --> */}
       {(isLoggedIn == false || user?.role === "employer") && (
         <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
