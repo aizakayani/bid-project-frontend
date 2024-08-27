@@ -41,7 +41,9 @@ function Home() {
   const [locationInput, setLocationInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [searchJob, setSearchJob] = useState({ location: "", title: "" });
+  const [searchFreelancers, setSearchFreelancers] = useState({ location: "", category: "" });
   const handleSelect = (category) => {
+    console.log("HEHEHHE", category)
     setSelectedCategory(category);
   };
   const handleButtonClick = () => {
@@ -51,6 +53,21 @@ function Home() {
       title: titleInput,
     }));
     window.scrollBy(0, 1100);
+  };
+  const handleSearchForEmployer = () => {
+    setSearchFreelancers((prevState) => ({
+      ...prevState,
+      location: locationInput,
+      category: selectedCategory,
+    }));
+    if (!isLoggedIn) {
+      setSearchJob((prevState) => ({
+        ...prevState,
+        location: locationInput,
+        title: titleInput,
+      }));
+    }
+    window.scrollBy(0, 10);
   };
   console.log({employers});
   // Function to filter jobs based on location and title
@@ -64,6 +81,20 @@ function Home() {
       .includes(searchJob?.title.toLowerCase());
     return locationMatch && titleMatch;
   });
+
+  console.log(searchFreelancers);
+
+  const filteredFreelancers = freelancers?.length > 0 &&  freelancers.filter((freelancer) => {
+    // Convert inputs to lowercase for case-insensitive comparison
+    const locationMatch = searchFreelancers?.location?.trim() === "" ? true : freelancer?.data?.location && freelancer.data.location
+      .toLowerCase()
+      .includes(searchFreelancers?.location.toLowerCase());
+    const categoryMatch = searchFreelancers?.category?.trim() === "" ? true : freelancer?.data?.category && freelancer.data.category
+      .toLowerCase()
+      .includes(searchFreelancers?.category.toLowerCase());
+    return locationMatch || categoryMatch;
+  });
+
   const ratingNumber = freelancers?.review?.rating;
   const stars = Array.from({ length: 5 }, (_, index) => {
     if (index < ratingNumber) {
@@ -135,13 +166,15 @@ function Home() {
                       <input
                         id="autocomplete-input"
                         type="text"
-                        placeholder="Online Job"
+                        placeholder="e.g. Germany"
+                        value={locationInput}
+                        onChange={(e) => setLocationInput(e.target.value)}
                       />
                       <i class="icon-material-outline-location-on"></i>
                     </div>
                   </div>
                   {/* <!-- Search Field --> */}
-                  <div class="intro-search-field">
+                  {/* <div class="intro-search-field">
                     <label
                       for="intro-keywords"
                       class="field-title ripple-effect"
@@ -153,7 +186,7 @@ function Home() {
                       type="text"
                       placeholder="e.g. build me a website"
                     />
-                  </div>
+                  </div> */}
 
                   {/* <!-- Search Field --> */}
                   <div
@@ -183,7 +216,7 @@ function Home() {
                   </div>
                   {/* <!-- Button --> */}
                   <div class="intro-search-button">
-                    <button class="button ripple-effect">Search</button>
+                    <button class="button ripple-effect" onClick={() => handleSearchForEmployer()}>Search</button>
                   </div>
                 </div>
               </div>
@@ -202,7 +235,7 @@ function Home() {
                     </label>
                     <div class="input-with-icon">
                       <input
-                        placeholder="Online Job"
+                        placeholder="e.g. Germany"
                         id="autocomplete-input"
                         type="text"
                         value={locationInput}
@@ -621,8 +654,8 @@ function Home() {
                   id="freelancer-container"
                 >
                   {/* <!--Freelancer --> */}
-                  {freelancers?.length > 0 &&
-                    freelancers.map((freelancer) => {
+                  {filteredFreelancers?.length > 0 &&
+                    filteredFreelancers.map((freelancer) => {
                       return (
                         <div class="freelancer">
                           {/* <!-- Overview --> */}

@@ -136,7 +136,7 @@ function Dashboard() {
                     <li>
                       <a onClick={() => setDashboardType("messages")}>
                         <i class="icon-material-outline-question-answer"></i>{" "}
-                        Messages <span class="nav-tag">2</span>
+                        Messages 
                       </a>
                     </li>
                     <li>

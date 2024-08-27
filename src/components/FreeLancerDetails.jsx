@@ -9,9 +9,9 @@ import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
 import { unixToDate } from "../utils/utils";
 import MakeOffer from "./modals/OfferPopup";
-function FreeLancerDetails() {
+function FreeLancerDetails({ setDashboardType,}) {
   const { id } = useParams();
-  const { freelancers, user, setUser, tasksList, userBids, bids } =
+  const { freelancers, user, setUser, tasksList, userBids, bids,setNewMessageContext } =
     useContext(UserContext);
   const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
@@ -263,21 +263,28 @@ console.log({freelancerDetails});
                   <span>Hourly Rate</span>
                 </div>
                 <div class="overview-item">
-                  <strong>53</strong>
+                  <strong>None</strong>
                   <span>Jobs Done</span>
                 </div>
-                <div class="overview-item">
+                {/* <div class="overview-item">
                   <strong>22</strong>
                   <span>Rehired</span>
-                </div>
+                </div> */}
               </div>
 
               {/* <!-- Button --> */}
-              <a
-                onClick={() => setShowOfferPopup(true)}
+              <a onClick={() => {
+                                        setNewMessageContext({
+                                          receiver: {
+                                            // id: freelancerId.,
+                                            name: freelancerDetails?.name,
+                                          },
+                                        });
+                                        setDashboardType("messages");
+                                      }}
                 class="apply-now-button popup-with-zoom-anim margin-bottom-50 white-text-button"
               >
-                Make an Offer{" "}
+                Message{" "}
                 <i class="icon-material-outline-arrow-right-alt"></i>
               </a>
 

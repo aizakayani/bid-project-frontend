@@ -29,6 +29,7 @@ function DashboardSettings() {
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Admin Support");
   
   const fileInputRef = useRef(null);
   const coverInputRef = useRef(null);
@@ -64,6 +65,7 @@ function DashboardSettings() {
       user?.data?.hourlyRate && setHourlyRate(user?.data?.hourlyRate);
       user?.data?.skills && setSkills(user?.data?.skills?.split(","));
       user?.data?.introduction && setIntroduction(user?.data?.introduction);
+      user?.data?.category && setCategory(user?.data?.category);
       user?.coverLetter && setCoverLetter(user?.coverLetter);
       user?.resume && setResume(user?.resume);
     }
@@ -87,6 +89,9 @@ function DashboardSettings() {
     };
     if (location && location !== "") {
       payload.data.location = location;
+    }
+    if (category && category !== "") {
+      payload.data.category = category;
     }
     if (hourlyRate) {
       payload.data.hourlyRate = hourlyRate;
@@ -540,9 +545,10 @@ function DashboardSettings() {
                         class="selectpicker with-border"
                         data-size="7"
                         title="Select Category"
-                        // onChange={(e) => {
-                        //   setCategory(e.target.value);
-                        // }}
+                        onChange={(e) => {
+                          setCategory(e.target.value);
+                        }}
+                        value={category}
                       >
                         <option value={"Admin Support"}>Admin Support</option>
                         <option value={"Customer Service"}>
