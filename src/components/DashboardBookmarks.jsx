@@ -162,7 +162,7 @@ function DashboardBookmarks() {
                           </div>
 
                           {/* <!-- Name --> */}
-                          <div class="freelancer-name">
+                          {/* <div class="freelancer-name">
                             <h4>
                               <a href="#">
                                 David Peterson
@@ -177,15 +177,15 @@ function DashboardBookmarks() {
                             </h4>
                             <span>iOS Expert + Node Dev</span>
                             {/* <!-- Rating --> */}
-                            <div class="freelancer-rating">
+                            {/* <div class="freelancer-rating">
                               <div class="star-rating" data-rating="4.2"></div>
                             </div>
-                          </div>
+                          </div> */} *
                         </div>
                       </div>
 
                       {/* <!-- Buttons --> */}
-                      <div class="buttons-to-right">
+                      {/* <div class="buttons-to-right">
                         <a
                           href="#"
                           class="button red ripple-effect ico"
@@ -194,7 +194,7 @@ function DashboardBookmarks() {
                         >
                           <i class="icon-feather-trash-2"></i>
                         </a>
-                      </div>
+                      </div> */}
                     </li>
                     <li>
                       {/* <!-- Overview --> */}
@@ -208,7 +208,7 @@ function DashboardBookmarks() {
                           </div>
 
                           {/* <!-- Name --> */}
-                          <div class="freelancer-name">
+                          {/* <div class="freelancer-name">
                             <h4>
                               <a href="#">
                                 Marcin Kowalski{" "}
@@ -222,11 +222,11 @@ function DashboardBookmarks() {
                               </a>
                             </h4>
                             <span>Front-End Developer</span>
-                            {/* <!-- Rating --> */}
+                           
                             <div class="freelancer-rating">
                               <div class="star-rating" data-rating="4.7"></div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 

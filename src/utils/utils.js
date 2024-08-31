@@ -86,3 +86,41 @@ export const timeDifferenceFromNow = (unixTimestamp) => {
 
   return timeAgo;
 };
+
+export const extractDateFromUnixTimestamp = (timestamp) => {
+  // Convert Unix timestamp (seconds) to milliseconds
+  const date = new Date(timestamp);
+
+  // // Extract date components
+  // const year = date.getFullYear();
+  // const month = date.getMonth() + 1; // Months are zero-based
+  const day = date.getDate();
+  // const hours = date.getHours();
+  // const minutes = date.getMinutes();
+  // const seconds = date.getSeconds();
+
+  return parseInt(day);
+}
+
+export const checkToday = (unixTimestamp) => {
+  // Specific date in Unix timestamp (example: July 6, 2024 00:00:00 UTC)
+  // let specificUnixTimestamp = 1720262400000; // Unix timestamp in milliseconds
+
+  // Convert Unix timestamp to Date object
+  // Convert Unix timestamp to Date object
+  let specificDate = new Date(unixTimestamp);
+
+  // Current date and time
+  let currentDate = new Date();
+
+  // Difference in milliseconds
+  let differenceInMs = currentDate - specificDate;
+    // Calculate the difference in terms of days, hours, or minutes
+    let differenceInSeconds = Math.floor(differenceInMs / 1000);
+    let differenceInMinutes = Math.floor(differenceInSeconds / 60);
+    let differenceInHours = Math.floor(differenceInMinutes / 60);
+
+  let differenceInDays = Math.floor(differenceInHours / 24);
+
+  return differenceInDays;
+};

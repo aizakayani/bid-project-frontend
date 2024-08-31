@@ -4,26 +4,34 @@ import de from "../utils/images/flags/de.svg";
 import BrowseCompanies3 from "../utils/images/browse-companies-03.png";
 import BrowseCompanies4 from "../utils/images/browse-companies-04.png";
 import { UserContext } from "../context/userContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
 import { unixToDate } from "../utils/utils";
 import MakeOffer from "./modals/OfferPopup";
-function FreeLancerDetails({ setDashboardType,}) {
+function FreeLancerDetails() {
   const { id } = useParams();
-  const { freelancers, user, setUser, tasksList, userBids, bids,setNewMessageContext } =
-    useContext(UserContext);
+  const {
+    freelancers,
+    user,
+    setUser,
+    tasksList,
+    userBids,
+    bids,
+    setNewMessageContext,
+  } = useContext(UserContext);
   const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
-  const [showOfferPopup,setShowOfferPopup]= useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false); 
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
       setBookmarkedFreelancers([...user?.data?.bookmarkedFreelancers]);
     }
   }, [user?.data]);
-console.log({freelancerDetails});
+  console.log({ freelancerDetails });
   useEffect(() => {
     if (id && freelancers?.length > 0) {
       const filteredFreelancer = freelancers.find(
@@ -83,9 +91,9 @@ console.log({freelancerDetails});
   const ratingNumber = freelancerDetails?.review?.rating;
   const stars = Array.from({ length: 5 }, (_, index) => {
     if (index < ratingNumber) {
-      return 'filled';
+      return "filled";
     } else {
-      return 'empty';
+      return "empty";
     }
   });
   useEffect(() => {
@@ -124,7 +132,10 @@ console.log({freelancerDetails});
                     <h3>{freelancerDetails?.name}</h3>
                     <ul>
                       <li>
-                        <div class="star-rating" data-rating={freelancerDetails?.rating}>
+                        <div
+                          class="star-rating"
+                          data-rating={freelancerDetails?.rating}
+                        >
                           {Array.from({ length: 5 }, (_, index) => (
                             <span
                               key={index}
@@ -176,18 +187,24 @@ console.log({freelancerDetails});
                 </h3>
               </div>
               <ul class="boxed-list-ul">
-                {finishedTasks?.length === 0 && <div  style={{
-        display: 'flex',
-         justifyContent:"space-evenly",
-        //  alignItems: 'center',
-        height: '100vh',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: '29px',
-        marginBottom:'100px',
-        color:'#770737',
-        marginTop:'10px',
-      }} >No Work History Yet</div>}
+                {finishedTasks?.length === 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                      //  alignItems: 'center',
+                      height: "100vh",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      fontSize: "29px",
+                      marginBottom: "100px",
+                      color: "#770737",
+                      marginTop: "10px",
+                    }}
+                  >
+                    No Work History Yet
+                  </div>
+                )}
                 {finishedTasks?.map((task) => {
                   return (
                     <li>
@@ -273,19 +290,19 @@ console.log({freelancerDetails});
               </div>
 
               {/* <!-- Button --> */}
-              <a onClick={() => {
-                                        setNewMessageContext({
-                                          receiver: {
-                                            // id: freelancerId.,
-                                            name: freelancerDetails?.name,
-                                          },
-                                        });
-                                        setDashboardType("messages");
-                                      }}
+              <a
+                onClick={() => {
+                  setNewMessageContext({
+                    receiver: {
+                      id: freelancerDetails?._id,
+                      name: freelancerDetails?.name,
+                    },
+                  });
+                  navigate("/dashboard");
+                }}
                 class="apply-now-button popup-with-zoom-anim margin-bottom-50 white-text-button"
               >
-                Message{" "}
-                <i class="icon-material-outline-arrow-right-alt"></i>
+                Message <i class="icon-material-outline-arrow-right-alt"></i>
               </a>
 
               {/* <!-- Freelancer Indicators --> */}
@@ -411,7 +428,7 @@ console.log({freelancerDetails});
                 </button>
 
                 {/* <!-- Copy URL --> */}
-                {/* <div class="copy-url">
+              {/* <div class="copy-url">
                   <input
                     id="copy-url"
                     type="text"
@@ -428,8 +445,8 @@ console.log({freelancerDetails});
                   </button>
                 </div> */}
 
-                {/* <!-- Share Buttons --> */}
-                {/* <div class="share-buttons margin-top-25">
+              {/* <!-- Share Buttons --> */}
+              {/* <div class="share-buttons margin-top-25">
                   <div class="share-buttons-trigger">
                     <i class="icon-feather-share-2"></i>
                   </div>
@@ -486,7 +503,13 @@ console.log({freelancerDetails});
           </div>
         </div>
       </div>
-      {showOfferPopup && <MakeOffer show = {showOfferPopup} handleClose={()=> setShowOfferPopup(false)} handleSubmit={()=> setShowOfferPopup(false) }/>}
+      {showOfferPopup && (
+        <MakeOffer
+          show={showOfferPopup}
+          handleClose={() => setShowOfferPopup(false)}
+          handleSubmit={() => setShowOfferPopup(false)}
+        />
+      )}
     </>
   );
 }

@@ -4,7 +4,12 @@ import userAvatarSmall1 from "../utils/images/user-avatar-small-01.jpg";
 import userAvatarPlaceholder from "../utils/images/user-avatar-placeholder.png";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
-import { timeDifferenceFromNow } from "../utils/utils";
+import {
+  checkToday,
+  extractDateFromUnixTimestamp,
+  timeDifferenceFromNow,
+  unixToDate,
+} from "../utils/utils";
 
 const dummyMessages = [
   {
@@ -323,58 +328,93 @@ function DashboardMessages() {
               {/* <!-- Message Content Inner --> */}
               <div class="message-content-inner">
                 {/* <!-- Time Sign --> */}
-                <div class="message-time-sign">
-                  <span>28 June, 2019</span>
-                </div>
 
                 {selectedConversation?.messages?.length > 0 &&
-                  selectedConversation?.messages?.map((conversationMessage) => {
-                    const receiver = selectedConversation?.recepients?.find(
-                      (recepient) => recepient.id !== user?._id
-                    );
-                    let avatar = null;
-                    avatar =
-                      conversationMessage.sentBy === user?._id
-                        ? user?.avatar
+                  selectedConversation?.messages?.map(
+                    (conversationMessage, index) => {
+                      const receiver = selectedConversation?.recepients?.find(
+                        (recepient) => recepient.id !== user?._id
+                      );
+                      let avatar = null;
+                      avatar =
+                        conversationMessage.sentBy === user?._id
                           ? user?.avatar
-                          : null
-                        : receiver?.avatar
-                        ? receiver?.avatar
-                        : null;
-                    return (
-                      <div
-                        class={`message-bubble ${
-                          conversationMessage.sentBy === user?._id ? "me" : ""
-                        }`}
-                      >
-                        <div class="message-bubble-inner">
-                          <div class="message-avatar">
-                            <img
-                              // src={
-                              //   conversationMessage.sender === user?._id
-                              //     ? conversationMessage.senderAvatar
-                              //       ? conversationMessage.senderAvatar
-                              //       : userAvatarPlaceholder
-                              //     : conversationMessage.receiverAvatar
-                              //     ? conversationMessage.receiverAvatar
-                              //     : userAvatarPlaceholder
-                              // }
-                              src={
-                                avatar?.base64Image
-                                  ? `data:${avatar?.contentType};base64,${avatar?.base64Image}`
-                                  : userAvatarPlaceholder
-                              }
-                              alt=""
-                            />
+                            ? user?.avatar
+                            : null
+                          : receiver?.avatar
+                          ? receiver?.avatar
+                          : null;
+                      let showDate = false;
+                      if (index === 0) {
+                        showDate = true;
+                      } else {
+                        console.log(
+                          "taheena",
+                          extractDateFromUnixTimestamp(
+                            conversationMessage.createdAt
+                          ),
+                          extractDateFromUnixTimestamp(
+                            selectedConversation?.messages[index - 1].createdAt
+                          )
+                        );
+                        if (
+                          extractDateFromUnixTimestamp(
+                            conversationMessage.createdAt
+                          ) >
+                          extractDateFromUnixTimestamp(
+                            selectedConversation?.messages[index - 1].createdAt
+                          )
+                        ) {
+                          showDate = true;
+                          console.log(unixToDate(conversationMessage.createdAt))
+                        }
+                      }
+                      return (
+                        <>
+                          {showDate && (
+                            <div class="message-time-sign">
+                              <span>
+                                {checkToday(conversationMessage.createdAt) ? unixToDate(conversationMessage.createdAt) : "Today"}
+                              </span>
+                            </div>
+                          )}
+                          <div
+                            class={`message-bubble ${
+                              conversationMessage.sentBy === user?._id
+                                ? "me"
+                                : ""
+                            }`}
+                          >
+                            <div class="message-bubble-inner">
+                              <div class="message-avatar">
+                                <img
+                                  // src={
+                                  //   conversationMessage.sender === user?._id
+                                  //     ? conversationMessage.senderAvatar
+                                  //       ? conversationMessage.senderAvatar
+                                  //       : userAvatarPlaceholder
+                                  //     : conversationMessage.receiverAvatar
+                                  //     ? conversationMessage.receiverAvatar
+                                  //     : userAvatarPlaceholder
+                                  // }
+                                  src={
+                                    avatar?.base64Image
+                                      ? `data:${avatar?.contentType};base64,${avatar?.base64Image}`
+                                      : userAvatarPlaceholder
+                                  }
+                                  alt=""
+                                />
+                              </div>
+                              <div class="message-text">
+                                <p>{conversationMessage.content}</p>
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
                           </div>
-                          <div class="message-text">
-                            <p>{conversationMessage.content}</p>
-                          </div>
-                        </div>
-                        <div class="clearfix"></div>
-                      </div>
-                    );
-                  })}
+                        </>
+                      );
+                    }
+                  )}
 
                 {/* <!-- Time Sign --> */}
                 {/* <div class="message-time-sign">

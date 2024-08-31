@@ -28,7 +28,8 @@ function Dashboard() {
     jobsList,
     userBids,
     dashboardScreen,
-    setDashboardScreen
+    setDashboardScreen,
+    newMessageContext
   } = useContext(UserContext);
   const [dashboardType, setDashboardType] = useState("main");
   const [jobMenuOpen, setJobMenuOpen] = useState(false);
@@ -58,6 +59,12 @@ function Dashboard() {
       getTaskBids(taskIds);
     }
   }, [userTasks?.length]);
+
+  useEffect(() => {
+    if (dashboardType === "main" && newMessageContext) {
+      setDashboardType("messages")
+    }
+  })
 
   const getJobApplications = async (jobIds) => {
     // fetch jobs
