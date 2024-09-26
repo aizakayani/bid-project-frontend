@@ -518,15 +518,6 @@ function Header() {
                               <li>
                                 <a
                                   onClick={() => {
-                                    navigate("/Contact");
-                                  }}
-                                >
-                                  Contact
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  onClick={() => {
                                     navigate("/JobListLayout");
                                   }}
                                 >
@@ -544,12 +535,6 @@ function Header() {
                             </a>
                           </li>
                         </ul>
-                      </li>
-                    )}
-
-                    {!isLoggedIn && (
-                      <li>
-                        <a href="#">What We Are</a>
                       </li>
                     )}
                     {!isLoggedIn && (
