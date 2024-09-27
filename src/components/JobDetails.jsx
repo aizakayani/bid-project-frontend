@@ -5,7 +5,7 @@ import companyLogo2 from "../utils/images/company-logo-02.png";
 import companyLogo3 from "../utils/images/company-logo-03.png";
 import companyLogo05 from "../utils/images/company-logo-05.png";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { timeDifferenceFromNow } from "../utils/utils";
 import ApplyJobPopup from "./modals/ApplyJobPopup";
@@ -16,22 +16,27 @@ import {
 import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
 import { getCountryFlag } from "../utils/common";
+import Popup from "./modals/Popup";
 function JobDetails() {
-  const { id } = useParams();  
+  const { id } = useParams();
   const {
     jobsList,
     setUserJobApplications,
     userJobApplications,
     user,
     setUser,
+    isLoggedIn
   } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [JobDetails, setJobDetails] = useState(null);
   const [showApplyJobPopup, setShowApplyJobPopup] = useState(false);
   const [applied, setApplied] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false); 
- 
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+
 
   useEffect(() => {
     if (user?.data?.bookmarkedJobs) {
@@ -132,12 +137,12 @@ function JobDetails() {
       return "empty";
     }
   });
-console.log({JobDetails});
-console.log({jobsList});
-console.log('dsfsd',JobDetails?.categories);
-const similarJobs = jobsList.filter((job) => {
-  return job.category === JobDetails?.category && job._id !== JobDetails?._id;
-});
+  console.log({ JobDetails });
+  console.log({ jobsList });
+  console.log('dsfsd', JobDetails?.categories);
+  const similarJobs = jobsList.filter((job) => {
+    return job.category === JobDetails?.category && job._id !== JobDetails?._id;
+  });
   return (
     <>
       <div class="single-page-header" data-background-image={singleJob}>
@@ -272,44 +277,44 @@ const similarJobs = jobsList.filter((job) => {
               {/* <!-- Listings Container --> */}
               <div class="listings-container grid-layout">
                 {/* <!-- Job Listing --> */}
-                {similarJobs?.length > 0 ? 
-                <div class="listings-container grid-layout">
-                  
-                {similarJobs.map((job) => (
-                  <a key={job._id} href={`/job-details/${job._id}`} class="job-listing">
-                    <div class="job-listing-details">
-                      <div class="job-listing-company-logo">
-                        <img src={companyLogo2} alt="" />
-                      </div>
-                      <div class="job-listing-description">
-                        <h4 class="job-listing-company">{job.companyName}</h4>
-                        <h3 class="job-listing-title">{job.title}</h3>
-                      </div>
-                    </div>
-                    <div class="job-listing-footer">
-                      <ul>
-                        <li>
-                          <i class="icon-material-outline-location-on"></i> {job.location}
-                        </li>
-                        <li>
-                          <i class="icon-material-outline-business-center"></i> {job.type}
-                        </li>
-                        <li>
-                          <i class="icon-material-outline-account-balance-wallet"></i> {job.salary}
-                        </li>
-                        <li>
-                          <i class="icon-material-outline-access-time"></i> {timeDifferenceFromNow(job.createdAt)}
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                ))}
-              </div>
-              : 
-              <div class="no-job-listing">
-              <p>{'No similar jobs found'}</p> 
-              </div>
-              }
+                {similarJobs?.length > 0 ?
+                  <div class="listings-container grid-layout">
+
+                    {similarJobs.map((job) => (
+                      <a key={job._id} href={`/job-details/${job._id}`} class="job-listing">
+                        <div class="job-listing-details">
+                          <div class="job-listing-company-logo">
+                            <img src={companyLogo2} alt="" />
+                          </div>
+                          <div class="job-listing-description">
+                            <h4 class="job-listing-company">{job.companyName}</h4>
+                            <h3 class="job-listing-title">{job.title}</h3>
+                          </div>
+                        </div>
+                        <div class="job-listing-footer">
+                          <ul>
+                            <li>
+                              <i class="icon-material-outline-location-on"></i> {job.location}
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-business-center"></i> {job.type}
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-account-balance-wallet"></i> {job.salary}
+                            </li>
+                            <li>
+                              <i class="icon-material-outline-access-time"></i> {timeDifferenceFromNow(job.createdAt)}
+                            </li>
+                          </ul>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                  :
+                  <div class="no-job-listing">
+                    <p>{'No similar jobs found'}</p>
+                  </div>
+                }
 
               </div>
               {/* <!-- Listings Container / End --> */}
@@ -321,7 +326,7 @@ const similarJobs = jobsList.filter((job) => {
             <div class="sidebar-container">
               <a
                 class="apply-now-button popup-with-zoom-anim white-text-button"
-                onClick={() => setShowApplyJobPopup(true)}
+                onClick={() => { isLoggedIn ? setShowApplyJobPopup(true) : setShowLoginPopup(true) }}
                 style={
                   applied ? { pointerEvents: "none", cursor: "default" } : {}
                 }
@@ -371,9 +376,8 @@ const similarJobs = jobsList.filter((job) => {
 
                 {/* <!-- Bookmark Button --> */}
                 <button
-                  class={`${
-                    isBookmarked ? "bookmarked-button" : "bookmark-button"
-                  } margin-bottom-25`}
+                  class={`${isBookmarked ? "bookmarked-button" : "bookmark-button"
+                    } margin-bottom-25`}
                   onClick={() => {
                     handleUpdateBookmarkedJobs(JobDetails?._id);
                   }}
@@ -470,6 +474,17 @@ const similarJobs = jobsList.filter((job) => {
           handleSubmit={handleJobApplication}
         />
       )}
+      {showLoginPopup && <Popup
+        show={showLoginPopup}
+        title={"Login Required"}
+        description={
+          "Please login to continue with job application."
+        }
+        okButtonText={"Login"}
+        closeButtonText={"Cancel"}
+        handleOk={() => { navigate("/login"); setShowLoginPopup(false) }}
+        handleClose={() => setShowLoginPopup(false)}
+      />}
     </>
   );
 }

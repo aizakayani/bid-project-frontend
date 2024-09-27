@@ -16,10 +16,11 @@ import toast from "react-hot-toast";
 import { updateUserAPI } from "../services/user";
 import { getCountryFlag, getFreelancerDetails } from "../utils/common";
 import { useNavigate } from "react-router-dom";
+import Popup from "./modals/Popup";
 function TaskDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { tasksList, userBids, setUserBids, user, setUser, freelancers } =
+  const { tasksList, userBids, setUserBids, user, setUser, freelancers, isLoggedIn } =
     useContext(UserContext);
   const [taskDetails, setTaskDetails] = useState(null);
   const [bidRate, setBidRate] = useState("");
@@ -28,6 +29,7 @@ function TaskDetails() {
   const [applied, setApplied] = useState(false);
   const [bookmarkedTasks, setBookmarkedTasks] = useState([]);
   const [taskBids, setTaskBids] = useState([]);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     if (
@@ -231,7 +233,7 @@ function TaskDetails() {
                           <div class="freelancer-avatar">
                             <div class="verified-badge"></div>
                             <a href="single-freelancer-profile.html">
-                            <img src={avatar} alt="" />
+                              <img src={avatar} alt="" />
                             </a>
                           </div>
                         </div>
@@ -254,10 +256,10 @@ function TaskDetails() {
                               </a>
                             </h4>
                             <div class="star-rate" data-rating={ratingNumber ?? 0}>
-                          {stars.map((starType, index) => (
-                            <span key={index} className={`star ${starType}`}></span>
-                          ))}
-                        </div>
+                              {stars.map((starType, index) => (
+                                <span key={index} className={`star ${starType}`}></span>
+                              ))}
+                            </div>
                           </div>
                         </div>
 
@@ -338,7 +340,7 @@ function TaskDetails() {
                     <button
                       id="snackbar-place-bid"
                       class="button ripple-effect move-on-hover full-width margin-top-30"
-                      onClick={handleAddBid}
+                      onClick={() => { isLoggedIn ? handleAddBid() : setShowLoginPopup(true) }}
                       style={
                         applied
                           ? { pointerEvents: "none", cursor: "default" }
@@ -354,7 +356,7 @@ function TaskDetails() {
                       onClick={() => {
                         navigate("/register");
                       }}
-                      style={{ color: "#770737", textDecoration: "underline" , cursor: "pointer" }}
+                      style={{ color: "#770737", textDecoration: "underline", cursor: "pointer" }}
                     >
                       Sign Up!
                     </a>
@@ -366,8 +368,8 @@ function TaskDetails() {
               {/* <div class="sidebar-widget">
                 <h3>Bookmark or Share</h3> */}
 
-                {/* <!-- Bookmark Button --> */}
-                {/* <button
+              {/* <!-- Bookmark Button --> */}
+              {/* <button
                   class="bookmark-button margin-bottom-25"
                   onClick={() => {
                     handleUpdateBookmarkedTasks(taskDetails?._id);
@@ -382,8 +384,8 @@ function TaskDetails() {
                   )}
                 </button> */}
 
-                {/* <!-- Copy URL --> */}
-                {/* <div class="copy-url">
+              {/* <!-- Copy URL --> */}
+              {/* <div class="copy-url">
                   <input
                     id="copy-url"
                     type="text"
@@ -400,8 +402,8 @@ function TaskDetails() {
                   </button>
                 </div> */}
 
-                {/* <!-- Share Buttons --> */}
-                {/* <div class="share-buttons margin-top-25">
+              {/* <!-- Share Buttons --> */}
+              {/* <div class="share-buttons margin-top-25">
                   <div class="share-buttons-trigger">
                     <i class="icon-feather-share-2"></i>
                   </div>
@@ -458,6 +460,17 @@ function TaskDetails() {
           </div>
         </div>
       </div>
+      {showLoginPopup && <Popup
+        show={showLoginPopup}
+        title={"Login Required"}
+        description={
+          "Please login to continue with task bidding."
+        }
+        okButtonText={"Login"}
+        closeButtonText={"Cancel"}
+        handleOk={() => { navigate("/login"); setShowLoginPopup(false) }}
+        handleClose={() => setShowLoginPopup(false)}
+      />}
     </>
   );
 }

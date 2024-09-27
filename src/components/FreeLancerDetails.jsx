@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { updateUserAPI } from "../services/user";
 import { unixToDate } from "../utils/utils";
 import MakeOffer from "./modals/OfferPopup";
+import Popup from "./modals/Popup";
 function FreeLancerDetails() {
   const { id } = useParams();
   const {
@@ -19,12 +20,14 @@ function FreeLancerDetails() {
     userBids,
     bids,
     setNewMessageContext,
+    isLoggedIn
   } = useContext(UserContext);
   const [freelancerDetails, setFreelancerDetails] = useState(null);
   const [bookmarkedFreelancers, setBookmarkedFreelancers] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
   const [showOfferPopup, setShowOfferPopup] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.data?.bookmarkedFreelancers) {
@@ -121,7 +124,7 @@ function FreeLancerDetails() {
                     <img
                       src={
                         freelancerDetails?.avatar?.contentType &&
-                        freelancerDetails?.avatar?.base64Image
+                          freelancerDetails?.avatar?.base64Image
                           ? `data:${freelancerDetails?.avatar?.contentType};base64,${freelancerDetails?.avatar?.base64Image}`
                           : userAvatarBig2
                       }
@@ -139,11 +142,10 @@ function FreeLancerDetails() {
                           {Array.from({ length: 5 }, (_, index) => (
                             <span
                               key={index}
-                              className={`star ${
-                                index < freelancerDetails?.rating
-                                  ? "filled"
-                                  : "empty"
-                              }`}
+                              className={`star ${index < freelancerDetails?.rating
+                                ? "filled"
+                                : "empty"
+                                }`}
                             ></span>
                           ))}
                         </div>
@@ -292,13 +294,16 @@ function FreeLancerDetails() {
               {/* <!-- Button --> */}
               <a
                 onClick={() => {
-                  setNewMessageContext({
-                    receiver: {
-                      id: freelancerDetails?._id,
-                      name: freelancerDetails?.name,
-                    },
-                  });
-                  navigate("/dashboard");
+                  if (isLoggedIn) {
+                    setNewMessageContext({
+                      receiver: {
+                        id: freelancerDetails?._id,
+                        name: freelancerDetails?.name,
+                      },
+                    });
+                    navigate("/dashboard");
+                  }
+                  else setShowLoginPopup(true)
                 }}
                 class="apply-now-button popup-with-zoom-anim margin-bottom-50 white-text-button"
               >
@@ -502,14 +507,26 @@ function FreeLancerDetails() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {showOfferPopup && (
         <MakeOffer
           show={showOfferPopup}
           handleClose={() => setShowOfferPopup(false)}
           handleSubmit={() => setShowOfferPopup(false)}
         />
-      )}
+      )
+      }
+      {showLoginPopup && <Popup
+        show={showLoginPopup}
+        title={"Login Required"}
+        description={
+          "Please login to contact freelancer."
+        }
+        okButtonText={"Login"}
+        closeButtonText={"Cancel"}
+        handleOk={() => { navigate("/login"); setShowLoginPopup(false) }}
+        handleClose={() => setShowLoginPopup(false)}
+      />}
     </>
   );
 }
